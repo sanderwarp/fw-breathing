@@ -19,16 +19,16 @@ body{font-family:'Raleway',Georgia,serif;background:#0d1117;color:#f0f4f8;min-he
 
 /* HOME */
 #p-home{justify-content:flex-end;text-align:center;min-height:100vh;position:relative;overflow:hidden;padding-bottom:52px}
-.home-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;z-index:0}
-.home-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 55%,rgba(5,8,14,.92) 78%,rgba(5,8,14,1) 100%);z-index:1}
-.home-content{position:relative;z-index:2;padding:0 28px;width:100%}
+.home-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;z-index:0;pointer-events:none}
+.home-overlay{display:none}
+.home-content{position:relative;z-index:5;padding:0 28px;width:100%}
 @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
 .home-tag{display:none}
 .home-title{display:none}
 .home-sub{display:none}
 .home-div{display:none}
 .home-desc{display:none}
-.btn-main{padding:18px 52px;background:transparent;border:1.5px solid #4fc3f7;color:#4fc3f7;font-size:12px;letter-spacing:5px;cursor:pointer;transition:all .3s;font-family:'Cinzel',serif;position:relative;z-index:10}
+.btn-main{padding:18px 52px;background:rgba(5,8,14,.6);border:1.5px solid #4fc3f7;color:#4fc3f7;font-size:12px;letter-spacing:5px;cursor:pointer;transition:all .3s;font-family:'Cinzel',serif;position:relative;z-index:5}
 .btn-main:hover{background:#4fc3f7;color:#080c10}
 .btn-main:active{transform:scale(0.97)}
 
