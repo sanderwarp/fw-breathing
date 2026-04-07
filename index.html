@@ -140,9 +140,9 @@ body{font-family:'Raleway',Georgia,serif;background:#0d1117;color:#f0f4f8;min-he
 
 <!-- PAGE ACCUEIL -->
 <div id="p-home" class="page active">
-  <img src="images/hero.png" alt="Frozen Warriors Breathing" style="width:240px;height:240px;object-fit:contain;margin-bottom:28px;animation:breathe 4s ease-in-out infinite;display:block;margin-left:auto;margin-right:auto;mix-blend-mode:lighten;filter:brightness(1.1) contrast(1.1);">
-  <p class="home-tag">FROZEN WARRIORS</p>
-  <h1 class="home-title">Breathing<br>App</h1>
+  <p class="home-tag" style="font-size:20px;letter-spacing:8px;margin-bottom:20px;opacity:1;color:#f0f4f8;font-family:'Cinzel',serif;font-weight:700">FROZEN WARRIORS</p>
+  <img src="images/hero.png" alt="Frozen Warriors Breathing" style="width:200px;height:200px;object-fit:contain;margin-bottom:20px;animation:breathe 4s ease-in-out infinite;display:block;margin-left:auto;margin-right:auto;mix-blend-mode:lighten;filter:brightness(1.1) contrast(1.1);">
+  <h1 class="home-title">Respiration</h1>
   <p class="home-sub">Respire plus fort. Performe plus loin.</p>
   <div class="home-div"></div>
   <p class="home-desc">6 protocoles respiratoires pour augmenter ta force, ton endurance et ta tolérance au CO₂. Basé sur les méthodes Gracie, Vranich et Oxygen Advantage.</p>
@@ -263,7 +263,7 @@ var EX = {
     instr:'<strong>Position :</strong> Assis en tailleur ou sur chaise, dos droit, mains sur les genoux.<br><br><strong>Technique :</strong> Inspire passivement par le nez (ventre qui sort). Expire <em>court et puissant</em> par le nez en contractant les abdos — comme souffler une bougie d\'un coup sec. L\'inspiration est passive, l\'expiration est active.<br><br><strong>Objectif :</strong> 100 répétitions à rythme régulier (~1-2/sec). Commence lentement et accélère.<br><br><strong>Adaptations :</strong> Force expiratoire, abdominaux profonds, activation système nerveux sympathique.' },
   2: { cat:'Force inspiratoire · Diaphragme', title:'Sandbag Breathing', type:'series', series:3, reps:15, key:'fw-sand',
     instr:'<strong>Position :</strong> Allongé sur le dos, genoux fléchis. Sandbag (2-5 kg) sur l\'abdomen entre nombril et côtes flottantes.<br><br><strong>Technique :</strong> Une main sur le torse (immobile), l\'autre sur le sandbag. Inspire lentement par le nez en soulevant le sandbag avec le diaphragme. Expire lentement par la bouche.<br><br><strong>Objectif :</strong> 3 séries de 15 répétitions. Augmente le poids progressivement sur plusieurs semaines.<br><br><strong>Adaptations :</strong> Hypertrophie du diaphragme, force inspiratoire maximale, réduction du métaboréflexe.' },
-  3: { cat:'Volume pulmonaire · Expiration', title:'Balloon Breathing', type:'series', series:2, reps:10, key:'fw-ball',
+  3: { cat:'Volume pulmonaire · Expiration', title:'Balloon Breathing', type:'balloon', series:2, key:'fw-ball',
     instr:'<strong>Matériel :</strong> Un ballon standard.<br><br><strong>Technique :</strong> Inspire profondément par le nez (diaphragme). Place le ballon à la bouche et expire en <em>une seule expiration longue et puissante</em> sans souffler les joues — l\'air vient du ventre. Feedback visuel immédiat sur ta force et ton volume.<br><br><strong>Objectif :</strong> 2 séries de 10 gonflages. Vise à gonfler plus à chaque répétition.<br><br><strong>Adaptations :</strong> Force expiratoire, intercostaux, volume pulmonaire fonctionnel.' },
   4: { cat:'Système nerveux · Récupération', title:'Box Breathing', type:'box', key:'fw-box',
     instr:'<strong>Principe :</strong> 4 phases égales — inspire, retiens (poumons pleins), expire, retiens (poumons vides). Progression automatique de 3s à 10s par phase.<br><br><strong>Déroulement :</strong> 3s × 3 cycles → 4s × 4 cycles → ... → 10s × 10 cycles. <strong>Va le plus loin possible.</strong><br><br><strong>Adaptations :</strong> Régulation du système nerveux autonome, tolérance à l\'inconfort, récupération post-effort.' },
@@ -287,6 +287,7 @@ function openEx(id) {
   var w = document.getElementById('w-main');
   if (ex.type === 'counter') buildCounter(w, ex);
   else if (ex.type === 'series') buildSeries(w, ex);
+  else if (ex.type === 'balloon') buildBalloon(w, ex);
   else if (ex.type === 'box') buildBox(w, ex);
   else if (ex.type === 'co2') buildApnea(w, ex, 'co2');
   else if (ex.type === 'o2') buildApnea(w, ex, 'o2');
@@ -320,7 +321,7 @@ function buildCounter(w, ex) {
           on = false; clearInterval(iv); cstartEl.textContent = 'Démarrer'; cstartEl.style.background = '';
           save(ex.key, { last: { date: Date.now(), count: count } }); parler('Objectif atteint. Bien joué.', 0); notif('Objectif atteint ! 💪');
         }
-      }, 600);
+      }, 540);
       cstartEl.textContent = 'Pause'; cstartEl.style.background = '#ef5350';
     } else {
       on = false; clearInterval(iv); cstartEl.textContent = 'Reprendre'; cstartEl.style.background = '';
@@ -369,7 +370,7 @@ function buildSeries(w, ex) {
           restIv = setInterval(function() { t--; srtEl.textContent = t; if (t <= 0) { clearInterval(restIv); inRest = false; srestEl.style.display = 'none'; sbtnEl.disabled = false; sbtnEl.textContent = 'Démarrer série ' + (cur + 1); sbtnEl.style.background = ''; parler('Série suivante', 0); } }, 1000);
         }
       }
-    }, 800);
+    }, 2400);
     sbtnEl.textContent = 'Pause'; sbtnEl.style.background = '#ef5350';
   });
 }
@@ -392,8 +393,8 @@ function buildBox(w, ex) {
   var bpr = document.getElementById('bpr'), bph = document.getElementById('bph'), bsc = document.getElementById('bsc');
   var bci = document.getElementById('bci'), bb = document.getElementById('bb');
   var bstart = document.getElementById('bstart'), bstop = document.getElementById('bstop'), breset = document.getElementById('breset');
-  function getCyc(s) { return Math.min(s, 10); }
-  function updBadge() { var c = getCyc(sec); bb.textContent = 'Niveau : ' + sec + 's par phase · ' + c + ' cycles'; bci.textContent = 'Cycle ' + cycle + ' / ' + c + ' · Niveau ' + sec + 's'; }
+  function getCyc(s) { return 3; }
+  function updBadge() { var c = getCyc(sec); bb.textContent = 'Niveau : ' + sec + 's par phase · 3 cycles'; bci.textContent = 'Cycle ' + cycle + ' / 3 · Niveau ' + sec + 's'; }
   function updProg(ph, el, tot) { var p = 720, pp = p / 4, filled = ph * pp + (el / tot) * pp; bpr.style.strokeDashoffset = p - filled; bpr.style.stroke = cols[ph]; bph.style.color = cols[ph]; }
   function saveRec() { var d2 = load(ex.key) || {}; if (sec > (d2.best || 0)) { d2.best = sec; save(ex.key, d2); document.getElementById('bval').textContent = sec + 's par phase'; notif('Nouveau record : ' + sec + 's ! 🎉'); } else { notif('Niveau ' + sec + 's atteint'); } }
   bstart.addEventListener('click', function() {
@@ -409,7 +410,7 @@ function buildBox(w, ex) {
         if (phase >= 4) {
           phase = 0; cycle++;
           if (cycle > c) {
-            sec++; if (sec > 10) { clearInterval(iv); running = false; bph.textContent = 'COMPLET'; bsc.textContent = '10'; bph.style.color = '#ffd54f'; parler('Niveau dix atteint. Félicitations.', 0); saveRec(); return; }
+            sec++; if (sec > 20) { clearInterval(iv); running = false; bph.textContent = 'COMPLET'; bsc.textContent = '20'; bph.style.color = '#ffd54f'; parler('Niveau vingt secondes atteint. Félicitations.', 0); saveRec(); return; }
             var nc = getCyc(sec); cycle = 1; updBadge();
           }
         }
@@ -595,9 +596,29 @@ function buildApnea(w, ex, type) {
 
   astartEl.addEventListener('click', function() {
     if (!running) {
-      running = true; cur = 0; inHold = true; astartEl.disabled = true; astartEl.textContent = 'En cours...';
+      running = true; cur = 0; inHold = false; astartEl.disabled = true; astartEl.textContent = 'En cours...';
       document.querySelectorAll('#w-main .apn-row').forEach(function(r) { r.classList.remove('done', 'cur'); });
-      nextPhase();
+      // Commencer par une phase de respiration préparatoire
+      var prepDur = 120;
+      var prepColor = restColor;
+      bigTimeEl.textContent = fmt(prepDur);
+      phaseLblEl.textContent = type === 'co2' ? 'RESPIREZ · PRÉPAREZ-VOUS' : 'RESPIREZ · PRÉPAREZ-VOUS';
+      phaseLblEl.style.color = prepColor;
+      seriesLblEl.textContent = 'Préparation avant série 1';
+      updateCircle(0, prepColor);
+      parler('Respirez. Préparez-vous. La table commence dans deux minutes.', 0);
+      var prepEl = 0;
+      var prepIv = setInterval(function() {
+        prepEl++;
+        bigTimeEl.textContent = fmt(prepDur - prepEl);
+        updateCircle((prepEl/prepDur)*100, prepColor);
+        if (prepEl === prepDur - 3) parler('Trois', 0);
+        if (prepEl >= prepDur) {
+          clearInterval(prepIv);
+          inHold = true;
+          nextPhase();
+        }
+      }, 1000);
     }
   });
 
@@ -648,6 +669,94 @@ function buildTest(w, ex, type) {
     setTimeout(function() { buildApnea(w, ex, type); }, 800);
   });
 }
+
+// ============ BALLOON BREATHING ============
+function buildBalloon(w, ex) {
+  var d = load(ex.key) || {};
+  var ser1done = false, ser2done = false;
+  var restIv = null, restActive = false;
+
+  function renderState() {
+    var s1class = ser1done ? 'done' : 'active';
+    var s2class = ser2done ? 'done' : (ser1done && !restActive ? 'active' : 'waiting');
+    w.innerHTML = '<p class="w-title">2 séries · Cochage manuel</p>'
+      + '<div style="display:flex;flex-direction:column;gap:16px;margin-bottom:20px">'
+
+      // Série 1
+      + '<div style="background:rgba(79,195,247,' + (ser1done ? '.05' : '.08') + ');border:1px solid rgba(79,195,247,' + (ser1done ? '.1' : '.3') + ');border-radius:6px;padding:20px;display:flex;align-items:center;gap:16px;cursor:' + (ser1done ? 'default' : 'pointer') + '" id="bal-s1">'
+      + '<div style="width:32px;height:32px;border-radius:50%;border:2px solid ' + (ser1done ? '#66bb6a' : '#4fc3f7') + ';display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;background:' + (ser1done ? 'rgba(102,187,106,.15)' : 'transparent') + '">' + (ser1done ? '✓' : '1') + '</div>'
+      + '<div><p style="font-family:'Cinzel',serif;font-size:14px;color:#f0f4f8">Série 1 — 10 gonflages</p><p style="font-size:11px;color:#8899aa;margin-top:3px">' + (ser1done ? 'Complétée' : 'Clique quand terminée') + '</p></div>'
+      + '</div>'
+
+      // Repos entre séries
+      + '<div id="bal-rest" style="display:' + (ser1done && !ser2done ? 'flex' : 'none') + ';align-items:center;justify-content:center;gap:12px;padding:14px;background:rgba(79,195,247,.04);border:1px solid rgba(79,195,247,.1);border-radius:6px">'
+      + '<p style="font-size:11px;color:#8899aa;letter-spacing:2px">REPOS</p>'
+      + '<p style="font-family:'Cinzel',serif;font-size:32px;color:#4fc3f7;font-weight:700" id="bal-rest-t">30</p>'
+      + '</div>'
+
+      // Série 2
+      + '<div style="background:rgba(79,195,247,' + (ser2done ? '.05' : (ser1done && !restActive ? '.08' : '.02')) + ');border:1px solid rgba(79,195,247,' + (ser2done ? '.1' : (ser1done && !restActive ? '.3' : '.08')) + ');border-radius:6px;padding:20px;display:flex;align-items:center;gap:16px;cursor:' + (ser2done ? 'default' : (ser1done && !restActive ? 'pointer' : 'default')) + '" id="bal-s2">'
+      + '<div style="width:32px;height:32px;border-radius:50%;border:2px solid ' + (ser2done ? '#66bb6a' : (ser1done && !restActive ? '#4fc3f7' : 'rgba(79,195,247,.2)')) + ';display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;background:' + (ser2done ? 'rgba(102,187,106,.15)' : 'transparent') + '">' + (ser2done ? '✓' : '2') + '</div>'
+      + '<div><p style="font-family:'Cinzel',serif;font-size:14px;color:' + (ser1done && !restActive ? '#f0f4f8' : '#8899aa') + '">Série 2 — 10 gonflages</p><p style="font-size:11px;color:#8899aa;margin-top:3px">' + (ser2done ? 'Complétée' : (ser1done && !restActive ? 'Clique quand terminée' : 'En attente')) + '</p></div>'
+      + '</div>'
+
+      + '</div>'
+
+      // Résultat final
+      + (ser2done ? '<div style="text-align:center;padding:16px;background:rgba(102,187,106,.08);border:1px solid rgba(102,187,106,.2);border-radius:6px"><p style="font-family:'Cinzel',serif;font-size:16px;color:#66bb6a">✓ Séance complète !</p></div>' : '')
+
+      + '<button class="bs" id="bal-reset" style="margin-top:12px;width:100%">Réinitialiser</button>';
+
+    // Events
+    var s1 = document.getElementById('bal-s1');
+    var s2 = document.getElementById('bal-s2');
+    var resetBtn = document.getElementById('bal-reset');
+
+    if (s1 && !ser1done) {
+      s1.addEventListener('click', function() {
+        ser1done = true;
+        restActive = true;
+        parler('Série une terminée. Repos trente secondes.', 0);
+        renderState();
+        // Lancer timer repos
+        var t = 30;
+        document.getElementById('bal-rest-t').textContent = t;
+        restIv = setInterval(function() {
+          t--;
+          var el = document.getElementById('bal-rest-t');
+          if (el) el.textContent = t;
+          if (t <= 0) {
+            clearInterval(restIv);
+            restActive = false;
+            parler('Commencez la série deux.', 0);
+            renderState();
+          }
+        }, 1000);
+      });
+    }
+
+    if (s2 && ser1done && !restActive && !ser2done) {
+      s2.addEventListener('click', function() {
+        ser2done = true;
+        parler('Séance complète. Excellent.', 0);
+        save(ex.key, { last: { date: Date.now() } });
+        notif('Balloon Breathing terminé ! 💪');
+        renderState();
+      });
+    }
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', function() {
+        clearInterval(restIv);
+        ser1done = false; ser2done = false; restActive = false;
+        renderState();
+      });
+    }
+  }
+
+  renderState();
+}
+
 </script>
 </body>
 </html>
