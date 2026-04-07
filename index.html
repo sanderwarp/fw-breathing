@@ -18,17 +18,18 @@ body{font-family:'Raleway',Georgia,serif;background:#0d1117;color:#f0f4f8;min-he
 .page.active{display:flex!important;flex-direction:column;min-height:100vh}
 
 /* HOME */
-#p-home{justify-content:flex-end;text-align:center;min-height:100vh;position:relative;overflow:hidden;padding-bottom:52px}
-.home-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;z-index:0;pointer-events:none}
+#p-home{align-items:center;justify-content:center;text-align:center;background:#080c10;padding:40px 24px;min-height:100vh}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.home-tag{font-family:'Cinzel',serif;font-size:clamp(22px,5vw,36px);font-weight:900;letter-spacing:6px;color:#4fc3f7;margin-bottom:24px;text-transform:uppercase}
+.home-lung{width:min(75vw,320px);height:min(75vw,320px);object-fit:contain;display:block;margin:0 auto 24px;animation:breathe 4s ease-in-out infinite;mix-blend-mode:lighten}
+.home-title{font-family:'Cinzel',serif;font-size:clamp(28px,6vw,48px);font-weight:900;color:#f0f4f8;letter-spacing:3px;margin-bottom:10px}
+.home-sub{font-size:clamp(14px,3vw,18px);color:#4fc3f7;letter-spacing:2px;margin-bottom:20px}
+.home-div{width:60px;height:1px;background:linear-gradient(90deg,transparent,#a8d8ea,transparent);margin:0 auto 20px}
+.home-desc{font-size:13px;color:#8899aa;line-height:1.8;max-width:380px;margin:0 auto 36px}
 .home-overlay{display:none}
-.home-content{position:relative;z-index:5;padding:0 28px;width:100%}
-@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
-.home-tag{display:none}
-.home-title{display:none}
-.home-sub{display:none}
-.home-div{display:none}
-.home-desc{display:none}
-.btn-main{padding:18px 52px;background:rgba(5,8,14,.6);border:1.5px solid #4fc3f7;color:#4fc3f7;font-size:12px;letter-spacing:5px;cursor:pointer;transition:all .3s;font-family:'Cinzel',serif;position:relative;z-index:5}
+.home-bg-img{display:none}
+.home-content{display:none}
+.btn-main{padding:16px 48px;background:transparent;border:1.5px solid #4fc3f7;color:#4fc3f7;font-size:12px;letter-spacing:4px;cursor:pointer;transition:all .3s;font-family:'Cinzel',serif}
 .btn-main:hover{background:#4fc3f7;color:#080c10}
 .btn-main:active{transform:scale(0.97)}
 
@@ -143,11 +144,13 @@ body{font-family:'Raleway',Georgia,serif;background:#0d1117;color:#f0f4f8;min-he
 
 <!-- PAGE ACCUEIL -->
 <div id="p-home" class="page active">
-  <img class="home-bg-img" src="images/hero.png" alt="Frozen Warriors">
-  <div class="home-overlay"></div>
-  <div class="home-content">
-    <button class="btn-main" id="btn-commencer">▶ COMMENCER</button>
-  </div>
+  <p class="home-tag">Frozen Warriors</p>
+  <img class="home-lung" src="images/hero.png" alt="Poumons Frozen Warriors">
+  <h1 class="home-title">Respiration</h1>
+  <p class="home-sub">Respire plus fort. Performe plus loin.</p>
+  <div class="home-div"></div>
+  <p class="home-desc">6 protocoles respiratoires pour augmenter ta force, ton endurance et ta tolérance au CO₂.</p>
+  <button class="btn-main" id="btn-commencer">▶ COMMENCER</button>
 </div>
 
 <!-- PAGE DASHBOARD -->
