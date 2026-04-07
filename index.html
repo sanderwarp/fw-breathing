@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frozen Warriors — Breathing App</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Raleway',Georgia,serif;background:#0d1117;color:#f0f4f8;min-height:100vh}
+.page{display:none!important}
+.page.active{display:flex!important;flex-direction:column;min-height:100vh}
+
+/* HOME */
+#p-home{align-items:center;justify-content:center;text-align:center;background:linear-gradient(180deg,#080c10 0%,#0d1520 50%,#080c10 100%);padding:40px 20px;min-height:100vh}
+.lung-anim{font-size:90px;display:block;margin-bottom:28px;animation:breathe 4s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.home-tag{font-size:11px;letter-spacing:6px;color:#a8d8ea;margin-bottom:14px;opacity:.8}
+.home-title{font-family:'Cinzel',Georgia,serif;font-size:clamp(36px,7vw,64px);font-weight:900;color:#f0f4f8;line-height:1.05;margin-bottom:8px}
+.home-sub{font-size:17px;color:#4fc3f7;letter-spacing:3px;margin-bottom:22px}
+.home-div{width:60px;height:1px;background:linear-gradient(90deg,transparent,#a8d8ea,transparent);margin:0 auto 22px}
+.home-desc{font-size:14px;color:#8899aa;line-height:1.8;max-width:460px;margin:0 auto 36px}
+.btn-main{padding:16px 48px;background:transparent;border:1.5px solid #4fc3f7;color:#4fc3f7;font-size:13px;letter-spacing:4px;cursor:pointer;transition:all .3s;font-family:'Cinzel',serif}
+.btn-main:hover{background:#4fc3f7;color:#080c10}
+
+/* DASHBOARD */
+#p-dash{background:#0d1117}
+.dash-hdr{padding:18px 28px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(79,195,247,.12);background:rgba(13,17,23,.95);position:sticky;top:0;z-index:100}
+.dash-logo{font-family:'Cinzel',serif;font-size:13px;letter-spacing:3px;color:#a8d8ea;display:flex;align-items:center;gap:10px}
+.dot-pulse{width:7px;height:7px;background:#4fc3f7;border-radius:50%;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.btn-back{background:transparent;border:1px solid rgba(79,195,247,.25);color:#8899aa;padding:8px 16px;font-size:11px;letter-spacing:2px;cursor:pointer;transition:all .2s}
+.btn-back:hover{border-color:#4fc3f7;color:#4fc3f7}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding:2px;flex:1}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:500px){.grid{grid-template-columns:1fr}}
+.card{background:#1a2332;padding:28px 22px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;min-height:220px;display:flex;flex-direction:column;border:1px solid transparent}
+.card:hover{background:#1e2d40;border-color:rgba(79,195,247,.3);transform:translateY(-2px)}
+.card-n{font-family:'Cinzel',serif;font-size:44px;font-weight:900;color:rgba(79,195,247,.1);position:absolute;top:10px;right:14px;line-height:1}
+.card-ico{font-size:28px;margin-bottom:14px}
+.card-cat{font-size:9px;letter-spacing:3px;color:#4fc3f7;margin-bottom:6px;text-transform:uppercase}
+.card-ttl{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:#f0f4f8;margin-bottom:8px}
+.card-txt{font-size:11px;color:#8899aa;line-height:1.65;flex:1}
+.card-ph{width:100%;height:60px;background:rgba(79,195,247,.04);border:1px dashed rgba(79,195,247,.15);margin-top:14px;display:flex;align-items:center;justify-content:center;font-size:9px;color:rgba(79,195,247,.3);letter-spacing:2px}
+.card-arr{position:absolute;bottom:14px;right:16px;color:rgba(79,195,247,.3);transition:all .2s;font-size:16px}
+.card:hover .card-arr{color:#4fc3f7;transform:translateX(3px)}
+
+/* EXERCISE PAGE */
+#p-ex{background:#0d1117}
+.ex-hdr{padding:16px 24px;display:flex;align-items:center;gap:16px;border-bottom:1px solid rgba(79,195,247,.1);background:#1a2332;position:sticky;top:0;z-index:100}
+.ex-meta{flex:1}
+.ex-cat{font-size:9px;letter-spacing:3px;color:#4fc3f7;text-transform:uppercase}
+.ex-ttl{font-family:'Cinzel',serif;font-size:19px;font-weight:700;color:#f0f4f8}
+.ex-body{padding:24px;display:flex;flex-direction:column;gap:20px;max-width:760px;margin:0 auto;width:100%}
+.ph-img{width:100%;height:150px;background:rgba(79,195,247,.03);border:1px dashed rgba(79,195,247,.15);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:rgba(79,195,247,.3);font-size:10px;letter-spacing:2px}
+.instr{background:#1a2332;border-left:3px solid #4fc3f7;padding:16px 20px;font-size:13px;line-height:1.85;color:#8899aa}
+.instr strong{color:#f0f4f8}
+.widget{background:#1a2332;border:1px solid rgba(79,195,247,.12);border-radius:4px;padding:24px}
+.w-title{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:#a8d8ea;text-align:center;margin-bottom:18px;text-transform:uppercase}
+
+/* COUNTER */
+.big-num{font-family:'Cinzel',serif;font-size:80px;font-weight:900;text-align:center;color:#f0f4f8;line-height:1;margin-bottom:4px}
+.num-label{text-align:center;font-size:10px;letter-spacing:3px;color:#8899aa;margin-bottom:20px;text-transform:uppercase}
+
+/* BUTTONS */
+.brow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:4px}
+.bp{padding:13px 28px;background:#4fc3f7;border:none;color:#080c10;font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;cursor:pointer;transition:all .2s;text-transform:uppercase}
+.bp:hover{background:#81d4fa}
+.bp:disabled{opacity:.4;cursor:not-allowed}
+.bs{padding:13px 20px;background:transparent;border:1px solid rgba(79,195,247,.3);color:#8899aa;font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;cursor:pointer;transition:all .2s;text-transform:uppercase}
+.bs:hover{border-color:#4fc3f7;color:#4fc3f7}
+
+/* SERIES */
+.dots{display:flex;gap:8px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+.dot{width:28px;height:28px;border-radius:50%;border:2px solid rgba(79,195,247,.2);display:flex;align-items:center;justify-content:center;font-size:10px;color:#8899aa;transition:all .3s}
+.dot.active{border-color:#4fc3f7;background:rgba(79,195,247,.1);color:#4fc3f7}
+.dot.done{border-color:#66bb6a;background:rgba(102,187,106,.1);color:#66bb6a}
+.rest-box{text-align:center;padding:14px;background:rgba(79,195,247,.05);border:1px solid rgba(79,195,247,.15);margin-bottom:14px}
+.rest-lbl{font-size:10px;letter-spacing:2px;color:#8899aa;text-transform:uppercase;margin-bottom:4px}
+.rest-timer-s{font-family:'Cinzel',serif;font-size:40px;color:#4fc3f7;font-weight:700}
+
+/* BOX */
+.box-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;margin-bottom:18px}
+.box-svg-c{position:relative;width:210px;height:210px}
+.box-svg-c svg{width:100%;height:100%}
+.box-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.box-ph{font-family:'Cinzel',serif;font-size:12px;color:#4fc3f7;letter-spacing:2px;text-transform:uppercase}
+.box-s{font-family:'Cinzel',serif;font-size:42px;font-weight:900;color:#f0f4f8;line-height:1}
+.box-info{font-size:11px;color:#8899aa;letter-spacing:2px;text-align:center}
+.box-badge{background:rgba(79,195,247,.07);border:1px solid rgba(79,195,247,.2);padding:6px 16px;font-size:10px;color:#a8d8ea;letter-spacing:2px;text-align:center;margin-bottom:16px}
+.rec-box{text-align:center;padding:12px;background:rgba(255,213,79,.05);border:1px solid rgba(255,213,79,.15);margin-top:16px;border-radius:3px}
+.rec-lbl{font-size:9px;letter-spacing:2px;color:#8899aa;text-transform:uppercase;margin-bottom:3px}
+.rec-val{font-family:'Cinzel',serif;font-size:22px;color:#ffd54f;font-weight:700}
+
+/* APNEA - GRAND TIMER CERCLE */
+.apn-circle-wrap{display:flex;flex-direction:column;align-items:center;margin-bottom:20px;position:relative}
+.apn-circle-svg{width:220px;height:220px}
+.apn-circle-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none}
+.apn-big-time{font-family:'Cinzel',serif;font-size:52px;font-weight:900;color:#f0f4f8;line-height:1;letter-spacing:2px}
+.apn-phase-lbl{font-family:'Cinzel',serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;margin-top:4px}
+.apn-series-lbl{font-size:10px;letter-spacing:2px;color:#8899aa;margin-top:6px}
+
+.apn-stats{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.apn-stat{flex:1;min-width:90px;text-align:center;padding:10px;background:rgba(79,195,247,.05);border:1px solid rgba(79,195,247,.1)}
+.apn-sl{font-size:9px;letter-spacing:2px;color:#8899aa;text-transform:uppercase;margin-bottom:3px}
+.apn-sv{font-family:'Cinzel',serif;font-size:16px;color:#a8d8ea}
+.apn-rows{display:flex;flex-direction:column;gap:5px;margin-bottom:16px;max-height:240px;overflow-y:auto}
+.apn-row{display:grid;grid-template-columns:30px 1fr auto;gap:8px;align-items:center;padding:8px 12px;background:rgba(255,255,255,.02);border:1px solid transparent;transition:all .3s;border-radius:3px}
+.apn-row.cur{background:rgba(79,195,247,.08);border-color:rgba(79,195,247,.3)}
+.apn-row.done{opacity:.3}
+.apn-rn{font-family:'Cinzel',serif;font-size:12px;color:#8899aa;text-align:center}
+.apn-rl{font-size:10px;color:#8899aa}
+.apn-rt{font-family:'Cinzel',serif;font-size:14px;color:#a8d8ea;font-weight:700}
+.apn-row.cur .apn-rt{color:#4fc3f7}
+.hist{margin-top:14px;padding-top:14px;border-top:1px solid rgba(79,195,247,.1)}
+.hist-ttl{font-size:9px;letter-spacing:2px;color:#8899aa;text-align:center;text-transform:uppercase;margin-bottom:8px}
+.hist-list{display:flex;flex-direction:column;gap:4px;max-height:110px;overflow-y:auto}
+.hist-item{display:flex;justify-content:space-between;font-size:10px;color:#8899aa;padding:5px 8px;background:rgba(255,255,255,.02)}
+.hist-v{color:#a8d8ea;font-family:'Cinzel',serif}
+
+/* TEST */
+.test-timer{font-family:'Cinzel',serif;font-size:68px;font-weight:900;text-align:center;color:#f0f4f8;letter-spacing:4px;margin:12px 0;line-height:1}
+.test-info{text-align:center;font-size:11px;color:#8899aa;letter-spacing:2px;margin-bottom:16px}
+.tip{padding:12px;background:rgba(79,195,247,.04);border:1px solid rgba(79,195,247,.1);font-size:11px;color:#8899aa;line-height:1.7;margin-top:14px}
+.tip strong{color:#a8d8ea}
+
+/* NOTIF */
+.notif{position:fixed;top:16px;right:16px;padding:12px 18px;background:#1a2332;border-left:3px solid #66bb6a;color:#f0f4f8;font-size:12px;z-index:9999;opacity:0;transform:translateX(16px);transition:all .3s;max-width:260px;pointer-events:none}
+.notif.show{opacity:1;transform:translateX(0)}
+.notif.err{border-color:#ef5350}
+</style>
+</head>
+<body>
+
+<!-- PAGE ACCUEIL -->
+<div id="p-home" class="page active">
+  <span class="lung-anim">🫁</span>
+  <p class="home-tag">FROZEN WARRIORS</p>
+  <h1 class="home-title">Breathing<br>App</h1>
+  <p class="home-sub">Respire plus fort. Performe plus loin.</p>
+  <div class="home-div"></div>
+  <p class="home-desc">6 protocoles respiratoires pour augmenter ta force, ton endurance et ta tolérance au CO₂. Basé sur les méthodes Gracie, Vranich et Oxygen Advantage.</p>
+  <button class="btn-main" id="btn-commencer">▶ COMMENCER</button>
+</div>
+
+<!-- PAGE DASHBOARD -->
+<div id="p-dash" class="page">
+  <div class="dash-hdr">
+    <div class="dash-logo"><span class="dot-pulse"></span>FROZEN WARRIORS · BREATHING</div>
+    <button class="btn-back" id="btn-back-home">← Accueil</button>
+  </div>
+  <div class="grid">
+    <div class="card" data-ex="1"><span class="card-n">01</span><div class="card-ico">🔥</div><p class="card-cat">Force expiratoire · Diaphragme</p><h3 class="card-ttl">Breath of Fire</h3><p class="card-txt">100 expirations courtes et puissantes par le ventre. Renforce les muscles expiratoires profonds et active le système nerveux.</p><div class="card-ph">📸 PHOTO À VENIR</div><span class="card-arr">→</span></div>
+    <div class="card" data-ex="2"><span class="card-n">02</span><div class="card-ico">🏋️</div><p class="card-cat">Force inspiratoire · Diaphragme</p><h3 class="card-ttl">Sandbag Breathing</h3><p class="card-txt">Couché sur le dos, sandbag sur l'abdomen. Soulève le poids à chaque inspiration diaphragmatique. 3×15 répétitions.</p><div class="card-ph">📸 PHOTO À VENIR</div><span class="card-arr">→</span></div>
+    <div class="card" data-ex="3"><span class="card-n">03</span><div class="card-ico">🎈</div><p class="card-cat">Volume pulmonaire · Expiration</p><h3 class="card-ttl">Balloon Breathing</h3><p class="card-txt">Gonfle un ballon en une seule expiration diaphragmatique longue et puissante. Feedback visuel immédiat. 2×10 répétitions.</p><div class="card-ph">📸 PHOTO À VENIR</div><span class="card-arr">→</span></div>
+    <div class="card" data-ex="4"><span class="card-n">04</span><div class="card-ico">⬜</div><p class="card-cat">Système nerveux · Récupération</p><h3 class="card-ttl">Box Breathing</h3><p class="card-txt">Progression guidée de 3 à 10 secondes par phase. Va le plus loin possible. Ton record est mémorisé.</p><div class="card-ph">📸 PHOTO À VENIR</div><span class="card-arr">→</span></div>
+    <div class="card" data-ex="5"><span class="card-n">05</span><div class="card-ico">💨</div><p class="card-cat">Tolérance CO₂ · Poumons vides</p><h3 class="card-ttl">Table CO₂</h3><p class="card-txt">8 apnées à durée fixe (50% de ton max), récupération décroissante. Poumons vides. Basé sur ton test initial.</p><div class="card-ph">📸 PHOTO À VENIR</div><span class="card-arr">→</span></div>
+    <div class="card" data-ex="6"><span class="card-n">06</span><div class="card-ico">🌊</div><p class="card-cat">Tolérance O₂ · Volume pulmonaire</p><h3 class="card-ttl">Table O₂</h3><p class="card-txt">8 apnées croissantes (jusqu'à 80% de ton max), récupération fixe 2 min. Poumons pleins. Étirement structurel des poumons.</p><div class="card-ph">📸 PHOTO À VENIR</div><span class="card-arr">→</span></div>
+  </div>
+</div>
+
+<!-- PAGE EXERCICE -->
+<div id="p-ex" class="page">
+  <div class="ex-hdr">
+    <button class="btn-back" id="btn-back-dash">← Retour</button>
+    <div class="ex-meta">
+      <p class="ex-cat" id="ex-cat-label"></p>
+      <h2 class="ex-ttl" id="ex-title-label"></h2>
+    </div>
+  </div>
+  <div class="ex-body" id="ex-body"></div>
+</div>
+
+<div class="notif" id="notif-el"></div>
+
+<script>
+// ============ VOIX SYNTHÉTIQUE ============
+var voixActive = true;
+var voixLang = 'fr-FR';
+
+function parler(texte, delai) {
+  if (!voixActive) return;
+  if (!window.speechSynthesis) return;
+  setTimeout(function() {
+    try {
+      window.speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(texte);
+      u.lang = voixLang;
+      u.rate = 0.85;
+      u.pitch = 0.9;
+      u.volume = 1.0;
+      // Chercher une voix française si disponible
+      var voices = window.speechSynthesis.getVoices();
+      var voixFr = voices.find(function(v){ return v.lang.startsWith('fr'); });
+      if (voixFr) u.voice = voixFr;
+      window.speechSynthesis.speak(u);
+    } catch(e) {}
+  }, delai || 0);
+}
+
+// Phrases vocales
+function bipStart() { parler('Apnée', 0); }
+function bipChange() { /* changement box breathing - pas de voix pour ne pas perturber */ }
+function bipEnd() { parler('Séance terminée. Bien joué.', 0); }
+function bipRest() { parler('Récupération', 0); }
+function direInspire() { parler('Inspire', 0); }
+function direExpire() { parler('Expire', 0); }
+function direApnee() { parler('Apnée', 0); }
+function direRecup(duree) { parler('Récupération. ' + duree + ' secondes.', 0); }
+function direBientotFin() { parler('Trois secondes', 0); }
+function direNiveau(n) { parler('Niveau ' + n + ' secondes', 0); }
+
+// Box breathing voix
+var boxPhrasesVoix = ['Inspire', 'Retiens', 'Expire', 'Retiens'];
+
+// ============ NAVIGATION ============
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+document.getElementById('btn-commencer').addEventListener('click', function() {
+  // Init voix : charger les voix disponibles
+  if (window.speechSynthesis) {
+    window.speechSynthesis.getVoices();
+    // Sur certains navigateurs les voix se chargent en async
+    window.speechSynthesis.onvoiceschanged = function() { window.speechSynthesis.getVoices(); };
+  }
+  showPage('p-dash');
+});
+document.getElementById('btn-back-home').addEventListener('click', function() { showPage('p-home'); });
+document.getElementById('btn-back-dash').addEventListener('click', function() { showPage('p-dash'); });
+document.querySelectorAll('.card').forEach(function(card) {
+  card.addEventListener('click', function() { openEx(parseInt(this.getAttribute('data-ex'))); });
+});
+
+// ============ STORAGE ============
+function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) {} }
+function load(k) { try { var r = localStorage.getItem(k); return r ? JSON.parse(r) : null; } catch(e) { return null; } }
+
+// ============ UTILS ============
+function notif(msg, isErr) {
+  var n = document.getElementById('notif-el');
+  n.textContent = msg;
+  n.className = 'notif show' + (isErr ? ' err' : '');
+  setTimeout(function() { n.classList.remove('show'); }, 3000);
+}
+function fmt(s) {
+  var m = Math.floor(s / 60), sec = s % 60;
+  return m > 0 ? m + ':' + (sec < 10 ? '0' : '') + sec : sec + 's';
+}
+
+// ============ EXERCISE DATA ============
+var EX = {
+  1: { cat:'Force expiratoire · Diaphragme', title:'Breath of Fire', type:'counter', target:100, key:'fw-bof',
+    instr:'<strong>Position :</strong> Assis en tailleur ou sur chaise, dos droit, mains sur les genoux.<br><br><strong>Technique :</strong> Inspire passivement par le nez (ventre qui sort). Expire <em>court et puissant</em> par le nez en contractant les abdos — comme souffler une bougie d\'un coup sec. L\'inspiration est passive, l\'expiration est active.<br><br><strong>Objectif :</strong> 100 répétitions à rythme régulier (~1-2/sec). Commence lentement et accélère.<br><br><strong>Adaptations :</strong> Force expiratoire, abdominaux profonds, activation système nerveux sympathique.' },
+  2: { cat:'Force inspiratoire · Diaphragme', title:'Sandbag Breathing', type:'series', series:3, reps:15, key:'fw-sand',
+    instr:'<strong>Position :</strong> Allongé sur le dos, genoux fléchis. Sandbag (2-5 kg) sur l\'abdomen entre nombril et côtes flottantes.<br><br><strong>Technique :</strong> Une main sur le torse (immobile), l\'autre sur le sandbag. Inspire lentement par le nez en soulevant le sandbag avec le diaphragme. Expire lentement par la bouche.<br><br><strong>Objectif :</strong> 3 séries de 15 répétitions. Augmente le poids progressivement sur plusieurs semaines.<br><br><strong>Adaptations :</strong> Hypertrophie du diaphragme, force inspiratoire maximale, réduction du métaboréflexe.' },
+  3: { cat:'Volume pulmonaire · Expiration', title:'Balloon Breathing', type:'series', series:2, reps:10, key:'fw-ball',
+    instr:'<strong>Matériel :</strong> Un ballon standard.<br><br><strong>Technique :</strong> Inspire profondément par le nez (diaphragme). Place le ballon à la bouche et expire en <em>une seule expiration longue et puissante</em> sans souffler les joues — l\'air vient du ventre. Feedback visuel immédiat sur ta force et ton volume.<br><br><strong>Objectif :</strong> 2 séries de 10 gonflages. Vise à gonfler plus à chaque répétition.<br><br><strong>Adaptations :</strong> Force expiratoire, intercostaux, volume pulmonaire fonctionnel.' },
+  4: { cat:'Système nerveux · Récupération', title:'Box Breathing', type:'box', key:'fw-box',
+    instr:'<strong>Principe :</strong> 4 phases égales — inspire, retiens (poumons pleins), expire, retiens (poumons vides). Progression automatique de 3s à 10s par phase.<br><br><strong>Déroulement :</strong> 3s × 3 cycles → 4s × 4 cycles → ... → 10s × 10 cycles. <strong>Va le plus loin possible.</strong><br><br><strong>Adaptations :</strong> Régulation du système nerveux autonome, tolérance à l\'inconfort, récupération post-effort.' },
+  5: { cat:'Tolérance CO₂ · Poumons vides', title:'Table CO₂', type:'co2', key:'fw-co2',
+    instr:'<strong>Principe :</strong> 8 apnées de durée fixe (50% de ton max), récupération <em>décroissante</em> de 15s à chaque série. Toujours réalisé <strong>poumons vides</strong> — expire complètement avant chaque apnée.<br><br><strong>Pourquoi poumons vides ?</strong> Le CO₂ monte plus vite, entraîne la tolérance aux contractions du diaphragme et au signal de manque.<br><br><strong>Adaptations :</strong> Tolérance CO₂, calme mental sous pression.' },
+  6: { cat:'Tolérance O₂ · Volume pulmonaire', title:'Table O₂', type:'o2', key:'fw-o2',
+    instr:'<strong>Principe :</strong> 8 apnées <em>croissantes</em> (50% → 80% de ton max), récupération fixe 2 min. Toujours réalisé <strong>poumons pleins</strong> — inspire à fond avant chaque apnée.<br><br><strong>Pourquoi poumons pleins ?</strong> Les poumons gonflés étirent la cage thoracique de l\'intérieur — adaptation structurelle qui augmente réellement le volume pulmonaire.<br><br><strong>Adaptations :</strong> Tolérance hypoxie, efficience O₂, étirement structurel des poumons.' }
+};
+
+function openEx(id) {
+  var ex = EX[id];
+  document.getElementById('ex-cat-label').textContent = ex.cat;
+  document.getElementById('ex-title-label').textContent = ex.title;
+  showPage('p-ex');
+  var body = document.getElementById('ex-body');
+  body.innerHTML = '<div class="ph-img"><span style="font-size:30px">📸</span><span>Photo · ' + ex.title + '</span></div>'
+    + '<div class="instr">' + ex.instr + '</div>'
+    + '<div class="widget" id="w-main"></div>';
+  var w = document.getElementById('w-main');
+  if (ex.type === 'counter') buildCounter(w, ex);
+  else if (ex.type === 'series') buildSeries(w, ex);
+  else if (ex.type === 'box') buildBox(w, ex);
+  else if (ex.type === 'co2') buildApnea(w, ex, 'co2');
+  else if (ex.type === 'o2') buildApnea(w, ex, 'o2');
+}
+
+// ============ COUNTER ============
+function buildCounter(w, ex) {
+  var d = load(ex.key) || {};
+  var count = 0, iv = null, on = false;
+  w.innerHTML = '<p class="w-title">Objectif : ' + ex.target + ' répétitions</p>'
+    + '<div class="big-num" id="cnt">0</div>'
+    + '<p class="num-label" id="cntl">Répétitions</p>'
+    + (d.last ? '<p style="text-align:center;font-size:11px;color:#8899aa;margin-bottom:12px">Dernière séance : ' + new Date(d.last.date).toLocaleDateString('fr') + ' — ' + d.last.count + ' reps</p>' : '')
+    + '<div class="brow"><button class="bp" id="cstart">Démarrer</button><button class="bs" id="creset">Réinitialiser</button></div>';
+  var cntEl = document.getElementById('cnt');
+  var cntlEl = document.getElementById('cntl');
+  var cstartEl = document.getElementById('cstart');
+  document.getElementById('creset').addEventListener('click', function() {
+    if (on) { on = false; clearInterval(iv); }
+    count = 0; cntEl.textContent = '0'; cntEl.style.color = '';
+    cntlEl.textContent = 'Répétitions'; cstartEl.textContent = 'Démarrer'; cstartEl.style.background = '';
+  });
+  cstartEl.addEventListener('click', function() {
+    if (!on) {
+      on = true;
+      parler('Départ', 0);
+      iv = setInterval(function() {
+        count++; cntEl.textContent = count;
+        if (count >= ex.target) {
+          cntEl.style.color = '#66bb6a'; cntlEl.textContent = '✓ OBJECTIF ATTEINT !';
+          on = false; clearInterval(iv); cstartEl.textContent = 'Démarrer'; cstartEl.style.background = '';
+          save(ex.key, { last: { date: Date.now(), count: count } }); parler('Objectif atteint. Bien joué.', 0); notif('Objectif atteint ! 💪');
+        }
+      }, 600);
+      cstartEl.textContent = 'Pause'; cstartEl.style.background = '#ef5350';
+    } else {
+      on = false; clearInterval(iv); cstartEl.textContent = 'Reprendre'; cstartEl.style.background = '';
+      save(ex.key, { last: { date: Date.now(), count: count } }); notif(count + ' reps sauvegardées');
+    }
+  });
+}
+
+// ============ SERIES ============
+function buildSeries(w, ex) {
+  var cur = 0, repIv = null, restIv = null, repCnt = 0, inRest = false;
+  function dotsHTML() {
+    var h = '<div class="dots">';
+    for (var i = 0; i < ex.series; i++) h += '<div class="dot' + (i < cur ? ' done' : i === cur ? ' active' : '') + '">' + (i + 1) + '</div>';
+    return h + '</div>';
+  }
+  w.innerHTML = '<p class="w-title">' + ex.series + ' séries × ' + ex.reps + ' répétitions</p>'
+    + '<div id="sdots">' + dotsHTML() + '</div>'
+    + '<div class="big-num" id="srn">0</div>'
+    + '<p class="num-label" id="srl">Répétitions · Série 1</p>'
+    + '<div class="rest-box" id="srest" style="display:none"><p class="rest-lbl">Repos</p><p class="rest-timer-s" id="srt">30</p></div>'
+    + '<div class="brow"><button class="bp" id="sbtn">Démarrer série 1</button><button class="bs" id="sreset">Réinitialiser</button></div>';
+  var srnEl = document.getElementById('srn'), srlEl = document.getElementById('srl');
+  var sbtnEl = document.getElementById('sbtn'), srestEl = document.getElementById('srest'), srtEl = document.getElementById('srt');
+  function updDots() { document.getElementById('sdots').innerHTML = dotsHTML(); }
+  document.getElementById('sreset').addEventListener('click', function() {
+    if (repIv) clearInterval(repIv); if (restIv) clearInterval(restIv);
+    cur = 0; repCnt = 0; inRest = false; srnEl.textContent = '0'; srlEl.textContent = 'Répétitions · Série 1';
+    srestEl.style.display = 'none'; sbtnEl.disabled = false; sbtnEl.textContent = 'Démarrer série 1'; sbtnEl.style.background = ''; updDots();
+  });
+  sbtnEl.addEventListener('click', function() {
+    if (inRest) return;
+    if (repIv) { clearInterval(repIv); repIv = null; sbtnEl.textContent = 'Reprendre série ' + (cur + 1); sbtnEl.style.background = ''; return; }
+    repCnt = 0; srnEl.textContent = '0'; srlEl.textContent = 'Répétitions · Série ' + (cur + 1);
+    parler('Départ', 0);
+    repIv = setInterval(function() {
+      repCnt++; srnEl.textContent = repCnt;
+      if (repCnt >= ex.reps) {
+        clearInterval(repIv); repIv = null; cur++; updDots();
+        if (cur >= ex.series) {
+          sbtnEl.textContent = '✓ Terminé !'; sbtnEl.disabled = true;
+          srlEl.textContent = 'Toutes les séries complètes !'; parler('Toutes les séries terminées. Excellent.', 0); notif('Séance complète ! 💪');
+        } else {
+          parler('Repos. Trente secondes.', 0); inRest = true; sbtnEl.disabled = true; srestEl.style.display = 'block';
+          var t = 30; srtEl.textContent = t;
+          restIv = setInterval(function() { t--; srtEl.textContent = t; if (t <= 0) { clearInterval(restIv); inRest = false; srestEl.style.display = 'none'; sbtnEl.disabled = false; sbtnEl.textContent = 'Démarrer série ' + (cur + 1); sbtnEl.style.background = ''; parler('Série suivante', 0); } }, 1000);
+        }
+      }
+    }, 800);
+    sbtnEl.textContent = 'Pause'; sbtnEl.style.background = '#ef5350';
+  });
+}
+
+// ============ BOX BREATHING ============
+function buildBox(w, ex) {
+  var d = load(ex.key) || {}; var best = d.best || 0;
+  var sec = 3, cycle = 0, phase = 0, phaseTime = 0, running = false, iv = null;
+  var phases = ['INSPIRE', 'RETIENS', 'EXPIRE', 'RETIENS'];
+  var cols = ['#4fc3f7', '#ffd54f', '#81d4fa', '#b0bec5'];
+  w.innerHTML = '<p class="w-title">Box Breathing — Progression guidée</p>'
+    + '<div class="box-badge" id="bb">Niveau : 3s par phase · 3 cycles</div>'
+    + '<div class="box-wrap"><div class="box-svg-c"><svg viewBox="0 0 210 210" fill="none">'
+    + '<rect x="15" y="15" width="180" height="180" rx="10" stroke="rgba(79,195,247,0.12)" stroke-width="1.5"/>'
+    + '<rect id="bpr" x="15" y="15" width="180" height="180" rx="10" stroke="#4fc3f7" stroke-width="2.5" fill="none" stroke-dasharray="720" stroke-dashoffset="720" stroke-linecap="round"/>'
+    + '</svg><div class="box-center"><p class="box-ph" id="bph">PRÊT</p><p class="box-s" id="bsc">—</p></div></div>'
+    + '<p class="box-info" id="bci">Cycle 0 / 3 · Niveau 3s</p></div>'
+    + '<div class="brow"><button class="bp" id="bstart">Démarrer</button><button class="bs" id="bstop" disabled>Arrêter ici</button><button class="bs" id="breset">Réinitialiser</button></div>'
+    + '<div class="rec-box"><p class="rec-lbl">🏆 Meilleur niveau atteint</p><p class="rec-val" id="bval">' + (best > 0 ? best + 's par phase' : '—') + '</p></div>';
+  var bpr = document.getElementById('bpr'), bph = document.getElementById('bph'), bsc = document.getElementById('bsc');
+  var bci = document.getElementById('bci'), bb = document.getElementById('bb');
+  var bstart = document.getElementById('bstart'), bstop = document.getElementById('bstop'), breset = document.getElementById('breset');
+  function getCyc(s) { return Math.min(s, 10); }
+  function updBadge() { var c = getCyc(sec); bb.textContent = 'Niveau : ' + sec + 's par phase · ' + c + ' cycles'; bci.textContent = 'Cycle ' + cycle + ' / ' + c + ' · Niveau ' + sec + 's'; }
+  function updProg(ph, el, tot) { var p = 720, pp = p / 4, filled = ph * pp + (el / tot) * pp; bpr.style.strokeDashoffset = p - filled; bpr.style.stroke = cols[ph]; bph.style.color = cols[ph]; }
+  function saveRec() { var d2 = load(ex.key) || {}; if (sec > (d2.best || 0)) { d2.best = sec; save(ex.key, d2); document.getElementById('bval').textContent = sec + 's par phase'; notif('Nouveau record : ' + sec + 's ! 🎉'); } else { notif('Niveau ' + sec + 's atteint'); } }
+  bstart.addEventListener('click', function() {
+    running = true; sec = 3; cycle = 1; phase = 0; phaseTime = sec;
+    bstart.disabled = true; bstop.disabled = false; updBadge();
+    bph.textContent = phases[0]; bsc.textContent = phaseTime; bph.style.color = cols[0];
+    parler('Inspire', 0);
+    iv = setInterval(function() {
+      phaseTime--; bsc.textContent = Math.max(0, phaseTime); updProg(phase, sec - phaseTime, sec);
+      var c = getCyc(sec); bci.textContent = 'Cycle ' + cycle + ' / ' + c + ' · Niveau ' + sec + 's';
+      if (phaseTime <= 0) {
+        phase++;
+        if (phase >= 4) {
+          phase = 0; cycle++;
+          if (cycle > c) {
+            sec++; if (sec > 10) { clearInterval(iv); running = false; bph.textContent = 'COMPLET'; bsc.textContent = '10'; bph.style.color = '#ffd54f'; parler('Niveau dix atteint. Félicitations.', 0); saveRec(); return; }
+            var nc = getCyc(sec); cycle = 1; updBadge();
+          }
+        }
+        phaseTime = sec; bph.textContent = phases[phase]; bph.style.color = cols[phase];
+        parler(boxPhrasesVoix[phase], 0);
+      }
+    }, 1000);
+  });
+  bstop.addEventListener('click', function() { clearInterval(iv); running = false; bstart.disabled = false; bstop.disabled = true; saveRec(); });
+  breset.addEventListener('click', function() {
+    clearInterval(iv); running = false; sec = 3; cycle = 0; phase = 0;
+    bpr.style.strokeDashoffset = '720'; bph.textContent = 'PRÊT'; bph.style.color = '#4fc3f7'; bsc.textContent = '—';
+    bstart.disabled = false; bstop.disabled = true; updBadge();
+  });
+  updBadge();
+}
+
+// ============ APNEA - CERCLE SVG ============
+// Cercle : r=90 => circonférence = 2*PI*90 ≈ 565.5
+var CIRC = 565.5;
+
+function makeCircleSVG(color) {
+  return '<svg class="apn-circle-svg" viewBox="0 0 220 220">'
+    + '<circle cx="110" cy="110" r="90" stroke="rgba(79,195,247,0.1)" stroke-width="8" fill="none"/>'
+    + '<circle id="apn-prog-circle" cx="110" cy="110" r="90" stroke="' + color + '" stroke-width="8" fill="none"'
+    + ' stroke-dasharray="' + CIRC + '" stroke-dashoffset="' + CIRC + '"'
+    + ' stroke-linecap="round" transform="rotate(-90 110 110)" style="transition:stroke .4s"/>'
+    + '</svg>';
+}
+
+function updateCircle(pct, color) {
+  var c = document.getElementById('apn-prog-circle');
+  if (!c) return;
+  c.style.strokeDashoffset = CIRC - (pct / 100) * CIRC;
+  if (color) c.style.stroke = color;
+}
+
+function buildApnea(w, ex, type) {
+  var testData = load('fw-apnea-test');
+  if (!testData || !testData.max) { buildTest(w, ex, type); return; }
+  var max = testData.max;
+  var hist = load(ex.key) || { sessions: [] };
+  var table = [];
+  if (type === 'co2') {
+    var h = Math.floor(max * 0.5);
+    for (var i = 0; i < 8; i++) table.push({ hold: h, rest: Math.max(30, 120 - i * 15) });
+    table[7].rest = 0;
+  } else {
+    var mn = Math.floor(max * 0.5), mx = Math.floor(max * 0.8);
+    var st = Math.max(1, Math.floor((mx - mn) / 7));
+    for (var i = 0; i < 8; i++) table.push({ hold: mn + i * st, rest: i < 7 ? 120 : 0 });
+  }
+  var tLbl = type === 'co2' ? 'CO₂' : 'O₂';
+  var lLbl = type === 'co2' ? 'Poumons vides' : 'Poumons pleins';
+  var holdColor = type === 'co2' ? '#ef5350' : '#4fc3f7';
+  var restColor = '#66bb6a';
+
+  var rowsHTML = '';
+  table.forEach(function(r, i) {
+    rowsHTML += '<div class="apn-row" id="ar' + i + '">'
+      + '<span class="apn-rn">' + (i + 1) + '</span>'
+      + '<div><p class="apn-rl">🫁 ' + lLbl + '</p>' + (r.rest > 0 ? '<p class="apn-rl" style="margin-top:2px">💨 Récup.</p>' : '') + '</div>'
+      + '<div style="text-align:right"><p class="apn-rt">' + fmt(r.hold) + '</p>' + (r.rest > 0 ? '<p class="apn-rt" style="color:#8899aa;font-size:11px">' + fmt(r.rest) + '</p>' : '') + '</div>'
+      + '</div>';
+  });
+
+  var histHTML = (hist.sessions && hist.sessions.length)
+    ? hist.sessions.slice(0, 6).map(function(s) { return '<div class="hist-item"><span>' + new Date(s.date).toLocaleDateString('fr') + '</span><span class="hist-v">' + (s.completed ? '✓ Complète' : '—') + '</span></div>'; }).join('')
+    : '<p style="text-align:center;font-size:10px;color:#8899aa;padding:8px">Aucune séance enregistrée</p>';
+
+  w.innerHTML = '<p class="w-title">Table ' + tLbl + ' — ' + lLbl + '</p>'
+
+    // Grand cercle timer
+    + '<div class="apn-circle-wrap">'
+    + makeCircleSVG(holdColor)
+    + '<div class="apn-circle-center">'
+    + '<div class="apn-big-time" id="apn-big-time">—</div>'
+    + '<div class="apn-phase-lbl" id="apn-phase-lbl" style="color:' + holdColor + '">PRÊT</div>'
+    + '<div class="apn-series-lbl" id="apn-series-lbl">Série — / 8</div>'
+    + '</div></div>'
+
+    // Stats
+    + '<div class="apn-stats">'
+    + '<div class="apn-stat"><p class="apn-sl">Test max</p><p class="apn-sv">' + fmt(max) + '</p></div>'
+    + '<div class="apn-stat"><p class="apn-sl">Apnée base</p><p class="apn-sv">' + fmt(table[0].hold) + '</p></div>'
+    + '<button class="bs" id="aretest" style="font-size:9px;padding:7px 10px">Refaire le test</button>'
+    + '</div>'
+
+    // Table rows
+    + '<div class="apn-rows">' + rowsHTML + '</div>'
+
+    // Boutons
+    + '<div class="brow" style="margin-bottom:14px">'
+    + '<button class="bp" id="astart">Démarrer la table</button>'
+    + '<button class="bs" id="areset">Réinitialiser</button>'
+    + '</div>'
+
+    // Historique
+    + '<div class="hist"><p class="hist-ttl">Historique des séances</p><div class="hist-list" id="ahist">' + histHTML + '</div></div>';
+
+  var bigTimeEl = document.getElementById('apn-big-time');
+  var phaseLblEl = document.getElementById('apn-phase-lbl');
+  var seriesLblEl = document.getElementById('apn-series-lbl');
+  var astartEl = document.getElementById('astart'), aresetEl = document.getElementById('areset');
+  var cur = 0, running = false, inHold = true, iv = null, el = 0;
+
+  document.getElementById('aretest').addEventListener('click', function() {
+    save('fw-apnea-test', null); buildTest(w, ex, type);
+  });
+
+  function hilite(i) {
+    document.querySelectorAll('#w-main .apn-row').forEach(function(r) { r.classList.remove('cur'); });
+    var row = document.getElementById('ar' + i);
+    if (row) { row.classList.add('cur'); row.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+  }
+  function markDone(i) {
+    var row = document.getElementById('ar' + i);
+    if (row) { row.classList.remove('cur'); row.classList.add('done'); }
+  }
+
+  function setCirclePhase(color, label, serLabel) {
+    phaseLblEl.textContent = label;
+    phaseLblEl.style.color = color;
+    var c = document.getElementById('apn-prog-circle');
+    if (c) c.style.stroke = color;
+    seriesLblEl.textContent = serLabel;
+  }
+
+  function nextPhase() {
+    var row = table[cur];
+    var dur = inHold ? row.hold : row.rest;
+    var color = inHold ? holdColor : restColor;
+    var label = inHold ? (type === 'co2' ? 'APNÉE · POUMONS VIDES' : 'APNÉE · POUMONS PLEINS') : 'RÉCUPÉRATION';
+    el = 0;
+    hilite(cur);
+    updateCircle(0, color);
+    setCirclePhase(color, label, 'Série ' + (cur + 1) + ' / 8');
+    if (inHold) {
+      if (type === 'co2') { parler('Apnée. Poumons vides.', 0); }
+      else { parler('Apnée. Poumons pleins.', 0); }
+    } else {
+      var restDur = table[cur] ? table[cur].rest : 0;
+      direRecup(restDur);
+    }
+
+    iv = setInterval(function() {
+      el++;
+      var remaining = dur - el;
+      var pct = (el / dur) * 100;
+      bigTimeEl.textContent = fmt(remaining);
+      updateCircle(pct, color);
+
+      // Bip à 3 secondes restantes
+      if (remaining === 3) parler('Trois', 0);
+
+      if (el >= dur) {
+        clearInterval(iv);
+        if (inHold) {
+          markDone(cur);
+          if (row.rest > 0) { inHold = false; setTimeout(nextPhase, 300); }
+          else { finish(); }
+        } else {
+          cur++; inHold = true;
+          if (cur >= 8) finish(); else setTimeout(nextPhase, 300);
+        }
+      }
+    }, 1000);
+  }
+
+  function finish() {
+    running = false;
+    bigTimeEl.textContent = '✓';
+    setCirclePhase('#ffd54f', 'TERMINÉ', 'Table complète !');
+    updateCircle(100, '#ffd54f');
+    astartEl.textContent = 'Démarrer à nouveau'; astartEl.disabled = false;
+    parler('Table terminée. Excellent travail.', 0); notif('Table ' + tLbl + ' complète ! 🔥');
+    var sessions = hist.sessions || []; sessions.unshift({ date: Date.now(), completed: true });
+    if (sessions.length > 10) sessions.pop(); hist.sessions = sessions; save(ex.key, hist);
+    document.getElementById('ahist').innerHTML = sessions.slice(0, 6).map(function(s) {
+      return '<div class="hist-item"><span>' + new Date(s.date).toLocaleDateString('fr') + '</span><span class="hist-v">✓ Complète</span></div>';
+    }).join('');
+  }
+
+  astartEl.addEventListener('click', function() {
+    if (!running) {
+      running = true; cur = 0; inHold = true; astartEl.disabled = true; astartEl.textContent = 'En cours...';
+      document.querySelectorAll('#w-main .apn-row').forEach(function(r) { r.classList.remove('done', 'cur'); });
+      nextPhase();
+    }
+  });
+
+  aresetEl.addEventListener('click', function() {
+    clearInterval(iv); running = false; cur = 0; inHold = true;
+    bigTimeEl.textContent = '—'; phaseLblEl.textContent = 'PRÊT'; phaseLblEl.style.color = holdColor;
+    seriesLblEl.textContent = 'Série — / 8'; updateCircle(0, holdColor);
+    astartEl.disabled = false; astartEl.textContent = 'Démarrer la table';
+    document.querySelectorAll('#w-main .apn-row').forEach(function(r) { r.classList.remove('done', 'cur'); });
+  });
+}
+
+// ============ APNEA TEST ============
+function buildTest(w, ex, type) {
+  var sec = 0, iv = null, on = false;
+  var testColor = '#4fc3f7';
+  w.innerHTML = '<p class="w-title">Test d\'apnée maximum</p>'
+    + '<div class="apn-circle-wrap">'
+    + makeCircleSVG(testColor)
+    + '<div class="apn-circle-center">'
+    + '<div class="apn-big-time" id="tt">0:00</div>'
+    + '<div class="apn-phase-lbl" id="tph" style="color:' + testColor + '">PRÊT</div>'
+    + '</div></div>'
+    + '<p class="test-info" id="ts">Expire complètement, inspire à fond, puis retiens.</p>'
+    + '<div class="brow"><button class="bp" id="tstart">▶ Démarrer</button><button class="bs" id="tstop" disabled>■ J\'arrête</button></div>'
+    + '<div class="tip"><strong>Conseil :</strong> Ne force pas. Arrête dès les premières contractions intenses du diaphragme. Ce résultat sert de base pour toutes tes tables.</div>';
+  var ttEl = document.getElementById('tt'), tphEl = document.getElementById('tph');
+  var tstartEl = document.getElementById('tstart'), tstopEl = document.getElementById('tstop');
+  var maxTime = 0;
+  tstartEl.addEventListener('click', function() {
+    on = true; sec = 0; maxTime = 0; tstartEl.disabled = true; tstopEl.disabled = false;
+    tphEl.textContent = 'APNÉE EN COURS'; tphEl.style.color = '#ef5350';
+    parler('Apnée. Maintenant.', 0);
+    iv = setInterval(function() {
+      sec++;
+      var m = Math.floor(sec / 60), s = sec % 60;
+      ttEl.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+      // Le cercle tourne lentement (2 min = 120s = 100%)
+      updateCircle(Math.min(100, (sec / 120) * 100), '#ef5350');
+    }, 1000);
+  });
+  tstopEl.addEventListener('click', function() {
+    clearInterval(iv); on = false; tstartEl.disabled = false; tstopEl.disabled = true;
+    tphEl.textContent = 'SAUVEGARDÉ'; tphEl.style.color = '#66bb6a';
+    updateCircle(100, '#66bb6a');
+    save('fw-apnea-test', { max: sec, date: Date.now() });
+    parler('Test enregistré. ' + fmt(sec), 0); notif('Test sauvegardé : ' + fmt(sec) + ' !');
+    setTimeout(function() { buildApnea(w, ex, type); }, 800);
+  });
+}
+</script>
+</body>
+</html>
