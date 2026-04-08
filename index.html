@@ -22,7 +22,7 @@ body{font-family:'Raleway',Georgia,serif;background:#0d1117;color:#f0f4f8;min-he
 .page.active{display:flex!important;flex-direction:column;min-height:100vh}
 
 /* HOME */
-#p-home{align-items:center;justify-content:center;text-align:center;background:linear-gradient(180deg,#080c10 0%,#0d1520 50%,#080c10 100%);padding:40px 20px;min-height:100vh}
+#p-home{align-items:center;justify-content:center;text-align:center;background:linear-gradient(180deg,#080c10 0%,#0d1520 50%,#080c10 100%);padding:40px 20px;min-height:100vh;position:relative}
 .lung-anim{font-size:90px;display:block;margin-bottom:28px;animation:breathe 4s ease-in-out infinite}
 @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
 .home-tag{font-size:11px;letter-spacing:6px;color:#a8d8ea;margin-bottom:14px;opacity:.8}
@@ -30,7 +30,7 @@ body{font-family:'Raleway',Georgia,serif;background:#0d1117;color:#f0f4f8;min-he
 .home-sub{font-size:17px;color:#4fc3f7;letter-spacing:3px;margin-bottom:22px}
 .home-div{width:60px;height:1px;background:linear-gradient(90deg,transparent,#a8d8ea,transparent);margin:0 auto 22px}
 .home-desc{font-size:14px;color:#8899aa;line-height:1.8;max-width:460px;margin:0 auto 36px}
-.btn-main{padding:16px 48px;background:transparent;border:1.5px solid #4fc3f7;color:#4fc3f7;font-size:13px;letter-spacing:4px;cursor:pointer;transition:all .3s;font-family:'Cinzel',serif}
+.btn-main{padding:16px 48px;background:transparent;border:1.5px solid #4fc3f7;color:#4fc3f7;font-size:13px;letter-spacing:4px;cursor:pointer;transition:all .3s;font-family:'Cinzel',serif;position:relative;z-index:10}
 .btn-main:hover{background:#4fc3f7;color:#080c10}
 
 /* DASHBOARD */
@@ -145,7 +145,7 @@ body{font-family:'Raleway',Georgia,serif;background:#0d1117;color:#f0f4f8;min-he
 <!-- PAGE ACCUEIL -->
 <div id="p-home" class="page active">
   <p class="home-tag" style="font-size:20px;letter-spacing:8px;margin-bottom:20px;opacity:1;color:#f0f4f8;font-family:'Cinzel',serif;font-weight:700">FROZEN WARRIORS</p>
-  <img src="images/hero.png" alt="Frozen Warriors Breathing" style="width:200px;height:200px;object-fit:contain;margin-bottom:20px;animation:breathe 4s ease-in-out infinite;display:block;margin-left:auto;margin-right:auto;mix-blend-mode:lighten;filter:brightness(1.1) contrast(1.1);">
+  <img src="images/hero.png" alt="Frozen Warriors Breathing" style="width:200px;height:200px;object-fit:contain;margin-bottom:20px;animation:breathe 4s ease-in-out infinite;display:block;margin-left:auto;margin-right:auto;mix-blend-mode:lighten;filter:brightness(1.1) contrast(1.1);pointer-events:none;">
   <h1 class="home-title">Respiration</h1>
   <p class="home-sub">Respire plus fort. Performe plus loin.</p>
   <div class="home-div"></div>
