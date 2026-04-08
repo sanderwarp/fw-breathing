@@ -4,17 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Frozen Warriors — Breathing App</title>
-<link rel="apple-touch-icon" href="images/hero.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="FW Breathing">
-<meta name="theme-color" content="#0d1117">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
-<link rel="apple-touch-icon" href="images/hero.png">
-<link rel="icon" type="image/png" href="images/hero.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="FW Breathing">
-<meta name="theme-color" content="#0d1117">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Raleway',Georgia,serif;background:#0d1117;color:#f0f4f8;min-height:100vh}
@@ -41,19 +31,20 @@ body{font-family:'Raleway',Georgia,serif;background:#0d1117;color:#f0f4f8;min-he
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
 .btn-back{background:transparent;border:1px solid rgba(79,195,247,.25);color:#8899aa;padding:8px 16px;font-size:11px;letter-spacing:2px;cursor:pointer;transition:all .2s}
 .btn-back:hover{border-color:#4fc3f7;color:#4fc3f7}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:3px;padding:3px;flex:1;align-content:start}
-.card{cursor:pointer;transition:all .25s;position:relative;overflow:hidden;border-radius:6px;aspect-ratio:1/1;background:#1a2332}
-.card:active{transform:scale(0.97)}
-.card-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
-.card:hover .card-img{transform:scale(1.03)}
-.card-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,transparent 50%);pointer-events:none}
-.card-n{font-family:'Cinzel',serif;font-size:28px;font-weight:900;color:rgba(255,255,255,.15);position:absolute;top:8px;right:10px;line-height:1}
-.card-ttl{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:#fff;position:absolute;bottom:10px;left:12px;right:30px;line-height:1.2;text-shadow:0 1px 4px rgba(0,0,0,.8)}
-.card-cat{font-size:8px;letter-spacing:1.5px;color:#81d4fa;position:absolute;bottom:28px;left:12px;text-transform:uppercase;text-shadow:0 1px 3px rgba(0,0,0,.8)}
-.card-ico{display:none}
-.card-body{display:none}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:3px;padding:3px;flex:1}
+.card{background:#1a2332;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;display:flex;flex-direction:column;border:1px solid transparent;border-radius:4px}
+.card:hover{background:#1e2d40;border-color:rgba(79,195,247,.3)}
+.card:active{transform:scale(0.98)}
+.card-img{width:100%;height:140px;object-fit:cover;display:block}
+@media(max-width:400px){.card-img{height:120px}}
+.card-body{padding:12px 14px 14px}
+.card-n{font-family:'Cinzel',serif;font-size:32px;font-weight:900;color:rgba(79,195,247,.1);position:absolute;top:8px;right:10px;line-height:1}
+.card-ico{font-size:18px;margin-bottom:6px}
+.card-cat{font-size:8px;letter-spacing:2px;color:#4fc3f7;margin-bottom:4px;text-transform:uppercase}
+.card-ttl{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:#f0f4f8;line-height:1.2}
 .card-txt{display:none}
-.card-arr{display:none}
+.card-arr{position:absolute;bottom:10px;right:12px;color:rgba(79,195,247,.25);font-size:14px;transition:all .2s}
+.card:hover .card-arr{color:#4fc3f7;transform:translateX(3px)}
 
 /* EXERCISE PAGE */
 #p-ex{background:#0d1117}
@@ -144,9 +135,9 @@ body{font-family:'Raleway',Georgia,serif;background:#0d1117;color:#f0f4f8;min-he
 
 <!-- PAGE ACCUEIL -->
 <div id="p-home" class="page active">
-  <p class="home-tag" style="font-size:20px;letter-spacing:8px;margin-bottom:20px;opacity:1;color:#f0f4f8;font-family:'Cinzel',serif;font-weight:700">FROZEN WARRIORS</p>
-  <img src="images/hero.png" alt="Frozen Warriors Breathing" style="width:200px;height:200px;object-fit:contain;margin-bottom:20px;animation:breathe 4s ease-in-out infinite;display:block;margin-left:auto;margin-right:auto;mix-blend-mode:lighten;filter:brightness(1.1) contrast(1.1);">
-  <h1 class="home-title">Respiration</h1>
+  <img src="images/hero.png" alt="Frozen Warriors Breathing" style="width:220px;height:220px;object-fit:contain;margin-bottom:28px;animation:breathe 4s ease-in-out infinite;display:block;margin-left:auto;margin-right:auto;mix-blend-mode:screen;">
+  <p class="home-tag">FROZEN WARRIORS</p>
+  <h1 class="home-title">Breathing<br>App</h1>
   <p class="home-sub">Respire plus fort. Performe plus loin.</p>
   <div class="home-div"></div>
   <p class="home-desc">6 protocoles respiratoires pour augmenter ta force, ton endurance et ta tolérance au CO₂. Basé sur les méthodes Gracie, Vranich et Oxygen Advantage.</p>
@@ -160,14 +151,14 @@ body{font-family:'Raleway',Georgia,serif;background:#0d1117;color:#f0f4f8;min-he
     <button class="btn-back" id="btn-back-home">← Accueil</button>
   </div>
   <div class="grid">
-    <div class="card" data-ex="1"><img class="card-img" src="images/01-breath-of-fire.png" alt="Breath of Fire"><div class="card-overlay"></div><span class="card-n">01</span><p class="card-cat">Force expiratoire</p><h3 class="card-ttl">Breath of Fire</h3></div>
-    <div class="card" data-ex="2"><img class="card-img" src="images/02-sandbag.png" alt="Sandbag Breathing"><div class="card-overlay"></div><span class="card-n">02</span><p class="card-cat">Force inspiratoire</p><h3 class="card-ttl">Sandbag Breathing</h3></div>
-    <div class="card" data-ex="3"><img class="card-img" src="images/03-balloon.png" alt="Balloon Breathing"><div class="card-overlay"></div><span class="card-n">03</span><p class="card-cat">Volume pulmonaire</p><h3 class="card-ttl">Balloon Breathing</h3></div>
-    <div class="card" data-ex="4"><img class="card-img" src="images/04-box-breathing.png" alt="Box Breathing"><div class="card-overlay"></div><span class="card-n">04</span><p class="card-cat">Système nerveux</p><h3 class="card-ttl">Box Breathing</h3></div>
-    <div class="card" data-ex="5"><img class="card-img" src="images/05-table-co2.png" alt="Table CO₂"><div class="card-overlay"></div><span class="card-n">05</span><p class="card-cat">Tolérance CO₂</p><h3 class="card-ttl">Table CO₂</h3></div>
-    <div class="card" data-ex="6"><img class="card-img" src="images/06-table-o2.png" alt="Table O₂"><div class="card-overlay"></div><span class="card-n">06</span><p class="card-cat">Tolérance O₂</p><h3 class="card-ttl">Table O₂</h3></div>
+    <div class="card" data-ex="1"><span class="card-n">01</span><img class="card-img" src="images/01-breath-of-fire.png" alt="Breath of Fire"><div class="card-body"><div class="card-ico">🔥</div><p class="card-cat">Force expiratoire · Diaphragme</p><h3 class="card-ttl">Breath of Fire</h3></div><span class="card-arr">→</span></div>
+    <div class="card" data-ex="2"><span class="card-n">02</span><img class="card-img" src="images/02-sandbag.png" alt="Sandbag Breathing"><div class="card-body"><div class="card-ico">🏋️</div><p class="card-cat">Force inspiratoire · Diaphragme</p><h3 class="card-ttl">Sandbag Breathing</h3></div><span class="card-arr">→</span></div>
+    <div class="card" data-ex="3"><span class="card-n">03</span><img class="card-img" src="images/03-balloon.png" alt="Balloon Breathing"><div class="card-body"><div class="card-ico">🎈</div><p class="card-cat">Volume pulmonaire · Expiration</p><h3 class="card-ttl">Balloon Breathing</h3></div><span class="card-arr">→</span></div>
+    <div class="card" data-ex="4"><span class="card-n">04</span><img class="card-img" src="images/04-box-breathing.png" alt="Box Breathing"><div class="card-body"><div class="card-ico">⬜</div><p class="card-cat">Système nerveux · Récupération</p><h3 class="card-ttl">Box Breathing</h3></div><span class="card-arr">→</span></div>
+    <div class="card" data-ex="5"><span class="card-n">05</span><img class="card-img" src="images/05-table-co2.png" alt="Table CO₂"><div class="card-body"><div class="card-ico">💨</div><p class="card-cat">Tolérance CO₂ · Poumons vides</p><h3 class="card-ttl">Table CO₂</h3></div><span class="card-arr">→</span></div>
+    <div class="card" data-ex="6"><span class="card-n">06</span><img class="card-img" src="images/06-table-o2.png" alt="Table O₂"><div class="card-body"><div class="card-ico">🌊</div><p class="card-cat">Tolérance O₂ · Volume pulmonaire</p><h3 class="card-ttl">Table O₂</h3></div><span class="card-arr">→</span></div>
   </div>
-</div>
+
 
 <!-- PAGE EXERCICE -->
 <div id="p-ex" class="page">
@@ -267,7 +258,7 @@ var EX = {
     instr:'<strong>Position :</strong> Assis en tailleur ou sur chaise, dos droit, mains sur les genoux.<br><br><strong>Technique :</strong> Inspire passivement par le nez (ventre qui sort). Expire <em>court et puissant</em> par le nez en contractant les abdos — comme souffler une bougie d\'un coup sec. L\'inspiration est passive, l\'expiration est active.<br><br><strong>Objectif :</strong> 100 répétitions à rythme régulier (~1-2/sec). Commence lentement et accélère.<br><br><strong>Adaptations :</strong> Force expiratoire, abdominaux profonds, activation système nerveux sympathique.' },
   2: { cat:'Force inspiratoire · Diaphragme', title:'Sandbag Breathing', type:'series', series:3, reps:15, key:'fw-sand',
     instr:'<strong>Position :</strong> Allongé sur le dos, genoux fléchis. Sandbag (2-5 kg) sur l\'abdomen entre nombril et côtes flottantes.<br><br><strong>Technique :</strong> Une main sur le torse (immobile), l\'autre sur le sandbag. Inspire lentement par le nez en soulevant le sandbag avec le diaphragme. Expire lentement par la bouche.<br><br><strong>Objectif :</strong> 3 séries de 15 répétitions. Augmente le poids progressivement sur plusieurs semaines.<br><br><strong>Adaptations :</strong> Hypertrophie du diaphragme, force inspiratoire maximale, réduction du métaboréflexe.' },
-  3: { cat:'Volume pulmonaire · Expiration', title:'Balloon Breathing', type:'balloon', series:2, key:'fw-ball',
+  3: { cat:'Volume pulmonaire · Expiration', title:'Balloon Breathing', type:'series', series:2, reps:10, key:'fw-ball',
     instr:'<strong>Matériel :</strong> Un ballon standard.<br><br><strong>Technique :</strong> Inspire profondément par le nez (diaphragme). Place le ballon à la bouche et expire en <em>une seule expiration longue et puissante</em> sans souffler les joues — l\'air vient du ventre. Feedback visuel immédiat sur ta force et ton volume.<br><br><strong>Objectif :</strong> 2 séries de 10 gonflages. Vise à gonfler plus à chaque répétition.<br><br><strong>Adaptations :</strong> Force expiratoire, intercostaux, volume pulmonaire fonctionnel.' },
   4: { cat:'Système nerveux · Récupération', title:'Box Breathing', type:'box', key:'fw-box',
     instr:'<strong>Principe :</strong> 4 phases égales — inspire, retiens (poumons pleins), expire, retiens (poumons vides). Progression automatique de 3s à 10s par phase.<br><br><strong>Déroulement :</strong> 3s × 3 cycles → 4s × 4 cycles → ... → 10s × 10 cycles. <strong>Va le plus loin possible.</strong><br><br><strong>Adaptations :</strong> Régulation du système nerveux autonome, tolérance à l\'inconfort, récupération post-effort.' },
@@ -291,8 +282,6 @@ function openEx(id) {
   var w = document.getElementById('w-main');
   if (ex.type === 'counter') buildCounter(w, ex);
   else if (ex.type === 'series') buildSeries(w, ex);
-  else if (ex.type === 'balloon') buildBalloon(w, ex);
-  else if (ex.type === 'balloon') buildBalloon(w, ex);
   else if (ex.type === 'box') buildBox(w, ex);
   else if (ex.type === 'co2') buildApnea(w, ex, 'co2');
   else if (ex.type === 'o2') buildApnea(w, ex, 'o2');
@@ -326,7 +315,7 @@ function buildCounter(w, ex) {
           on = false; clearInterval(iv); cstartEl.textContent = 'Démarrer'; cstartEl.style.background = '';
           save(ex.key, { last: { date: Date.now(), count: count } }); parler('Objectif atteint. Bien joué.', 0); notif('Objectif atteint ! 💪');
         }
-      }, 540);
+      }, 600);
       cstartEl.textContent = 'Pause'; cstartEl.style.background = '#ef5350';
     } else {
       on = false; clearInterval(iv); cstartEl.textContent = 'Reprendre'; cstartEl.style.background = '';
@@ -375,7 +364,7 @@ function buildSeries(w, ex) {
           restIv = setInterval(function() { t--; srtEl.textContent = t; if (t <= 0) { clearInterval(restIv); inRest = false; srestEl.style.display = 'none'; sbtnEl.disabled = false; sbtnEl.textContent = 'Démarrer série ' + (cur + 1); sbtnEl.style.background = ''; parler('Série suivante', 0); } }, 1000);
         }
       }
-    }, 2400);
+    }, 800);
     sbtnEl.textContent = 'Pause'; sbtnEl.style.background = '#ef5350';
   });
 }
@@ -398,8 +387,8 @@ function buildBox(w, ex) {
   var bpr = document.getElementById('bpr'), bph = document.getElementById('bph'), bsc = document.getElementById('bsc');
   var bci = document.getElementById('bci'), bb = document.getElementById('bb');
   var bstart = document.getElementById('bstart'), bstop = document.getElementById('bstop'), breset = document.getElementById('breset');
-  function getCyc(s) { return 3; }
-  function updBadge() { var c = getCyc(sec); bb.textContent = 'Niveau : ' + sec + 's par phase · 3 cycles'; bci.textContent = 'Cycle ' + cycle + ' / 3 · Niveau ' + sec + 's'; }
+  function getCyc(s) { return Math.min(s, 10); }
+  function updBadge() { var c = getCyc(sec); bb.textContent = 'Niveau : ' + sec + 's par phase · ' + c + ' cycles'; bci.textContent = 'Cycle ' + cycle + ' / ' + c + ' · Niveau ' + sec + 's'; }
   function updProg(ph, el, tot) { var p = 720, pp = p / 4, filled = ph * pp + (el / tot) * pp; bpr.style.strokeDashoffset = p - filled; bpr.style.stroke = cols[ph]; bph.style.color = cols[ph]; }
   function saveRec() { var d2 = load(ex.key) || {}; if (sec > (d2.best || 0)) { d2.best = sec; save(ex.key, d2); document.getElementById('bval').textContent = sec + 's par phase'; notif('Nouveau record : ' + sec + 's ! 🎉'); } else { notif('Niveau ' + sec + 's atteint'); } }
   bstart.addEventListener('click', function() {
@@ -415,7 +404,7 @@ function buildBox(w, ex) {
         if (phase >= 4) {
           phase = 0; cycle++;
           if (cycle > c) {
-            sec++; if (sec > 20) { clearInterval(iv); running = false; bph.textContent = 'COMPLET'; bsc.textContent = '20'; bph.style.color = '#ffd54f'; parler('Niveau vingt secondes atteint. Félicitations.', 0); saveRec(); return; }
+            sec++; if (sec > 10) { clearInterval(iv); running = false; bph.textContent = 'COMPLET'; bsc.textContent = '10'; bph.style.color = '#ffd54f'; parler('Niveau dix atteint. Félicitations.', 0); saveRec(); return; }
             var nc = getCyc(sec); cycle = 1; updBadge();
           }
         }
@@ -601,29 +590,9 @@ function buildApnea(w, ex, type) {
 
   astartEl.addEventListener('click', function() {
     if (!running) {
-      running = true; cur = 0; inHold = false; astartEl.disabled = true; astartEl.textContent = 'En cours...';
+      running = true; cur = 0; inHold = true; astartEl.disabled = true; astartEl.textContent = 'En cours...';
       document.querySelectorAll('#w-main .apn-row').forEach(function(r) { r.classList.remove('done', 'cur'); });
-      // Commencer par une phase de respiration préparatoire
-      var prepDur = 120;
-      var prepColor = restColor;
-      bigTimeEl.textContent = fmt(prepDur);
-      phaseLblEl.textContent = type === 'co2' ? 'RESPIREZ · PRÉPAREZ-VOUS' : 'RESPIREZ · PRÉPAREZ-VOUS';
-      phaseLblEl.style.color = prepColor;
-      seriesLblEl.textContent = 'Préparation avant série 1';
-      updateCircle(0, prepColor);
-      parler('Respirez. Préparez-vous. La table commence dans deux minutes.', 0);
-      var prepEl = 0;
-      var prepIv = setInterval(function() {
-        prepEl++;
-        bigTimeEl.textContent = fmt(prepDur - prepEl);
-        updateCircle((prepEl/prepDur)*100, prepColor);
-        if (prepEl === prepDur - 3) parler('Trois', 0);
-        if (prepEl >= prepDur) {
-          clearInterval(prepIv);
-          inHold = true;
-          nextPhase();
-        }
-      }, 1000);
+      nextPhase();
     }
   });
 
@@ -640,186 +609,39 @@ function buildApnea(w, ex, type) {
 function buildTest(w, ex, type) {
   var sec = 0, iv = null, on = false;
   var testColor = '#4fc3f7';
-  w.innerHTML = '<p class="w-title">Test d'apnée maximum</p>'
-    + '<div style="background:rgba(79,195,247,.06);border:1px solid rgba(79,195,247,.2);border-radius:6px;padding:16px 20px;margin-bottom:16px">'
-    + '<p style="font-size:10px;letter-spacing:2px;color:#4fc3f7;text-transform:uppercase;margin-bottom:10px">Tu connais déjà ton max ?</p>'
-    + '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">'
-    + '<input type="number" id="man-min" placeholder="min" min="0" max="10" style="width:64px;padding:10px;background:#0d1117;border:1px solid rgba(79,195,247,.3);color:#f0f4f8;font-family:'Cinzel',serif;font-size:18px;text-align:center;border-radius:3px">'
-    + '<span style="color:#8899aa;font-size:14px">min</span>'
-    + '<input type="number" id="man-sec" placeholder="sec" min="0" max="59" style="width:64px;padding:10px;background:#0d1117;border:1px solid rgba(79,195,247,.3);color:#f0f4f8;font-family:'Cinzel',serif;font-size:18px;text-align:center;border-radius:3px">'
-    + '<span style="color:#8899aa;font-size:14px">sec</span>'
-    + '<button class="bp" id="man-save" style="padding:11px 20px;font-size:10px">Valider</button>'
-    + '</div></div>'
-    + '<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">'
-    + '<div style="flex:1;height:1px;background:rgba(79,195,247,.1)"></div>'
-    + '<span style="font-size:10px;color:#8899aa;letter-spacing:2px">OU TESTER MAINTENANT</span>'
-    + '<div style="flex:1;height:1px;background:rgba(79,195,247,.1)"></div>'
-    + '</div>'
+  w.innerHTML = '<p class="w-title">Test d\'apnée maximum</p>'
     + '<div class="apn-circle-wrap">'
     + makeCircleSVG(testColor)
     + '<div class="apn-circle-center">'
     + '<div class="apn-big-time" id="tt">0:00</div>'
     + '<div class="apn-phase-lbl" id="tph" style="color:' + testColor + '">PRÊT</div>'
     + '</div></div>'
-    + '<p class="test-info">Expire complètement, inspire à fond, puis retiens.</p>'
-    + '<div class="brow"><button class="bp" id="tstart">▶ Démarrer</button><button class="bs" id="tstop" disabled>■ Arrêter</button></div>'
-    + '<div class="tip"><strong>Conseil :</strong> Ne force pas. Arrête dès les premières contractions intenses. Ce résultat sert de base pour toutes tes tables.</div>';
+    + '<p class="test-info" id="ts">Expire complètement, inspire à fond, puis retiens.</p>'
+    + '<div class="brow"><button class="bp" id="tstart">▶ Démarrer</button><button class="bs" id="tstop" disabled>■ J\'arrête</button></div>'
+    + '<div class="tip"><strong>Conseil :</strong> Ne force pas. Arrête dès les premières contractions intenses du diaphragme. Ce résultat sert de base pour toutes tes tables.</div>';
   var ttEl = document.getElementById('tt'), tphEl = document.getElementById('tph');
   var tstartEl = document.getElementById('tstart'), tstopEl = document.getElementById('tstop');
-  function saveAndGo(total) {
-    save('fw-apnea-test', { max: total, date: Date.now() });
-    tphEl.textContent = 'SAUVEGARDÉ'; tphEl.style.color = '#66bb6a';
-    updateCircle(100, '#66bb6a');
-    parler('Enregistré. ' + fmt(total) + '.', 0);
-    notif('Max enregistré : ' + fmt(total) + ' !');
-    setTimeout(function() { buildApnea(w, ex, type); }, 900);
-  }
-  document.getElementById('man-save').addEventListener('click', function() {
-    var m = parseInt(document.getElementById('man-min').value) || 0;
-    var s = parseInt(document.getElementById('man-sec').value) || 0;
-    var total = m * 60 + s;
-    if (total <= 0) { notif('Entre une durée valide', true); return; }
-    ttEl.textContent = fmt(total); saveAndGo(total);
-  });
+  var maxTime = 0;
   tstartEl.addEventListener('click', function() {
-    on = true; sec = 0; tstartEl.disabled = true; tstopEl.disabled = false;
+    on = true; sec = 0; maxTime = 0; tstartEl.disabled = true; tstopEl.disabled = false;
     tphEl.textContent = 'APNÉE EN COURS'; tphEl.style.color = '#ef5350';
     parler('Apnée. Maintenant.', 0);
     iv = setInterval(function() {
-      sec++; var m = Math.floor(sec/60), s = sec%60;
-      ttEl.textContent = m+':'+(s<10?'0':'')+s;
-      updateCircle(Math.min(100,(sec/120)*100),'#ef5350');
+      sec++;
+      var m = Math.floor(sec / 60), s = sec % 60;
+      ttEl.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+      // Le cercle tourne lentement (2 min = 120s = 100%)
+      updateCircle(Math.min(100, (sec / 120) * 100), '#ef5350');
     }, 1000);
   });
   tstopEl.addEventListener('click', function() {
     clearInterval(iv); on = false; tstartEl.disabled = false; tstopEl.disabled = true;
-    saveAndGo(sec);
+    tphEl.textContent = 'SAUVEGARDÉ'; tphEl.style.color = '#66bb6a';
+    updateCircle(100, '#66bb6a');
+    save('fw-apnea-test', { max: sec, date: Date.now() });
+    parler('Test enregistré. ' + fmt(sec), 0); notif('Test sauvegardé : ' + fmt(sec) + ' !');
+    setTimeout(function() { buildApnea(w, ex, type); }, 800);
   });
-}
-// ============ BALLOON BREATHING ============
-function buildBalloon(w, ex) {
-  var d = load(ex.key) || {};
-  var ser1done = false, ser2done = false;
-  var restIv = null, restActive = false;
-
-  function renderState() {
-    var s1class = ser1done ? 'done' : 'active';
-    var s2class = ser2done ? 'done' : (ser1done && !restActive ? 'active' : 'waiting');
-    w.innerHTML = '<p class="w-title">2 séries · Cochage manuel</p>'
-      + '<div style="display:flex;flex-direction:column;gap:16px;margin-bottom:20px">'
-
-      // Série 1
-      + '<div style="background:rgba(79,195,247,' + (ser1done ? '.05' : '.08') + ');border:1px solid rgba(79,195,247,' + (ser1done ? '.1' : '.3') + ');border-radius:6px;padding:20px;display:flex;align-items:center;gap:16px;cursor:' + (ser1done ? 'default' : 'pointer') + '" id="bal-s1">'
-      + '<div style="width:32px;height:32px;border-radius:50%;border:2px solid ' + (ser1done ? '#66bb6a' : '#4fc3f7') + ';display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;background:' + (ser1done ? 'rgba(102,187,106,.15)' : 'transparent') + '">' + (ser1done ? '✓' : '1') + '</div>'
-      + '<div><p style="font-family:'Cinzel',serif;font-size:14px;color:#f0f4f8">Série 1 — 10 gonflages</p><p style="font-size:11px;color:#8899aa;margin-top:3px">' + (ser1done ? 'Complétée' : 'Clique quand terminée') + '</p></div>'
-      + '</div>'
-
-      // Repos entre séries
-      + '<div id="bal-rest" style="display:' + (ser1done && !ser2done ? 'flex' : 'none') + ';align-items:center;justify-content:center;gap:12px;padding:14px;background:rgba(79,195,247,.04);border:1px solid rgba(79,195,247,.1);border-radius:6px">'
-      + '<p style="font-size:11px;color:#8899aa;letter-spacing:2px">REPOS</p>'
-      + '<p style="font-family:'Cinzel',serif;font-size:32px;color:#4fc3f7;font-weight:700" id="bal-rest-t">30</p>'
-      + '</div>'
-
-      // Série 2
-      + '<div style="background:rgba(79,195,247,' + (ser2done ? '.05' : (ser1done && !restActive ? '.08' : '.02')) + ');border:1px solid rgba(79,195,247,' + (ser2done ? '.1' : (ser1done && !restActive ? '.3' : '.08')) + ');border-radius:6px;padding:20px;display:flex;align-items:center;gap:16px;cursor:' + (ser2done ? 'default' : (ser1done && !restActive ? 'pointer' : 'default')) + '" id="bal-s2">'
-      + '<div style="width:32px;height:32px;border-radius:50%;border:2px solid ' + (ser2done ? '#66bb6a' : (ser1done && !restActive ? '#4fc3f7' : 'rgba(79,195,247,.2)')) + ';display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;background:' + (ser2done ? 'rgba(102,187,106,.15)' : 'transparent') + '">' + (ser2done ? '✓' : '2') + '</div>'
-      + '<div><p style="font-family:'Cinzel',serif;font-size:14px;color:' + (ser1done && !restActive ? '#f0f4f8' : '#8899aa') + '">Série 2 — 10 gonflages</p><p style="font-size:11px;color:#8899aa;margin-top:3px">' + (ser2done ? 'Complétée' : (ser1done && !restActive ? 'Clique quand terminée' : 'En attente')) + '</p></div>'
-      + '</div>'
-
-      + '</div>'
-
-      // Résultat final
-      + (ser2done ? '<div style="text-align:center;padding:16px;background:rgba(102,187,106,.08);border:1px solid rgba(102,187,106,.2);border-radius:6px"><p style="font-family:'Cinzel',serif;font-size:16px;color:#66bb6a">✓ Séance complète !</p></div>' : '')
-
-      + '<button class="bs" id="bal-reset" style="margin-top:12px;width:100%">Réinitialiser</button>';
-
-    // Events
-    var s1 = document.getElementById('bal-s1');
-    var s2 = document.getElementById('bal-s2');
-    var resetBtn = document.getElementById('bal-reset');
-
-    if (s1 && !ser1done) {
-      s1.addEventListener('click', function() {
-        ser1done = true;
-        restActive = true;
-        parler('Série une terminée. Repos trente secondes.', 0);
-        renderState();
-        // Lancer timer repos
-        var t = 30;
-        document.getElementById('bal-rest-t').textContent = t;
-        restIv = setInterval(function() {
-          t--;
-          var el = document.getElementById('bal-rest-t');
-          if (el) el.textContent = t;
-          if (t <= 0) {
-            clearInterval(restIv);
-            restActive = false;
-            parler('Commencez la série deux.', 0);
-            renderState();
-          }
-        }, 1000);
-      });
-    }
-
-    if (s2 && ser1done && !restActive && !ser2done) {
-      s2.addEventListener('click', function() {
-        ser2done = true;
-        parler('Séance complète. Excellent.', 0);
-        save(ex.key, { last: { date: Date.now() } });
-        notif('Balloon Breathing terminé ! 💪');
-        renderState();
-      });
-    }
-
-    if (resetBtn) {
-      resetBtn.addEventListener('click', function() {
-        clearInterval(restIv);
-        ser1done = false; ser2done = false; restActive = false;
-        renderState();
-      });
-    }
-  }
-
-  renderState();
-}
-
-
-// ============ BALLOON BREATHING ============
-function buildBalloon(w, ex) {
-  var ser1done = false, ser2done = false, restIv = null, restActive = false;
-  function render() {
-    w.innerHTML = '<p class="w-title">2 séries · Cochage manuel</p>'
-      + '<div style="display:flex;flex-direction:column;gap:14px;margin-bottom:20px">'
-      + '<div style="background:rgba(79,195,247,'+(ser1done?'.05':'.08')+');border:1px solid rgba(79,195,247,'+(ser1done?'.1':'.3')+');border-radius:6px;padding:18px;display:flex;align-items:center;gap:14px;cursor:'+(ser1done?'default':'pointer')+'" id="bs1">'
-      + '<div style="width:32px;height:32px;border-radius:50%;border:2px solid '+(ser1done?'#66bb6a':'#4fc3f7')+';display:flex;align-items:center;justify-content:center;font-size:16px;background:'+(ser1done?'rgba(102,187,106,.15)':'transparent')+'">'+(ser1done?'✓':'1')+'</div>'
-      + '<div><p style="font-family:'Cinzel',serif;font-size:14px;color:'+(ser1done?'#66bb6a':'#f0f4f8')+'">Série 1 — 10 gonflages</p><p style="font-size:11px;color:#8899aa;margin-top:3px">'+(ser1done?'Complétée':'Clique quand terminée')+'</p></div>'
-      + '</div>'
-      + '<div id="bal-rest" style="display:'+(ser1done&&!ser2done?'flex':'none')+';align-items:center;justify-content:center;gap:12px;padding:12px;background:rgba(79,195,247,.04);border:1px solid rgba(79,195,247,.1);border-radius:6px">'
-      + '<p style="font-size:10px;color:#8899aa;letter-spacing:2px">REPOS</p>'
-      + '<p style="font-family:'Cinzel',serif;font-size:32px;color:#4fc3f7;font-weight:700" id="bal-t">30</p>'
-      + '</div>'
-      + '<div style="background:rgba(79,195,247,'+(ser2done?'.05':(ser1done&&!restActive?'.08':'.02'))+');border:1px solid rgba(79,195,247,'+(ser2done?'.1':(ser1done&&!restActive?'.3':'.08'))+');border-radius:6px;padding:18px;display:flex;align-items:center;gap:14px;cursor:'+(ser2done?'default':(ser1done&&!restActive?'pointer':'default'))+'" id="bs2">'
-      + '<div style="width:32px;height:32px;border-radius:50%;border:2px solid '+(ser2done?'#66bb6a':(ser1done&&!restActive?'#4fc3f7':'rgba(79,195,247,.2)'))+';display:flex;align-items:center;justify-content:center;font-size:16px;background:'+(ser2done?'rgba(102,187,106,.15)':'transparent')+'">'+(ser2done?'✓':'2')+'</div>'
-      + '<div><p style="font-family:'Cinzel',serif;font-size:14px;color:'+(ser2done?'#66bb6a':(ser1done&&!restActive?'#f0f4f8':'#8899aa'))+'">Série 2 — 10 gonflages</p><p style="font-size:11px;color:#8899aa;margin-top:3px">'+(ser2done?'Complétée':(ser1done&&!restActive?'Clique quand terminée':'En attente'))+'</p></div>'
-      + '</div>'
-      + '</div>'
-      + (ser2done?'<div style="text-align:center;padding:16px;background:rgba(102,187,106,.08);border:1px solid rgba(102,187,106,.2);border-radius:6px"><p style="font-family:'Cinzel',serif;font-size:16px;color:#66bb6a">✓ Séance complète !</p></div>':'')
-      + '<button class="bs" id="bal-reset" style="margin-top:12px;width:100%">Réinitialiser</button>';
-    var s1 = document.getElementById('bs1');
-    var s2 = document.getElementById('bs2');
-    if (s1 && !ser1done) s1.addEventListener('click', function() {
-      ser1done = true; restActive = true; parler('Série une terminée. Repos trente secondes.', 0); render();
-      var t = 30; document.getElementById('bal-t').textContent = t;
-      restIv = setInterval(function() { t--; var el = document.getElementById('bal-t'); if(el) el.textContent = t; if(t<=0){clearInterval(restIv);restActive=false;parler('Commencez la série deux.',0);render();}}, 1000);
-    });
-    if (s2 && ser1done && !restActive && !ser2done) s2.addEventListener('click', function() {
-      ser2done = true; parler('Séance complète. Excellent.', 0); save(ex.key,{last:{date:Date.now()}}); notif('Balloon Breathing terminé ! 💪'); render();
-    });
-    document.getElementById('bal-reset').addEventListener('click', function() {
-      clearInterval(restIv); ser1done=false; ser2done=false; restActive=false; render();
-    });
-  }
-  render();
 }
 </script>
 </body>
