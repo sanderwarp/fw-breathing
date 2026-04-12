@@ -348,8 +348,8 @@ function openEx(id) {
   var imgMap = {1:'01-breath-of-fire.png',2:'02-sandbag.png',3:'03-balloon.png',4:'04-box-breathing.png',5:'05-table-co2.png',6:'06-table-o2.png'};
   var imgSrc = imgMap[id] ? 'images/' + imgMap[id] : '';
   var showInstr = (ex.type !== 'co2' && ex.type !== 'o2');
-  var imgHeight = (ex.type === 'co2' || ex.type === 'o2') ? '220px' : '140px';
-  body.innerHTML = '<img src="' + imgSrc + '" alt="' + ex.title + '" style="width:100%;height:' + imgHeight + ';object-fit:cover;border-radius:4px;">'
+  var showImg = (ex.type !== 'co2' && ex.type !== 'o2');
+  body.innerHTML = (showImg ? '<img src="' + imgSrc + '" alt="' + ex.title + '" style="width:100%;height:140px;object-fit:cover;border-radius:4px;">' : '')
     + (showInstr ? '<div class="instr">' + ex.instr + '</div>' : '')
     + '<div class="widget" id="w-main"></div>';
   var w = document.getElementById('w-main');
