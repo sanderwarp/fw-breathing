@@ -133,6 +133,22 @@ body{font-family:'Raleway',Georgia,serif;background:#0d1117;color:#f0f4f8;min-he
 .tip{padding:12px;background:rgba(79,195,247,.04);border:1px solid rgba(79,195,247,.1);font-size:11px;color:#8899aa;line-height:1.7;margin-top:14px}
 .tip strong{color:#a8d8ea}
 
+/* TABLE ACTIVE PAGE */
+#p-table{background:linear-gradient(180deg,#0d1a2e 0%,#0a1520 100%);flex-direction:column;min-height:100vh;overflow:hidden}
+.tbl-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0}
+.tbl-next-rows{padding:12px 20px;flex-shrink:0;display:flex;flex-direction:column;gap:0}
+.tbl-next-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06);opacity:.4}
+.tbl-next-row.current{opacity:1}
+.tbl-next-row-label{font-size:13px;letter-spacing:2px;text-transform:uppercase}
+.tbl-next-row-time{font-family:Cinzel,serif;font-size:14px;font-weight:700}
+.tbl-phase-wrap{text-align:center;padding:16px 20px 0;flex-shrink:0}
+.tbl-phase-lbl{font-family:Cinzel,serif;font-size:22px;letter-spacing:4px;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.tbl-phase-time{font-family:Cinzel,serif;font-size:36px;font-weight:900;color:#66bb6a}
+.tbl-circle-wrap{position:relative;flex:1;display:flex;align-items:center;justify-content:center;padding:10px}
+.tbl-circle-svg{width:min(75vw,280px);height:min(75vw,280px)}
+.tbl-circle-time{position:absolute;text-align:center}
+.tbl-big-num{font-family:Cinzel,serif;font-size:clamp(48px,12vw,72px);font-weight:900;color:#fff;line-height:1}
+
 /* NOTIF */
 .notif{position:fixed;top:16px;right:16px;padding:12px 18px;background:#1a2332;border-left:3px solid #66bb6a;color:#f0f4f8;font-size:12px;z-index:9999;opacity:0;transform:translateX(16px);transition:all .3s;max-width:260px;pointer-events:none}
 .notif.show{opacity:1;transform:translateX(0)}
@@ -178,6 +194,29 @@ body{font-family:'Raleway',Georgia,serif;background:#0d1117;color:#f0f4f8;min-he
     </div>
   </div>
   <div class="ex-body" id="ex-body"></div>
+</div>
+
+<!-- PAGE TABLE ACTIVE -->
+<div id="p-table" class="page">
+  <div class="tbl-header">
+    <button class="btn-back" id="tbl-btn-back">✕ Arrêter</button>
+    <div id="tbl-tour" style="font-family:Cinzel,serif;font-size:13px;color:#a8d8ea;letter-spacing:2px">TOUR 1 / 8</div>
+    <div id="tbl-restant" style="font-family:Cinzel,serif;font-size:13px;color:#8899aa;letter-spacing:1px">—</div>
+  </div>
+  <div class="tbl-next-rows" id="tbl-next-rows"></div>
+  <div class="tbl-phase-wrap">
+    <div class="tbl-phase-lbl" id="tbl-phase-lbl">RESPIREZ</div>
+    <div class="tbl-phase-time" id="tbl-phase-time">—</div>
+  </div>
+  <div class="tbl-circle-wrap">
+    <svg class="tbl-circle-svg" viewBox="0 0 300 300">
+      <circle cx="150" cy="150" r="130" stroke="rgba(255,255,255,0.08)" stroke-width="10" fill="none"/>
+      <circle id="tbl-prog" cx="150" cy="150" r="130" stroke="#66bb6a" stroke-width="10" fill="none"
+        stroke-dasharray="816.8" stroke-dashoffset="816.8"
+        stroke-linecap="round" transform="rotate(-90 150 150)" style="transition:stroke .4s"/>
+    </svg>
+    <div class="tbl-circle-time" id="tbl-circle-time">—</div>
+  </div>
 </div>
 
 <div class="notif" id="notif-el"></div>
@@ -250,6 +289,12 @@ function initNav() {
     });
     document.getElementById('btn-back-home').addEventListener('click', function() { showPage('p-home'); });
     document.getElementById('btn-back-dash').addEventListener('click', function() { showPage('p-dash'); });
+  document.getElementById('tbl-btn-back').addEventListener('click', function() {
+    if (window._tblInterval) clearInterval(window._tblInterval);
+    window._tblRunning = false;
+    parler('Table arrêtée.', 0);
+    showPage('p-dash');
+  });
     document.querySelectorAll('.card').forEach(function(card) {
       card.addEventListener('click', function() { openEx(parseInt(this.getAttribute('data-ex'))); });
     });
@@ -490,237 +535,240 @@ function buildApnea(w, ex, type) {
   var holdColor = type === 'co2' ? '#ef5350' : '#4fc3f7';
   var restColor = '#66bb6a';
 
-  var rowsHTML = '';
-  table.forEach(function(r, i) {
-    rowsHTML += '<div class="apn-row" id="ar' + i + '">'
-      + '<span class="apn-rn">' + (i + 1) + '</span>'
-      + '<div><p class="apn-rl">🫁 ' + lLbl + '</p>' + (r.rest > 0 ? '<p class="apn-rl" style="margin-top:2px">💨 Récup.</p>' : '') + '</div>'
-      + '<div style="text-align:right"><p class="apn-rt">' + fmt(r.hold) + '</p>' + (r.rest > 0 ? '<p class="apn-rt" style="color:#8899aa;font-size:11px">' + fmt(r.rest) + '</p>' : '') + '</div>'
-      + '</div>';
-  });
-
-  var histHTML = (hist.sessions && hist.sessions.length)
-    ? hist.sessions.slice(0, 6).map(function(s) { return '<div class="hist-item"><span>' + new Date(s.date).toLocaleDateString('fr') + '</span><span class="hist-v">' + (s.completed ? '✓ Complète' : '—') + '</span></div>'; }).join('')
-    : '<p style="text-align:center;font-size:10px;color:#8899aa;padding:8px">Aucune séance enregistrée</p>';
-
-  // Calculer temps total
+  // Temps total
   var totalSec = 0;
   table.forEach(function(r) { totalSec += r.hold + r.rest; });
-  var totalMin = Math.floor(totalSec / 60), totalS = totalSec % 60;
-  var totalStr = totalMin + 'min' + (totalS > 0 ? totalS + 's' : '');
+  var totalMin = Math.floor(totalSec/60), totalS = totalSec%60;
+  var totalStr = totalMin + 'min' + (totalS>0?totalS+'s':'');
 
-  w.innerHTML = '<p class="w-title">Table ' + tLbl + ' — ' + lLbl + '</p>'
+  // Historique
+  var histHTML = (hist.sessions && hist.sessions.length)
+    ? hist.sessions.slice(0,5).map(function(s){ return '<div class="hist-item"><span>'+new Date(s.date).toLocaleDateString("fr")+'</span><span class="hist-v">✓</span></div>'; }).join('')
+    : '<p style="text-align:center;font-size:10px;color:#8899aa;padding:6px">Aucune séance</p>';
 
-    // Temps total
-    + '<div style="text-align:center;padding:10px 16px;background:rgba(255,213,79,.06);border:1px solid rgba(255,213,79,.2);border-radius:6px;margin-bottom:14px">'
-    + '<p style="font-size:9px;letter-spacing:2px;color:#8899aa;text-transform:uppercase;margin-bottom:3px">Durée totale estimée</p>'
-    + '<p style="font-family:Cinzel,serif;font-size:24px;color:#ffd54f;font-weight:700">' + totalStr + '</p>'
+  // Construire les lignes style Stamina
+  var rowsHTML = '';
+  table.forEach(function(r, i) {
+    var restLabel = type === 'co2' ? 'Respirez' : 'Respirez';
+    var holdLabel = type === 'co2' ? 'Retenez' : 'Retenez';
+    rowsHTML += '<div class="sta-row">';
+    rowsHTML += '<span class="sta-num">'+(i+1)+'</span>';
+    rowsHTML += '<div class="sta-phases">';
+    if (r.rest > 0) rowsHTML += '<span class="sta-resp">'+restLabel+'</span><span class="sta-resp-t">'+fmt(r.rest)+'</span>';
+    rowsHTML += '<span class="sta-hold">'+holdLabel+'</span><span class="sta-hold-t">'+fmt(r.hold)+'</span>';
+    rowsHTML += '</div></div>';
+  });
+
+  // Instructions html
+  var instrHtml = ex.instr || '';
+
+  w.innerHTML = '<div class="sta-header">'
+    + '<div style="display:flex;align-items:center;justify-content:space-between">'
+    + '<span style="font-size:11px;letter-spacing:2px;color:#4fc3f7;text-transform:uppercase">Table '+tLbl+' · '+lLbl+'</span>'
+    + '<button id="btn-info" style="background:transparent;border:1px solid rgba(79,195,247,.3);color:#4fc3f7;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px">ℹ</button>'
     + '</div>'
-
-    // Grand cercle timer
-    + '<div class="apn-circle-wrap">'
-    + makeCircleSVG(holdColor)
-    + '<div class="apn-circle-center">'
-    + '<div class="apn-big-time" id="apn-big-time">—</div>'
-    + '<div class="apn-phase-lbl" id="apn-phase-lbl" style="color:' + holdColor + '">PRÊT</div>'
-    + '<div class="apn-series-lbl" id="apn-series-lbl">Série — / 8</div>'
+    + '<div class="sta-stats">'
+    + '<span style="font-size:10px;color:#8899aa">Max : <strong style="color:#a8d8ea">'+fmt(max)+'</strong></span>'
+    + ' &nbsp; <span style="font-size:10px;color:#8899aa">Durée : <strong style="color:#ffd54f">'+totalStr+'</strong></span>'
+    + ' &nbsp; <button class="bs" id="aretest" style="font-size:9px;padding:4px 8px">Changer max</button>'
     + '</div></div>'
+    + '<div id="instr-panel" style="display:none;padding:14px 16px;background:rgba(79,195,247,.05);border-top:1px solid rgba(79,195,247,.1);font-size:12px;line-height:1.8;color:#8899aa">'+instrHtml+'</div>'
+    + '<div class="sta-list">'+rowsHTML+'</div>'
+    + '<div class="sta-footer">'
+    + '<div class="hist" style="margin-bottom:12px"><p class="hist-ttl">Historique</p><div class="hist-list">'+histHTML+'</div></div>'
+    + '<button class="bp" id="astart" style="width:100%;padding:16px;font-size:14px;letter-spacing:4px">▶ COMMENCER</button>'
+    + '</div>';
 
-    // Stats
-    + '<div class="apn-stats">'
-    + '<div class="apn-stat"><p class="apn-sl">Test max</p><p class="apn-sv">' + fmt(max) + '</p></div>'
-    + '<div class="apn-stat"><p class="apn-sl">Apnée base</p><p class="apn-sv">' + fmt(table[0].hold) + '</p></div>'
-    + '<button class="bs" id="aretest" style="font-size:9px;padding:7px 10px">Refaire le test</button>'
-    + '</div>'
-
-    // Table rows
-    + '<div class="apn-rows">' + rowsHTML + '</div>'
-
-    // Temps restant
-    + '<div style="text-align:center;padding:8px 16px;background:rgba(79,195,247,.04);border:1px solid rgba(79,195,247,.1);border-radius:6px;margin-bottom:10px" id="time-remaining-box">'
-    + '<p style="font-size:9px;letter-spacing:2px;color:#8899aa;text-transform:uppercase;margin-bottom:2px">Temps restant estimé</p>'
-    + '<p style="font-family:Cinzel,serif;font-size:20px;color:#4fc3f7;font-weight:700" id="time-remaining">—</p>'
-    + '</div>'
-
-    // Boutons
-    + '<div class="brow" style="margin-bottom:14px">'
-    + '<button class="bp" id="astart">Démarrer la table</button>'
-    + '<button class="bs" id="astop" disabled style="border-color:rgba(239,83,80,.4);color:#ef5350">■ Stopper</button>'
-    + '<button class="bs" id="areset">Réinitialiser</button>'
-    + '</div>'
-
-    // Historique
-    + '<div class="hist"><p class="hist-ttl">Historique des séances</p><div class="hist-list" id="ahist">' + histHTML + '</div></div>';
-
-  var bigTimeEl = document.getElementById('apn-big-time');
-  var phaseLblEl = document.getElementById('apn-phase-lbl');
-  var seriesLblEl = document.getElementById('apn-series-lbl');
-  var astartEl = document.getElementById('astart');
-  var astopEl = document.getElementById('astop');
-  var aresetEl = document.getElementById('areset');
-  var timeRemEl = document.getElementById('time-remaining');
-  var cur = 0, running = false, inHold = true, iv = null, el = 0;
-
-  // Calculer temps restant dynamiquement
-  function updateTimeRemaining() {
-    var rem = 0;
-    // Temps restant dans la phase courante
-    var row = table[cur];
-    if (!row) return;
-    var dur = inHold ? row.hold : row.rest;
-    rem += dur - el;
-    // Toutes les phases suivantes
-    for (var ri = cur; ri < table.length; ri++) {
-      if (ri === cur) {
-        if (inHold && row.rest > 0) rem += row.rest;
-      } else {
-        rem += table[ri].hold;
-        if (table[ri].rest > 0) rem += table[ri].rest;
-      }
-    }
-    if (timeRemEl) {
-      var rm = Math.floor(rem/60), rs = rem%60;
-      timeRemEl.textContent = rm + 'min' + (rs<10?'0':'') + rs;
-    }
+  // CSS spécifique Stamina
+  var styleEl = document.getElementById('sta-style');
+  if (!styleEl) {
+    styleEl = document.createElement('style');
+    styleEl.id = 'sta-style';
+    styleEl.textContent = '.sta-header{padding:12px 16px;border-bottom:1px solid rgba(79,195,247,.1)}'
+      + '.sta-stats{display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap}'
+      + '.sta-list{flex:1;overflow-y:auto;padding:8px 0}'
+      + '.sta-row{display:flex;align-items:center;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.05)}'
+      + '.sta-num{font-family:Cinzel,serif;font-size:13px;color:#8899aa;width:24px;flex-shrink:0}'
+      + '.sta-phases{display:flex;flex:1;justify-content:space-between;align-items:center;gap:8px}'
+      + '.sta-resp{font-size:13px;letter-spacing:1px;color:'+restColor+';text-transform:uppercase}'
+      + '.sta-resp-t{font-family:Cinzel,serif;font-size:15px;font-weight:700;color:'+restColor+'}'
+      + '.sta-hold{font-size:13px;letter-spacing:1px;color:'+holdColor+';text-transform:uppercase}'
+      + '.sta-hold-t{font-family:Cinzel,serif;font-size:15px;font-weight:700;color:'+holdColor+'}'
+      + '.sta-footer{padding:16px;border-top:1px solid rgba(79,195,247,.1);flex-shrink:0}'
+      + '#w-main{display:flex;flex-direction:column;height:calc(100vh - 120px);overflow:hidden;padding:0}';
+    document.head.appendChild(styleEl);
   }
 
   document.getElementById('aretest').addEventListener('click', function() {
     save('fw-apnea-test', null); buildTest(w, ex, type);
   });
 
-  function hilite(i) {
-    document.querySelectorAll('#w-main .apn-row').forEach(function(r) { r.classList.remove('cur'); });
-    var row = document.getElementById('ar' + i);
-    if (row) { row.classList.add('cur'); row.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
-  }
-  function markDone(i) {
-    var row = document.getElementById('ar' + i);
-    if (row) { row.classList.remove('cur'); row.classList.add('done'); }
+  document.getElementById('btn-info').addEventListener('click', function() {
+    var panel = document.getElementById('instr-panel');
+    var btn = document.getElementById('btn-info');
+    if (panel.style.display === 'none') {
+      panel.style.display = 'block';
+      btn.style.background = 'rgba(79,195,247,.2)';
+    } else {
+      panel.style.display = 'none';
+      btn.style.background = 'transparent';
+    }
+  });
+
+  document.getElementById('astart').addEventListener('click', function() {
+    startTablePage(table, type, tLbl, lLbl, holdColor, restColor, ex, hist);
+  });
+}
+
+function startTablePage(table, type, tLbl, lLbl, holdColor, restColor, ex, hist) {
+  showPage('p-table');
+  var CIRC_TBL = 816.8;
+  var prog = document.getElementById('tbl-prog');
+  var tourEl = document.getElementById('tbl-tour');
+  var restantEl = document.getElementById('tbl-restant');
+  var nextRowsEl = document.getElementById('tbl-next-rows');
+  var phaseLbl = document.getElementById('tbl-phase-lbl');
+  var phaseTime = document.getElementById('tbl-phase-time');
+  var circleTime = document.getElementById('tbl-circle-time');
+
+  // Injecter le grand chiffre dans le cercle
+  circleTime.innerHTML = '<div class="tbl-big-num" id="tbl-big-num">—</div>';
+  var bigNum = document.getElementById('tbl-big-num');
+
+  var cur = 0, inHold = false, el = 0, iv = null;
+  window._tblInterval = null;
+  window._tblRunning = true;
+
+  function fmtRem(s) {
+    var m = Math.floor(s/60), sec = s%60;
+    return m > 0 ? m+'min'+sec+'s' : sec+'s';
   }
 
-  function setCirclePhase(color, label, serLabel) {
-    phaseLblEl.textContent = label;
-    phaseLblEl.style.color = color;
-    var c = document.getElementById('apn-prog-circle');
-    if (c) c.style.stroke = color;
-    seriesLblEl.textContent = serLabel;
+  function updateRem() {
+    var rem = 0;
+    var row = table[cur];
+    if (!row) return;
+    var dur = inHold ? row.hold : row.rest;
+    rem += dur - el;
+    for (var ri = cur; ri < table.length; ri++) {
+      if (ri === cur) { if (inHold && row.rest > 0) rem += row.rest; }
+      else { rem += table[ri].hold; if (table[ri].rest > 0) rem += table[ri].rest; }
+    }
+    restantEl.textContent = 'RESTANT: ' + fmtRem(rem);
   }
 
-  function nextPhase() {
+  function updateNextRows() {
+    var html = '';
+    for (var i = cur; i < Math.min(cur+3, table.length); i++) {
+      var r = table[i];
+      var isCur = (i === cur);
+      html += '<div class="tbl-next-row'+(isCur?' current':'')+'">'+
+        '<span class="tbl-next-row-label" style="color:'+(isCur?'#fff':'#8899aa')+'">'+(i+1)+' · '+(r.rest>0?'Resp/Ret':'Retenir')+'</span>'+
+        '<span class="tbl-next-row-time" style="color:'+(isCur?holdColor:'#8899aa')+'">'+(r.rest>0?fmt(r.rest)+' / ':'')+fmt(r.hold)+'</span>'+
+        '</div>';
+    }
+    nextRowsEl.innerHTML = html;
+  }
+
+  function setPhase(label, color, dur) {
+    phaseLbl.textContent = label;
+    phaseLbl.style.color = color;
+    phaseTime.textContent = fmt(dur);
+    phaseTime.style.color = color;
+    if (prog) prog.style.stroke = color;
+  }
+
+  function runPhase() {
+    clearInterval(iv);
     var row = table[cur];
     var dur = inHold ? row.hold : row.rest;
     var color = inHold ? holdColor : restColor;
-    var label = inHold ? (type === 'co2' ? 'APNÉE · POUMONS VIDES' : 'APNÉE · POUMONS PLEINS') : 'RÉCUPÉRATION';
+    var label = inHold ? (type==='co2'?'RETENEZ — POUMONS VIDES':'RETENEZ — POUMONS PLEINS') : 'RESPIREZ';
     el = 0;
-    hilite(cur);
-    updateCircle(0, color);
-    setCirclePhase(color, label, 'Série ' + (cur + 1) + ' / 8');
+    tourEl.textContent = 'TOUR: '+(cur+1)+' / '+table.length;
+    setPhase(label, color, dur);
+    updateNextRows();
+    if (prog) { prog.style.strokeDashoffset = CIRC_TBL; }
+
     if (inHold) {
-      if (type === 'co2') { parler('Apnée. Poumons vides.', 0); }
-      else { parler('Apnée. Poumons pleins.', 0); }
+      if (type==='co2') parler('Apnée. Poumons vides.', 0);
+      else parler('Apnée. Poumons pleins.', 0);
     } else {
-      var restDur = table[cur] ? table[cur].rest : 0;
-      direRecup(restDur);
+      direRecup(dur);
     }
 
     iv = setInterval(function() {
       el++;
-      var remaining = dur - el;
-      var pct = (el / dur) * 100;
-      bigTimeEl.textContent = fmt(remaining);
-      updateCircle(pct, color);
-      updateTimeRemaining();
+      var rem = dur - el;
+      var pct = el/dur;
+      bigNum.textContent = fmt(rem);
+      phaseTime.textContent = fmt(rem);
+      if (prog) prog.style.strokeDashoffset = CIRC_TBL - pct*CIRC_TBL;
+      updateRem();
 
-      // Compte à rebours 3-2-1
-      if (remaining === 30) parler('Trente secondes.', 0);
-      if (remaining === 3) parler('Trois.', 0);
-      if (remaining === 2) parler('Deux.', 0);
-      if (remaining === 1) parler('Un.', 0);
+      if (rem === 30) parler('Trente secondes.', 0);
+      if (rem === 3) parler('Trois.', 0);
+      if (rem === 2) parler('Deux.', 0);
+      if (rem === 1) parler('Un.', 0);
 
       if (el >= dur) {
         clearInterval(iv);
         if (inHold) {
-          markDone(cur);
-          if (row.rest > 0) { inHold = false; setTimeout(nextPhase, 300); }
-          else { finish(); }
+          if (row.rest > 0) { inHold = false; setTimeout(runPhase, 300); }
+          else { finishTable(); }
         } else {
           cur++; inHold = true;
-          if (cur >= 8) finish(); else setTimeout(nextPhase, 300);
+          if (cur >= table.length) finishTable();
+          else setTimeout(runPhase, 300);
         }
       }
     }, 1000);
+    window._tblInterval = iv;
   }
 
-  function finish() {
-    running = false;
-    if (astopEl) astopEl.disabled = true;
-    if (timeRemEl) timeRemEl.textContent = '0min00';
-    bigTimeEl.textContent = '✓';
-    setCirclePhase('#ffd54f', 'TERMINÉ', 'Table complète !');
-    updateCircle(100, '#ffd54f');
-    astartEl.textContent = 'Démarrer à nouveau'; astartEl.disabled = false;
-    parler('Table terminée. Excellent travail.', 0); notif('Table ' + tLbl + ' complète ! 🔥');
-    var sessions = hist.sessions || []; sessions.unshift({ date: Date.now(), completed: true });
-    if (sessions.length > 10) sessions.pop(); hist.sessions = sessions; save(ex.key, hist);
-    document.getElementById('ahist').innerHTML = sessions.slice(0, 6).map(function(s) {
-      return '<div class="hist-item"><span>' + new Date(s.date).toLocaleDateString('fr') + '</span><span class="hist-v">✓ Complète</span></div>';
-    }).join('');
+  function finishTable() {
+    window._tblRunning = false;
+    phaseLbl.textContent = 'TERMINÉ !';
+    phaseLbl.style.color = '#ffd54f';
+    bigNum.textContent = '✓';
+    if (prog) { prog.style.stroke = '#ffd54f'; prog.style.strokeDashoffset = 0; }
+    parler('Table terminée. Excellent travail.', 0);
+    notif('Table '+tLbl+' complète ! 🔥');
+    var sessions = hist.sessions || [];
+    sessions.unshift({ date: Date.now(), completed: true });
+    if (sessions.length > 10) sessions.pop();
+    hist.sessions = sessions;
+    save(ex.key, hist);
   }
 
-  astopEl.addEventListener('click', function() {
-    if (!running) return;
-    clearInterval(iv);
-    running = false;
-    astartEl.disabled = false;
-    astartEl.textContent = 'Reprendre';
-    astopEl.disabled = true;
-    bigTimeEl.textContent = 'II';
-    phaseLblEl.textContent = 'PAUSE';
-    phaseLblEl.style.color = '#ef5350';
-    parler('Table en pause.', 0);
-  });
+  // Démarrer par phase préparatoire 80s
+  var prepDur = 80, prepEl = 0;
+  setPhase('RESPIREZ — PRÉPAREZ-VOUS', restColor, prepDur);
+  tourEl.textContent = 'PRÉPARATION';
+  restantEl.textContent = '';
+  bigNum.textContent = fmt(prepDur);
+  if (prog) prog.style.stroke = restColor;
+  parler('Respirez. Préparez-vous. La table commence dans une minute vingt.', 0);
 
-  astartEl.addEventListener('click', function() {
-    if (!running) {
-      running = true; cur = 0; inHold = false; astartEl.disabled = true; astartEl.textContent = 'En cours...';
-      if (astopEl) astopEl.disabled = false;
-      document.querySelectorAll('#w-main .apn-row').forEach(function(r) { r.classList.remove('done', 'cur'); });
-      // Commencer par une phase de respiration préparatoire
-      var prepDur = 80;
-      var prepColor = restColor;
-      bigTimeEl.textContent = fmt(prepDur);
-      phaseLblEl.textContent = type === 'co2' ? 'RESPIREZ · PRÉPAREZ-VOUS' : 'RESPIREZ · PRÉPAREZ-VOUS';
-      phaseLblEl.style.color = prepColor;
-      seriesLblEl.textContent = 'Préparation avant série 1';
-      updateCircle(0, prepColor);
-      parler('Respirez. Préparez-vous. La table commence dans une minute vingt.', 0);
-      var prepEl = 0;
-      var prepIv = setInterval(function() {
-        prepEl++;
-        bigTimeEl.textContent = fmt(prepDur - prepEl);
-        updateCircle((prepEl/prepDur)*100, prepColor);
-        if (prepEl === prepDur - 3) parler('Trois', 0);
-        if (prepEl >= prepDur) {
-          clearInterval(prepIv);
-          inHold = true;
-          nextPhase();
-        }
-      }, 1000);
+  var prepIv = setInterval(function() {
+    prepEl++;
+    var rem = prepDur - prepEl;
+    bigNum.textContent = fmt(rem);
+    phaseTime.textContent = fmt(rem);
+    if (prog) prog.style.strokeDashoffset = CIRC_TBL - (prepEl/prepDur)*CIRC_TBL;
+    if (rem === 3) parler('Trois.', 0);
+    if (rem === 2) parler('Deux.', 0);
+    if (rem === 1) parler('Un.', 0);
+    if (prepEl >= prepDur) {
+      clearInterval(prepIv);
+      inHold = true;
+      runPhase();
     }
-  });
-
-  aresetEl.addEventListener('click', function() {
-    clearInterval(iv); running = false; cur = 0; inHold = true; el = 0;
-    bigTimeEl.textContent = '—'; phaseLblEl.textContent = 'PRÊT'; phaseLblEl.style.color = holdColor;
-    seriesLblEl.textContent = 'Série — / 8'; updateCircle(0, holdColor);
-    astartEl.disabled = false; astartEl.textContent = 'Démarrer la table';
-    if (astopEl) astopEl.disabled = true;
-    if (timeRemEl) timeRemEl.textContent = '—';
-    document.querySelectorAll('#w-main .apn-row').forEach(function(r) { r.classList.remove('done', 'cur'); });
-  });
+  }, 1000);
+  window._tblInterval = prepIv;
 }
 
-// ============ APNEA TEST ============
+
 function buildTest(w, ex, type) {
   var sec = 0, iv = null, on = false;
   var testColor = '#4fc3f7';
