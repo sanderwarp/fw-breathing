@@ -215,7 +215,15 @@ function bipRest() { parler('Récupération', 0); }
 function direInspire() { parler('Inspire', 0); }
 function direExpire() { parler('Expire', 0); }
 function direApnee() { parler('Apnée', 0); }
-function direRecup(duree) { parler('Récupération. ' + duree + ' secondes.', 0); }
+function direRecup(duree) {
+  var m = Math.floor(duree / 60), s = duree % 60;
+  var txt = 'Récupération. ';
+  if (m > 0) txt += m + ' minute' + (m > 1 ? 's' : '');
+  if (m > 0 && s > 0) txt += ' et ';
+  if (s > 0) txt += s + ' seconde' + (s > 1 ? 's' : '');
+  txt += '.';
+  parler(txt, 0);
+}
 function direBientotFin() { parler('Trois secondes', 0); }
 function direNiveau(n) { parler('Niveau ' + n + ' secondes', 0); }
 
@@ -335,7 +343,7 @@ function buildCounter(w, ex) {
           on = false; clearInterval(iv); cstartEl.textContent = 'Démarrer'; cstartEl.style.background = '';
           save(ex.key, { last: { date: Date.now(), count: count } }); parler('Objectif atteint. Bien joué.', 0); notif('Objectif atteint ! 💪');
         }
-      }, 540);
+      }, 640);
       cstartEl.textContent = 'Pause'; cstartEl.style.background = '#ef5350';
     } else {
       on = false; clearInterval(iv); cstartEl.textContent = 'Reprendre'; cstartEl.style.background = '';
@@ -384,7 +392,7 @@ function buildSeries(w, ex) {
           restIv = setInterval(function() { t--; srtEl.textContent = t; if (t <= 0) { clearInterval(restIv); inRest = false; srestEl.style.display = 'none'; sbtnEl.disabled = false; sbtnEl.textContent = 'Démarrer série ' + (cur + 1); sbtnEl.style.background = ''; parler('Série suivante', 0); } }, 1000);
         }
       }
-    }, 2400);
+    }, 4800);
     sbtnEl.textContent = 'Pause'; sbtnEl.style.background = '#ef5350';
   });
 }
@@ -470,7 +478,7 @@ function buildApnea(w, ex, type) {
   var table = [];
   if (type === 'co2') {
     var h = Math.floor(max * 0.5);
-    for (var i = 0; i < 8; i++) table.push({ hold: h, rest: Math.max(30, 120 - i * 15) });
+    for (var i = 0; i < 8; i++) table.push({ hold: h, rest: Math.max(0, 80 - i * 10) });
     table[7].rest = 0;
   } else {
     var mn = Math.floor(max * 0.5), mx = Math.floor(max * 0.8);
@@ -495,7 +503,19 @@ function buildApnea(w, ex, type) {
     ? hist.sessions.slice(0, 6).map(function(s) { return '<div class="hist-item"><span>' + new Date(s.date).toLocaleDateString('fr') + '</span><span class="hist-v">' + (s.completed ? '✓ Complète' : '—') + '</span></div>'; }).join('')
     : '<p style="text-align:center;font-size:10px;color:#8899aa;padding:8px">Aucune séance enregistrée</p>';
 
+  // Calculer temps total
+  var totalSec = 0;
+  table.forEach(function(r) { totalSec += r.hold + r.rest; });
+  var totalMin = Math.floor(totalSec / 60), totalS = totalSec % 60;
+  var totalStr = totalMin + 'min' + (totalS > 0 ? totalS + 's' : '');
+
   w.innerHTML = '<p class="w-title">Table ' + tLbl + ' — ' + lLbl + '</p>'
+
+    // Temps total
+    + '<div style="text-align:center;padding:10px 16px;background:rgba(255,213,79,.06);border:1px solid rgba(255,213,79,.2);border-radius:6px;margin-bottom:14px">'
+    + '<p style="font-size:9px;letter-spacing:2px;color:#8899aa;text-transform:uppercase;margin-bottom:3px">Durée totale estimée</p>'
+    + '<p style="font-family:Cinzel,serif;font-size:24px;color:#ffd54f;font-weight:700">' + totalStr + '</p>'
+    + '</div>'
 
     // Grand cercle timer
     + '<div class="apn-circle-wrap">'
