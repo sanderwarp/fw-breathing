@@ -333,8 +333,8 @@ var EX = {
     instr:'<strong>Matériel :</strong> Un ballon standard.<br><br><strong>Technique :</strong> Inspire profondément par le nez (diaphragme). Place le ballon à la bouche et expire en <em>une seule expiration longue et puissante</em> sans souffler les joues — l\'air vient du ventre. Feedback visuel immédiat sur ta force et ton volume.<br><br><strong>Objectif :</strong> 2 séries de 10 gonflages. Vise à gonfler plus à chaque répétition.<br><br><strong>Adaptations :</strong> Force expiratoire, intercostaux, volume pulmonaire fonctionnel.' },
   4: { cat:'Système nerveux · Récupération', title:'Box Breathing', type:'box', key:'fw-box',
     instr:'<strong>Principe :</strong> 4 phases égales — inspire, retiens (poumons pleins), expire, retiens (poumons vides). Progression automatique de 3s à 10s par phase.<br><br><strong>Déroulement :</strong> 3s × 3 cycles → 4s × 4 cycles → ... → 10s × 10 cycles. <strong>Va le plus loin possible.</strong><br><br><strong>Adaptations :</strong> Régulation du système nerveux autonome, tolérance à l\'inconfort, récupération post-effort.' },
-  5: { cat:'Tolérance CO₂ · Poumons vides', title:'Table CO₂', type:'co2', key:'fw-co2',
-    instr:'<strong>Principe :</strong> 8 apnées de durée fixe (50% de ton max), récupération <em>décroissante</em> de 15s à chaque série. Toujours réalisé <strong>poumons vides</strong> — expire complètement avant chaque apnée.<br><br><strong>Pourquoi poumons vides ?</strong> Le CO₂ monte plus vite, entraîne la tolérance aux contractions du diaphragme et au signal de manque.<br><br><strong>Adaptations :</strong> Tolérance CO₂, calme mental sous pression.' },
+  5: { cat:'Tolérance CO₂ · Poumons pleins', title:'Table CO₂', type:'co2', key:'fw-co2',
+    instr:'<strong>Principe :</strong> 8 apnées de durée fixe (50% de ton max), récupération <em>décroissante</em> par paliers de 10s à chaque série. Toujours réalisé <strong>poumons pleins</strong> — inspire normalement avant chaque apnée.<br><br><strong>Pourquoi poumons pleins ?</strong> La réserve en O₂ est maintenue, ce qui permet au CO₂ de monter progressivement sans composante hypoxique agressive. Tu entraînes le seuil de tolérance central au CO₂ — le point où ton cerveau déclenche l\'envie de respirer — sans risque hypoxique.<br><br><strong>Adaptations :</strong> Tolérance au CO₂, réduction de l\'hyperventilation réflexe à l\'effort, meilleure régulation ventilatoire.' },
   6: { cat:'Tolérance O₂ · Volume pulmonaire', title:'Table O₂', type:'o2', key:'fw-o2',
     instr:'<strong>Principe :</strong> 8 apnées <em>croissantes</em> (50% → 80% de ton max), récupération fixe 2 min. Toujours réalisé <strong>poumons pleins</strong> — inspire à fond avant chaque apnée.<br><br><strong>Pourquoi poumons pleins ?</strong> Les poumons gonflés étirent la cage thoracique de l\'intérieur — adaptation structurelle qui augmente réellement le volume pulmonaire.<br><br><strong>Adaptations :</strong> Tolérance hypoxie, efficience O₂, étirement structurel des poumons.' }
 };
@@ -533,7 +533,7 @@ function buildApnea(w, ex, type) {
     for (var i = 0; i < 8; i++) table.push({ hold: mn + i * st, rest: i < 7 ? 120 : 0 });
   }
   var tLbl = type === 'co2' ? 'CO₂' : 'O₂';
-  var lLbl = type === 'co2' ? 'Poumons vides' : 'Poumons pleins';
+  var lLbl = type === 'co2' ? 'Poumons pleins' : 'Poumons pleins';
   var holdColor = type === 'co2' ? '#ef5350' : '#4fc3f7';
   var restColor = '#66bb6a';
 
@@ -685,7 +685,7 @@ function startTablePage(table, type, tLbl, lLbl, holdColor, restColor, ex, hist)
     var row = table[cur];
     var dur = inHold ? row.hold : row.rest;
     var color = inHold ? holdColor : restColor;
-    var label = inHold ? (type==='co2'?'RETENEZ — POUMONS VIDES':'RETENEZ — POUMONS PLEINS') : 'RESPIREZ';
+    var label = inHold ? 'RETENEZ — POUMONS PLEINS' : 'RESPIREZ';
     el = 0;
     tourEl.textContent = 'TOUR: '+(cur+1)+' / '+table.length;
     setPhase(label, color, dur);
@@ -693,8 +693,7 @@ function startTablePage(table, type, tLbl, lLbl, holdColor, restColor, ex, hist)
     if (prog) { prog.style.strokeDashoffset = CIRC_TBL; }
 
     if (inHold) {
-      if (type==='co2') parler('Apnée. Poumons vides.', 0);
-      else parler('Apnée. Poumons pleins.', 0);
+      parler('Apnée. Poumons pleins.', 0);
     } else {
       direRecup(dur);
     }
