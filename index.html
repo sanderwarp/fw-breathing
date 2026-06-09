@@ -321,7 +321,10 @@ body{font-family:'Raleway',Georgia,serif;background:#0d1117;color:#f0f4f8;min-he
     <!-- Info -->
     <p id="mp-info" style="font-size:9px;letter-spacing:1px;color:#8899aa;text-align:center;margin:0"></p>
     <!-- Bouton START -->
-    <button id="mp-start" style="width:100%;padding:16px;background:#4fc3f7;border:none;color:#080c10;font-family:Cinzel,serif;font-size:14px;letter-spacing:4px;cursor:pointer;border-radius:4px">▶ START</button>
+    <div id="mp-start-wrap" style="position:relative;border-radius:4px;overflow:hidden;background:#0d1a2e;border:1.5px solid rgba(79,195,247,0.4)">
+      <div id="mp-prog-bar" style="position:absolute;top:0;left:0;height:100%;width:0%;background:#4fc3f7;transition:none;opacity:0.45"></div>
+      <button id="mp-start" style="position:relative;z-index:1;width:100%;padding:16px;background:transparent;border:none;color:#4fc3f7;font-family:Cinzel,serif;font-size:14px;letter-spacing:4px;cursor:pointer">▶ START</button>
+    </div>
     <!-- Sauver -->
     <div style="display:flex;gap:8px">
       <button id="mp-save" style="flex:1;padding:10px;background:transparent;border:1px solid rgba(79,195,247,.3);color:#4fc3f7;font-family:Cinzel,serif;font-size:10px;letter-spacing:2px;cursor:pointer;border-radius:4px">💾 SAUVER</button>
@@ -1389,7 +1392,12 @@ function metroUpdDots(){
 }
 function metroUpdStartBtn(){
   var b=document.getElementById('mp-start');
-  if(b){b.textContent=_mp.running?'⏸ PAUSE':'▶ START';b.style.background=_mp.running?'#ef5350':'#4fc3f7';}
+  var wrap=document.getElementById('mp-start-wrap');
+  if(b){
+    b.textContent=_mp.running?'⏸ PAUSE':'▶ START';
+    b.style.color=_mp.running?'#ef5350':'#4fc3f7';
+    if(wrap) wrap.style.borderColor=_mp.running?'rgba(239,83,80,0.5)':'rgba(79,195,247,0.4)';
+  }
 }
 function metroUpdCtrls(){
   var map={'mp-tv':metroFmt(_mp.dur),'mp-sv':_mp.num,'mp-rv':metroFmt(_mp.rest),'mp-bv':_mp.bpm};
@@ -1431,12 +1439,16 @@ function metroStartSerie(){
     subEl++;phEl++;
     metroUpdTri(isInsp?phEl/bsInSub:1-phEl/bsInSub,false);
     metroUpdPhase(isInsp?'INSPIRE':'EXPIRE','');
+    // Barre de progression série
+    var pb=document.getElementById('mp-prog-bar');
+    if(pb){ pb.style.width=(subEl/subTotal*100)+'%'; pb.style.background='rgba(79,195,247,0.35)'; }
     if(phEl>=bsInSub){phEl=0;isInsp=!isInsp;if(subEl<subTotal)metroBip(!isInsp);}
     if(subEl>=subTotal){
       clearInterval(_mp.iv);_mp.cur++;
       if(_mp.cur>=_mp.num){
         _mp.running=false;metroUpdTri(0,false);metroUpdPhase('TERMINÉ','✓');
         metroUpdDots();metroUpdStartBtn();
+        var pb=document.getElementById('mp-prog-bar');if(pb){pb.style.width='100%';pb.style.background='rgba(102,187,106,0.4)';}
         parler('Séance terminée. Excellent.',0);notif('Métronome terminé ! 💪');
       } else metroStartRest();
     }
@@ -1451,6 +1463,9 @@ function metroStartRest(){
   _mp.iv=setInterval(function(){
     subEl++;
     metroUpdTri(subEl/subTotal,true);
+    // Barre de progression repos (dorée)
+    var pb=document.getElementById('mp-prog-bar');
+    if(pb){ pb.style.width=(subEl/subTotal*100)+'%'; pb.style.background='rgba(255,213,79,0.35)'; }
     var rem=_mp.rest-Math.floor(subEl/10);
     metroUpdPhase('REPOS',metroFmt(Math.max(0,rem)));
     if(rem===3&&subEl%10===0)parler('Trois.',0);
@@ -1496,6 +1511,7 @@ function initMetroPage(){
     resetBtn.addEventListener('click',function(){
       metroStop();_mp.cur=0;_mp.inRest=false;
       metroUpdTri(0,false);metroUpdPhase('PRÊT','');metroUpdDots();metroUpdStartBtn();
+      var pb=document.getElementById('mp-prog-bar');if(pb)pb.style.width='0%';
     });
   }
   var saveBtn=document.getElementById('mp-save');
