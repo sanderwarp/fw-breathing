@@ -149,6 +149,13 @@ body{font-family:'Raleway',Georgia,serif;background:#0d1117;color:#f0f4f8;min-he
 .tbl-circle-time{position:absolute;text-align:center}
 .tbl-big-num{font-family:Cinzel,serif;font-size:clamp(48px,12vw,72px);font-weight:900;color:#fff;line-height:1}
 
+/* METRONOME PAGE */
+#p-metro.active{display:flex!important}
+.mp-dot{width:24px;height:24px;border-radius:50%;border:1.5px solid rgba(79,195,247,.25);display:flex;align-items:center;justify-content:center;font-size:10px;color:#8899aa;font-family:Cinzel,serif;transition:all .3s}
+.mp-dot.active{border-color:#4fc3f7;background:rgba(79,195,247,.15);color:#4fc3f7}
+.mp-dot.rest{border-color:#ffd54f;background:rgba(255,213,79,.1);color:#ffd54f}
+.mp-dot.done{border-color:#66bb6a;background:rgba(102,187,106,.1);color:#66bb6a;opacity:.5}
+
 /* METRONOME */
 .metro-wrap{display:flex;flex-direction:column;align-items:center;width:100%;padding:4px 0}
 .metro-controls{display:flex;gap:14px;justify-content:center;align-items:flex-start;margin-bottom:10px;flex-wrap:wrap}
@@ -239,6 +246,81 @@ body{font-family:'Raleway',Georgia,serif;background:#0d1117;color:#f0f4f8;min-he
   </div>
 </div>
 
+<!-- PAGE MÉTRONOME -->
+<div id="p-metro" class="page" style="background:#080c10;position:fixed;inset:0;z-index:200;flex-direction:column;overflow:hidden">
+
+  <!-- Croix sortie -->
+  <div style="position:absolute;top:16px;right:16px;z-index:10">
+    <button id="metro-exit" style="background:transparent;border:1px solid rgba(79,195,247,.3);color:#4fc3f7;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center">✕</button>
+  </div>
+
+  <!-- Triangle plein écran -->
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;position:relative;min-height:0">
+    <svg id="metro-svg" style="width:min(85vw,360px);height:min(100vw,420px)" viewBox="0 0 280 340">
+      <polygon points="140,10 265,325 15,325" fill="none" stroke="rgba(79,195,247,0.15)" stroke-width="1.5"/>
+      <polygon id="mt-fill" points="140,325 141,325 139,325" fill="rgba(79,195,247,0.45)"/>
+      <line x1="140" y1="10" x2="140" y2="325" stroke="rgba(79,195,247,0.2)" stroke-width="1"/>
+      <line x1="72" y1="114" x2="208" y2="114" stroke="rgba(255,255,255,0.07)" stroke-width="0.8"/>
+      <line x1="47" y1="218" x2="233" y2="218" stroke="rgba(255,255,255,0.07)" stroke-width="0.8"/>
+      <line x1="22" y1="285" x2="258" y2="285" stroke="rgba(255,255,255,0.07)" stroke-width="0.8"/>
+    </svg>
+    <!-- Label phase au centre -->
+    <div style="position:absolute;bottom:18%;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none">
+      <div style="font-family:Cinzel,serif;font-size:15px;letter-spacing:4px;color:#4fc3f7" id="mp-phase">PRÊT</div>
+      <div style="font-family:Cinzel,serif;font-size:18px;font-weight:700;color:#fff;margin-top:4px" id="mp-time"></div>
+    </div>
+    <!-- TIMER et RATE de chaque côté -->
+    <div style="position:absolute;left:12px;top:50%;transform:translateY(-50%);text-align:center">
+      <div style="font-size:9px;letter-spacing:2px;color:#8899aa;margin-bottom:8px">TIMER</div>
+      <button id="mp-tu" style="background:transparent;border:none;color:#4fc3f7;font-size:22px;cursor:pointer;display:block;margin:0 auto">▲</button>
+      <div style="font-family:Cinzel,serif;font-size:20px;color:#fff;margin:6px 0" id="mp-tv">40s</div>
+      <button id="mp-td" style="background:transparent;border:none;color:#4fc3f7;font-size:22px;cursor:pointer;display:block;margin:0 auto">▼</button>
+    </div>
+    <div style="position:absolute;right:12px;top:50%;transform:translateY(-50%);text-align:center">
+      <div style="font-size:9px;letter-spacing:2px;color:#8899aa;margin-bottom:8px">RATE</div>
+      <button id="mp-bu" style="background:transparent;border:none;color:#4fc3f7;font-size:22px;cursor:pointer;display:block;margin:0 auto">▲</button>
+      <div style="font-family:Cinzel,serif;font-size:20px;color:#fff;margin:6px 0" id="mp-bv">10</div>
+      <button id="mp-bd" style="background:transparent;border:none;color:#4fc3f7;font-size:22px;cursor:pointer;display:block;margin:0 auto">▼</button>
+    </div>
+  </div>
+
+  <!-- Bas : séries + repos + bouton START -->
+  <div style="flex-shrink:0;padding:0 20px 32px;display:flex;flex-direction:column;gap:10px">
+    <!-- Séries et repos -->
+    <div style="display:flex;justify-content:center;gap:32px">
+      <div style="text-align:center">
+        <div style="font-size:9px;letter-spacing:2px;color:#8899aa;margin-bottom:4px">SÉRIES</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <button id="mp-sd" style="background:transparent;border:none;color:#4fc3f7;font-size:20px;cursor:pointer">▼</button>
+          <span style="font-family:Cinzel,serif;font-size:22px;color:#fff" id="mp-sv">4</span>
+          <button id="mp-su" style="background:transparent;border:none;color:#4fc3f7;font-size:20px;cursor:pointer">▲</button>
+        </div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:9px;letter-spacing:2px;color:#8899aa;margin-bottom:4px">REPOS</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <button id="mp-rd" style="background:transparent;border:none;color:#4fc3f7;font-size:20px;cursor:pointer">▼</button>
+          <span style="font-family:Cinzel,serif;font-size:22px;color:#fff" id="mp-rv">20s</span>
+          <button id="mp-ru" style="background:transparent;border:none;color:#4fc3f7;font-size:20px;cursor:pointer">▲</button>
+        </div>
+      </div>
+    </div>
+    <!-- Dots séries -->
+    <div id="mp-dots" style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap"></div>
+    <!-- Info -->
+    <p id="mp-info" style="font-size:9px;letter-spacing:1px;color:#8899aa;text-align:center;margin:0"></p>
+    <!-- Bouton START -->
+    <button id="mp-start" style="width:100%;padding:16px;background:#4fc3f7;border:none;color:#080c10;font-family:Cinzel,serif;font-size:14px;letter-spacing:4px;cursor:pointer;border-radius:4px">▶ START</button>
+    <!-- Sauver -->
+    <div style="display:flex;gap:8px">
+      <button id="mp-save" style="flex:1;padding:10px;background:transparent;border:1px solid rgba(79,195,247,.3);color:#4fc3f7;font-family:Cinzel,serif;font-size:10px;letter-spacing:2px;cursor:pointer;border-radius:4px">💾 SAUVER</button>
+      <button id="mp-reset" style="padding:10px 16px;background:transparent;border:1px solid rgba(79,195,247,.2);color:#8899aa;font-size:16px;cursor:pointer;border-radius:4px">↺</button>
+    </div>
+    <!-- Séances sauvegardées -->
+    <div id="mp-saved" style="max-height:70px;overflow-y:auto"></div>
+  </div>
+</div>
+
 <div class="notif" id="notif-el"></div>
 
 <script>
@@ -310,7 +392,8 @@ function initNav() {
     });
     document.getElementById('btn-back-home').addEventListener('click', function() { showPage('p-home'); });
     document.getElementById('btn-back-dash').addEventListener('click', function() { showPage('p-dash'); });
-  var bm = document.getElementById('btn-metro'); if(bm) bm.addEventListener('click', function() { openEx(7); });
+  var bm = document.getElementById('btn-metro'); if(bm) bm.addEventListener('click', function() { initMetroPage(); showPage('p-metro'); });
+  var me = document.getElementById('metro-exit'); if(me) me.addEventListener('click', function() { metroStop(); showPage('p-dash'); });
   document.getElementById('tbl-btn-back').addEventListener('click', function() {
     if (window._tblInterval) clearInterval(window._tblInterval);
     window._tblRunning = false;
@@ -1239,6 +1322,181 @@ function buildMetro(w, ex) {
     if(savedList.length>10) savedList.shift();
     save('fw-metro-saved',savedList); notif('Sauvegardé: '+name); renderSaved();
   });
+}
+
+// ============ MÉTRONOME PAGE ============
+var _mp = {
+  bpm:10, dur:40, rest:20, num:4,
+  running:false, inRest:false, cur:0,
+  iv:null, actx:null,
+  saved: (function(){ try{ return JSON.parse(localStorage.getItem('fw-metro-saved'))||[]; }catch(e){return[];} })()
+};
+
+function metroStop() {
+  _mp.running=false;
+  if(_mp.iv){ clearInterval(_mp.iv); _mp.iv=null; }
+}
+
+function metroFmt(s){ var m=Math.floor(s/60),sec=s%60; return m>0?m+":"+(sec<10?"0":"")+sec:s+"s"; }
+function metroStr(s){ var m=Math.floor(s/60),sec=s%60; return m>0?m+"m"+(sec>0?sec+"s":""):s+"s"; }
+
+function metroGetCtx(){
+  if(!_mp.actx){ try{ _mp.actx=new(window.AudioContext||window.webkitAudioContext)(); }catch(e){} }
+  if(_mp.actx&&_mp.actx.state==='suspended') _mp.actx.resume();
+  return _mp.actx;
+}
+function metroBip(isExpire){
+  var ctx=metroGetCtx(); if(!ctx) return;
+  try{
+    var o=ctx.createOscillator(),g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);
+    o.type='sine';o.frequency.value=isExpire?440:660;
+    g.gain.setValueAtTime(0.4,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.12);
+    o.start();o.stop(ctx.currentTime+0.12);
+  }catch(e){}
+}
+
+function metroUpdTri(pct,isRest){
+  var fill=document.getElementById('mt-fill'); if(!fill) return;
+  var p=Math.max(0,Math.min(1,pct));
+  var topY=10+315*(1-p),hw=125*p+1;
+  fill.setAttribute('points','140,'+topY+' '+(140+hw)+',325 '+(140-hw)+',325');
+  fill.setAttribute('fill',isRest?'rgba(255,213,79,0.4)':'rgba(79,195,247,0.45)');
+}
+function metroUpdPhase(lbl,t){
+  var pl=document.getElementById('mp-phase'),tl=document.getElementById('mp-time');
+  if(pl)pl.textContent=lbl; if(tl)tl.textContent=t||'';
+}
+function metroUpdDots(){
+  for(var i=0;i<_mp.num;i++){
+    var d=document.getElementById('mpd-'+i); if(!d) continue;
+    if(i<_mp.cur){d.className='mp-dot done';d.textContent='✓';}
+    else if(i===_mp.cur&&_mp.running){d.className='mp-dot '+(_mp.inRest?'rest':'active');d.textContent=i+1;}
+    else{d.className='mp-dot';d.textContent=i+1;}
+  }
+}
+function metroUpdStartBtn(){
+  var b=document.getElementById('mp-start');
+  if(b){b.textContent=_mp.running?'⏸ PAUSE':'▶ START';b.style.background=_mp.running?'#ef5350':'#4fc3f7';}
+}
+function metroUpdCtrls(){
+  var map={'mp-tv':metroFmt(_mp.dur),'mp-sv':_mp.num,'mp-rv':metroFmt(_mp.rest),'mp-bv':_mp.bpm};
+  Object.keys(map).forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=map[id];});
+  var info=document.getElementById('mp-info');
+  if(info) info.textContent=_mp.num+' × '+metroStr(_mp.dur)+' / '+metroStr(_mp.rest)+' repos — '+metroStr(_mp.num*_mp.dur+(_mp.num-1)*_mp.rest)+' total';
+}
+function metroRebuildDots(){
+  var dc=document.getElementById('mp-dots'); if(!dc) return; dc.innerHTML='';
+  for(var i=0;i<_mp.num;i++){
+    var d=document.createElement('div');
+    d.className='mp-dot';d.id='mpd-'+i;d.textContent=i+1;
+    dc.appendChild(d);
+  }
+}
+function metroRenderSaved(){
+  var el=document.getElementById('mp-saved'); if(!el) return;
+  if(!_mp.saved.length){el.innerHTML='<p style="font-size:9px;color:#8899aa;text-align:center;padding:2px">Aucune séance</p>';return;}
+  el.innerHTML=_mp.saved.map(function(s,i){
+    return '<div style="display:flex;align-items:center;gap:6px;padding:4px 6px;background:rgba(79,195,247,.05);border:1px solid rgba(79,195,247,.1);border-radius:3px;margin-bottom:3px">'
+      +'<span style="flex:1;font-family:Cinzel,serif;font-size:10px;color:#f0f4f8">'+s.name+'</span>'
+      +'<span style="font-size:8px;color:#8899aa">'+s.bpm+'rpm·'+s.num+'×'+s.dur+'s</span>'
+      +'<button id="mpld-'+i+'" style="background:transparent;border:1px solid rgba(79,195,247,.3);color:#4fc3f7;font-size:9px;padding:2px 6px;cursor:pointer;border-radius:2px">↩</button>'
+      +'<button id="mpdl-'+i+'" style="background:transparent;border:1px solid rgba(239,83,80,.3);color:#ef5350;font-size:9px;padding:2px 6px;cursor:pointer;border-radius:2px">✕</button>'
+      +'</div>';
+  }).join('');
+  _mp.saved.forEach(function(s,i){
+    var lb=document.getElementById('mpld-'+i),db=document.getElementById('mpdl-'+i);
+    if(lb) lb.addEventListener('click',function(){_mp.bpm=s.bpm;_mp.dur=s.dur;_mp.rest=s.rest;_mp.num=s.num;_mp.running=false;_mp.cur=0;metroUpdCtrls();metroRebuildDots();metroRenderSaved();notif('Chargée: '+s.name);});
+    if(db) db.addEventListener('click',function(){_mp.saved.splice(i,1);save('fw-metro-saved',_mp.saved);metroRenderSaved();});
+  });
+}
+
+function metroStartSerie(){
+  _mp.inRest=false; metroUpdDots(); metroUpdPhase('INSPIRE','');
+  metroBip(false);
+  var bsInSub=Math.round((30/_mp.bpm)*10), subEl=0, subTotal=_mp.dur*10, phEl=0, isInsp=true;
+  _mp.iv=setInterval(function(){
+    subEl++;phEl++;
+    metroUpdTri(isInsp?phEl/bsInSub:1-phEl/bsInSub,false);
+    metroUpdPhase(isInsp?'INSPIRE':'EXPIRE','');
+    if(phEl>=bsInSub){phEl=0;isInsp=!isInsp;if(subEl<subTotal)metroBip(!isInsp);}
+    if(subEl>=subTotal){
+      clearInterval(_mp.iv);_mp.cur++;
+      if(_mp.cur>=_mp.num){
+        _mp.running=false;metroUpdTri(0,false);metroUpdPhase('TERMINÉ','✓');
+        metroUpdDots();metroUpdStartBtn();
+        parler('Séance terminée. Excellent.',0);notif('Métronome terminé ! 💪');
+      } else metroStartRest();
+    }
+  },100);
+}
+
+function metroStartRest(){
+  _mp.inRest=true;metroUpdDots();
+  metroUpdPhase('REPOS','');metroUpdTri(0,true);
+  parler('Repos.',0);
+  var subEl=0,subTotal=_mp.rest*10;
+  _mp.iv=setInterval(function(){
+    subEl++;
+    metroUpdTri(subEl/subTotal,true);
+    var rem=_mp.rest-Math.floor(subEl/10);
+    metroUpdPhase('REPOS',metroFmt(Math.max(0,rem)));
+    if(rem===3&&subEl%10===0)parler('Trois.',0);
+    if(rem===2&&subEl%10===0)parler('Deux.',0);
+    if(rem===1&&subEl%10===0)parler('Un.',0);
+    if(subEl>=subTotal){clearInterval(_mp.iv);_mp.inRest=false;parler('Respirez.',0);setTimeout(metroStartSerie,200);}
+  },100);
+}
+
+function initMetroPage(){
+  metroStop(); _mp.cur=0; _mp.inRest=false;
+  metroUpdTri(0,false); metroUpdPhase('PRÊT','');
+  metroUpdCtrls(); metroRebuildDots(); metroRenderSaved(); metroUpdStartBtn();
+
+  // Bind events (une seule fois par visite)
+  var controls=[
+    ['mp-tu',function(){_mp.dur=Math.min(600,_mp.dur+5);metroUpdCtrls();}],
+    ['mp-td',function(){_mp.dur=Math.max(5,_mp.dur-5);metroUpdCtrls();}],
+    ['mp-su',function(){_mp.num=Math.min(20,_mp.num+1);metroRebuildDots();metroUpdCtrls();}],
+    ['mp-sd',function(){if(_mp.num<=1)return;_mp.num--;metroRebuildDots();metroUpdCtrls();}],
+    ['mp-ru',function(){_mp.rest=Math.min(300,_mp.rest+5);metroUpdCtrls();}],
+    ['mp-rd',function(){_mp.rest=Math.max(0,_mp.rest-5);metroUpdCtrls();}],
+    ['mp-bu',function(){_mp.bpm=Math.min(60,_mp.bpm+1);metroUpdCtrls();}],
+    ['mp-bd',function(){_mp.bpm=Math.max(1,_mp.bpm-1);metroUpdCtrls();}],
+  ];
+  controls.forEach(function(p){
+    var el=document.getElementById(p[0]);
+    if(el){el.onclick=null;el.addEventListener('click',p[1]);}
+  });
+
+  var startBtn=document.getElementById('mp-start');
+  if(startBtn){
+    startBtn.onclick=null;
+    startBtn.addEventListener('click',function(){
+      metroGetCtx();
+      if(!_mp.running){_mp.running=true;_mp.cur=0;metroUpdStartBtn();metroStartSerie();}
+      else{metroStop();metroUpdPhase('EN PAUSE','');metroUpdStartBtn();}
+    });
+  }
+  var resetBtn=document.getElementById('mp-reset');
+  if(resetBtn){
+    resetBtn.onclick=null;
+    resetBtn.addEventListener('click',function(){
+      metroStop();_mp.cur=0;_mp.inRest=false;
+      metroUpdTri(0,false);metroUpdPhase('PRÊT','');metroUpdDots();metroUpdStartBtn();
+    });
+  }
+  var saveBtn=document.getElementById('mp-save');
+  if(saveBtn){
+    saveBtn.onclick=null;
+    saveBtn.addEventListener('click',function(){
+      var name=prompt('Nom:'); if(!name) return;
+      _mp.saved.push({name:name,bpm:_mp.bpm,dur:_mp.dur,rest:_mp.rest,num:_mp.num});
+      if(_mp.saved.length>10)_mp.saved.shift();
+      save('fw-metro-saved',_mp.saved);notif('Sauvegardé: '+name);metroRenderSaved();
+    });
+  }
 }
 
 </script>
