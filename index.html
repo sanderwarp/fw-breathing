@@ -1011,7 +1011,7 @@ function buildBalloon(w, ex) {
 function buildMetro(w, ex) {
   var bpm = 10, seriesDur = 40, restDur = 20, numSeries = 4;
   var running = false, inRest = false, curSerie = 0;
-  var mainIv = null, elapsed = 0;
+  var mainIv = null;
   var savedList = load('fw-metro-saved') || [];
   var actx = null;
 
@@ -1020,56 +1020,49 @@ function buildMetro(w, ex) {
     if (actx && actx.state === 'suspended') actx.resume();
     return actx;
   }
-
   function playBip(isExpire) {
     var ctx = getACtx(); if (!ctx) return;
     try {
       var o=ctx.createOscillator(), g=ctx.createGain();
       o.connect(g); g.connect(ctx.destination);
-      o.type='sine';
-      o.frequency.value = isExpire ? 440 : 660;
+      o.type='sine'; o.frequency.value = isExpire ? 440 : 660;
       g.gain.setValueAtTime(0.4, ctx.currentTime);
       g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.12);
       o.start(); o.stop(ctx.currentTime+0.12);
     } catch(e){}
   }
 
-  function bipSec() { return 30 / bpm; }
+  function bipSec() { return 30/bpm; }
   function fmtV(s) { var m=Math.floor(s/60),sec=s%60; return m>0?m+":"+(sec<10?"0":"")+sec:s+"s"; }
   function secStr(s) { var m=Math.floor(s/60),sec=s%60; return m>0?m+"m"+(sec>0?sec+"s":""):s+"s"; }
   function totalDur() { return numSeries*seriesDur+(numSeries-1)*restDur; }
 
-  // Met à jour le remplissage des poumons via clipRect
-  // pct 0=vide, 1=plein
-  function updLungs(pct, color) {
-    var fill = document.getElementById('mt-fill'); if(!fill) return;
-    var p = Math.max(0, Math.min(1, pct));
-    var topY = 10 + 315*(1-p), hw = 125*p + 1;
-    fill.setAttribute('points', '140,'+topY+' '+(140+hw)+',325 '+(140-hw)+',325');
-    fill.setAttribute('fill', color || 'rgba(79,195,247,0.45)');
+  function updTriangle(pct, isRest) {
+    var fill=document.getElementById('mt-fill'); if(!fill) return;
+    var p=Math.max(0,Math.min(1,pct));
+    var topY=10+315*(1-p), hw=125*p+1;
+    fill.setAttribute('points','140,'+topY+' '+(140+hw)+',325 '+(140-hw)+',325');
+    fill.setAttribute('fill', isRest?'rgba(255,213,79,0.4)':'rgba(79,195,247,0.45)');
   }
-
   function updStatus(lbl, t) {
     var pl=document.getElementById('metro-plbl'), tl=document.getElementById('metro-tlbl');
-    if(pl) pl.textContent=lbl;
-    if(tl) tl.textContent=t||'';
+    if(pl) pl.textContent=lbl; if(tl) tl.textContent=t||'';
   }
-
   function updDots() {
     for(var i=0;i<numSeries;i++){
       var d=document.getElementById('mdot-'+i); if(!d) continue;
-      if(i<curSerie){d.className='metro-dot done';d.innerHTML=(i+1)+'<br><small>✓</small>';}
-      else if(i===curSerie&&running){d.className='metro-dot '+(inRest?'rest':'active');d.innerHTML=(i+1)+'<br><small>'+(inRest?'repos':'go')+'</small>';}
-      else{d.className='metro-dot';d.innerHTML=(i+1)+'<br><small>—</small>';}
+      if(i<curSerie){d.className='metro-dot done';d.textContent='✓';}
+      else if(i===curSerie&&running){d.className='metro-dot '+(inRest?'rest':'active');d.textContent=i+1;}
+      else{d.className='metro-dot';d.textContent=i+1;}
     }
   }
   function updStartBtn() {
     var b=document.getElementById('metro-start');
-    if(b){b.textContent=running?'⏸ PAUSE':'▶ START';b.style.background=running?'#ef5350':'#4fc3f7';}
+    if(b){b.textContent=running?'⏸':'▶';b.style.background=running?'#ef5350':'#4fc3f7';}
   }
   function updInfo() {
     var el=document.getElementById('metro-info');
-    if(el) el.textContent=numSeries+' × '+secStr(seriesDur)+' / repos '+secStr(restDur)+' — total '+secStr(totalDur())+' · '+secStr(Math.round(60/bpm*10)/10)+'/resp';
+    if(el) el.textContent=numSeries+' × '+secStr(seriesDur)+' / '+secStr(restDur)+' repos — '+secStr(totalDur())+' total';
   }
   function updCtrls() {
     var map={'mc-tv':fmtV(seriesDur),'mc-sv':numSeries,'mc-rv':fmtV(restDur),'mc-bv':bpm};
@@ -1078,24 +1071,14 @@ function buildMetro(w, ex) {
   }
 
   function startSerie() {
-    inRest=false; elapsed=0; updDots();
-    updStatus('INSPIRE','');
+    inRest=false; updDots(); updStatus('INSPIRE','');
     playBip(false);
-    var bsInSub = Math.round(bipSec()*10);
-    var subElapsed=0, subTotal=seriesDur*10;
-    var phaseEl=0, isInspire=true;
-
+    var bsInSub=Math.round(bipSec()*10), subElapsed=0, subTotal=seriesDur*10, phaseEl=0, isInspire=true;
     mainIv=setInterval(function(){
       subElapsed++; phaseEl++;
-      var pct = phaseEl/bsInSub;
-      var col = 'rgba(79,195,247,0.55)';
-      if(isInspire) {
-        updLungs(pct, col);
-        updStatus('INSPIRE','');
-      } else {
-        updLungs(1-pct, col);
-        updStatus('EXPIRE','');
-      }
+      var pct=phaseEl/bsInSub;
+      updTriangle(isInspire?pct:1-pct, false);
+      updStatus(isInspire?'INSPIRE':'EXPIRE','');
       if(phaseEl>=bsInSub){
         phaseEl=0; isInspire=!isInspire;
         if(subElapsed<subTotal) playBip(!isInspire);
@@ -1103,23 +1086,22 @@ function buildMetro(w, ex) {
       if(subElapsed>=subTotal){
         clearInterval(mainIv); curSerie++;
         if(curSerie>=numSeries){
-          running=false; updLungs(0,null); updStatus('TERMINÉ !','✓');
+          running=false; updTriangle(0,false); updStatus('TERMINÉ','✓');
           updDots(); updStartBtn();
           parler('Séance terminée. Excellent.',0); notif('Métronome terminé ! 💪');
-        } else { startRest(); }
+        } else startRest();
       }
     },100);
   }
 
   function startRest() {
-    inRest=true; elapsed=0; updDots();
-    updStatus('REPOS',''); updLungs(0,'rgba(255,213,79,0.4)');
+    inRest=true; updDots();
+    updStatus('REPOS',''); updTriangle(0,true);
     parler('Repos.',0);
     var subElapsed=0, subTotal=restDur*10;
     mainIv=setInterval(function(){
       subElapsed++;
-      var pct=subElapsed/subTotal;
-      updLungs(pct,'rgba(255,213,79,0.4)');
+      updTriangle(subElapsed/subTotal, true);
       var remSec=restDur-Math.floor(subElapsed/10);
       updStatus('REPOS', fmtV(Math.max(0,remSec)));
       if(remSec===3&&subElapsed%10===0) parler('Trois.',0);
@@ -1133,26 +1115,20 @@ function buildMetro(w, ex) {
   }
 
   function renderSaved() {
-    var el=document.getElementById('metro-saved'); if(!el) return;
-    if(!savedList.length){el.innerHTML='<p style="font-size:11px;color:#8899aa;text-align:center;padding:8px">Aucune séance sauvegardée</p>';return;}
+    var el=document.getElementById('metro-saved-list'); if(!el) return;
+    if(!savedList.length){el.innerHTML='<p style="font-size:10px;color:#8899aa;text-align:center;padding:4px">Aucune séance</p>';return;}
     el.innerHTML=savedList.map(function(s,i){
-      return '<div class="metro-saved-row">'
-        +'<span class="metro-saved-name">'+s.name+'</span>'
-        +'<span class="metro-saved-info">'+s.bpm+' resp/min · '+s.num+'x'+s.dur+'s/'+s.rest+'s</span>'
-        +'<button class="bs" id="mld-'+i+'" style="font-size:9px;padding:4px 8px">↩</button>'
-        +'<button class="bs" id="mdl-'+i+'" style="font-size:9px;padding:4px 8px;color:#ef5350;border-color:rgba(239,83,80,.3)">✕</button>'
+      return '<div style="display:flex;align-items:center;gap:6px;padding:6px 8px;background:rgba(79,195,247,.05);border:1px solid rgba(79,195,247,.1);border-radius:3px;margin-bottom:4px">'
+        +'<span style="flex:1;font-family:Cinzel,serif;font-size:11px;color:#f0f4f8">'+s.name+'</span>'
+        +'<span style="font-size:9px;color:#8899aa">'+s.bpm+'rpm·'+s.num+'×'+s.dur+'s</span>'
+        +'<button class="bs" id="mld-'+i+'" style="font-size:9px;padding:3px 7px">↩</button>'
+        +'<button class="bs" id="mdl-'+i+'" style="font-size:9px;padding:3px 7px;color:#ef5350;border-color:rgba(239,83,80,.3)">✕</button>'
         +'</div>';
     }).join('');
     savedList.forEach(function(s,i){
       var lb=document.getElementById('mld-'+i), db=document.getElementById('mdl-'+i);
-      if(lb) lb.addEventListener('click',function(){
-        bpm=s.bpm;seriesDur=s.dur;restDur=s.rest;numSeries=s.num;
-        running=false;clearInterval(mainIv);curSerie=0;
-        updCtrls();rebuildDots();renderSaved();notif('Séance "'+s.name+'" chargée');
-      });
-      if(db) db.addEventListener('click',function(){
-        savedList.splice(i,1);save('fw-metro-saved',savedList);renderSaved();
-      });
+      if(lb) lb.addEventListener('click',function(){bpm=s.bpm;seriesDur=s.dur;restDur=s.rest;numSeries=s.num;running=false;clearInterval(mainIv);curSerie=0;updCtrls();rebuildDots();renderSaved();notif('Chargée: '+s.name);});
+      if(db) db.addEventListener('click',function(){savedList.splice(i,1);save('fw-metro-saved',savedList);renderSaved();});
     });
   }
 
@@ -1160,44 +1136,80 @@ function buildMetro(w, ex) {
     var dc=document.getElementById('metro-dots'); if(!dc) return; dc.innerHTML='';
     for(var i=0;i<numSeries;i++){
       var d=document.createElement('div');
-      d.className='metro-dot';d.id='mdot-'+i;
-      d.innerHTML=(i+1)+'<br><small>—</small>';
+      d.className='metro-dot'; d.id='mdot-'+i; d.textContent=i+1;
       dc.appendChild(d);
     }
   }
 
-  var lungSVG = '<div style="position:relative;display:flex;justify-content:center;margin-bottom:8px">'
-    +'<svg style="width:min(92vw,360px);height:min(110vw,420px)" viewBox="0 0 280 340">'
+  // Layout plein écran fixe - tout tient sans scroll
+  w.style.padding='0';
+  w.style.display='flex';
+  w.style.flexDirection='column';
+  w.style.height='calc(100vh - 120px)'; // 120px = header ex-hdr
+
+  w.innerHTML=
+    // Triangle - zone flexible
+    '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;min-height:0">'
+    +'<svg style="width:min(70vw,240px);height:min(82vw,282px);flex-shrink:0" viewBox="0 0 280 340">'
     +'<polygon points="140,10 265,325 15,325" fill="none" stroke="rgba(79,195,247,0.15)" stroke-width="1.5"/>'
     +'<polygon id="mt-fill" points="140,325 141,325 139,325" fill="rgba(79,195,247,0.45)"/>'
     +'<line x1="140" y1="10" x2="140" y2="325" stroke="rgba(79,195,247,0.2)" stroke-width="1"/>'
-    +'<line x1="72" y1="114" x2="208" y2="114" stroke="rgba(255,255,255,0.07)" stroke-width="0.8"/><text x="215" y="118" fill="rgba(255,255,255,0.2)" font-size="11" font-family="Arial">25</text>'
-    +'<line x1="47" y1="218" x2="233" y2="218" stroke="rgba(255,255,255,0.07)" stroke-width="0.8"/><text x="240" y="222" fill="rgba(255,255,255,0.2)" font-size="11" font-family="Arial">50</text>'
-    +'<line x1="22" y1="285" x2="258" y2="285" stroke="rgba(255,255,255,0.07)" stroke-width="0.8"/><text x="265" y="289" fill="rgba(255,255,255,0.2)" font-size="11" font-family="Arial">75</text>'
+    +'<line x1="72" y1="114" x2="208" y2="114" stroke="rgba(255,255,255,0.07)" stroke-width="0.8"/>'
+    +'<line x1="47" y1="218" x2="233" y2="218" stroke="rgba(255,255,255,0.07)" stroke-width="0.8"/>'
+    +'<line x1="22" y1="285" x2="258" y2="285" stroke="rgba(255,255,255,0.07)" stroke-width="0.8"/>'
     +'</svg>'
-    +'<div style="position:absolute;bottom:50px;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none">'
-    +'<div style="font-family:Cinzel,serif;font-size:13px;letter-spacing:2px;color:#4fc3f7" id="metro-plbl">PRÊT</div>'
-    +'<div style="font-family:Cinzel,serif;font-size:26px;font-weight:700;color:#fff;margin-top:4px" id="metro-tlbl">—</div>'
-    +'</div></div>';
-
-  w.innerHTML='<div class="metro-wrap">'
-    + lungSVG
-
-    +'<div class="metro-controls">'
-    +'<div class="metro-ctrl"><span class="metro-ctrl-lbl">TIMER</span><button class="metro-ctrl-btn" id="mc-tu">▲</button><span class="metro-ctrl-val" id="mc-tv">40s</span><button class="metro-ctrl-btn" id="mc-td">▼</button></div>'
-    +'<div class="metro-ctrl"><span class="metro-ctrl-lbl">SÉRIES</span><button class="metro-ctrl-btn" id="mc-su">▲</button><span class="metro-ctrl-val" id="mc-sv">4</span><button class="metro-ctrl-btn" id="mc-sd">▼</button></div>'
-    +'<div class="metro-ctrl"><span class="metro-ctrl-lbl">REPOS</span><button class="metro-ctrl-btn" id="mc-ru">▲</button><span class="metro-ctrl-val" id="mc-rv">20s</span><button class="metro-ctrl-btn" id="mc-rd">▼</button></div>'
-    +'<div class="metro-ctrl"><span class="metro-ctrl-lbl">RESP/MIN</span><button class="metro-ctrl-btn" id="mc-bu">▲</button><span class="metro-ctrl-val" id="mc-bv">10</span><button class="metro-ctrl-btn" id="mc-bd">▼</button></div>'
+    +'<div style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);text-align:center">'
+    +'<div style="font-family:Cinzel,serif;font-size:13px;letter-spacing:3px;color:#4fc3f7" id="metro-plbl">PRÊT</div>'
+    +'<div style="font-family:Cinzel,serif;font-size:20px;font-weight:700;color:#fff;margin-top:2px" id="metro-tlbl"></div>'
     +'</div>'
-    +'<p id="metro-info" style="font-size:10px;letter-spacing:1px;color:#8899aa;text-align:center;margin-bottom:12px"></p>'
-    +'<div class="metro-series-wrap" id="metro-dots"></div>'
-    +'<div class="brow" style="width:100%;margin-bottom:14px">'
-    +'<button class="bp" id="metro-start" style="flex:1;padding:10px;font-size:11px;letter-spacing:2px">▶ START</button>'
-    +'<button class="bs" id="metro-reset" style="padding:10px 14px;font-size:13px">↺</button>'
-    +'<button class="bs" id="metro-save" style="padding:10px 14px;font-size:13px">💾</button>'
     +'</div>'
-    +'<div style="width:100%"><p class="w-title" style="margin-bottom:8px">Séances sauvegardées</p>'
-    +'<div id="metro-saved"></div></div>'
+
+    // Contrôles - zone fixe compacte
+    +'<div style="flex-shrink:0;padding:0 12px">'
+    +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
+    // TIMER
+    +'<div style="display:flex;flex-direction:column;align-items:center;gap:4px">'
+    +'<span style="font-size:8px;letter-spacing:2px;color:#8899aa">TIMER</span>'
+    +'<button class="metro-ctrl-btn" id="mc-tu">▲</button>'
+    +'<span style="font-family:Cinzel,serif;font-size:18px;font-weight:700;color:#f0f4f8" id="mc-tv">40s</span>'
+    +'<button class="metro-ctrl-btn" id="mc-td">▼</button>'
+    +'</div>'
+    // SÉRIES
+    +'<div style="display:flex;flex-direction:column;align-items:center;gap:4px">'
+    +'<span style="font-size:8px;letter-spacing:2px;color:#8899aa">SÉRIES</span>'
+    +'<button class="metro-ctrl-btn" id="mc-su">▲</button>'
+    +'<span style="font-family:Cinzel,serif;font-size:18px;font-weight:700;color:#f0f4f8" id="mc-sv">4</span>'
+    +'<button class="metro-ctrl-btn" id="mc-sd">▼</button>'
+    +'</div>'
+    // REPOS
+    +'<div style="display:flex;flex-direction:column;align-items:center;gap:4px">'
+    +'<span style="font-size:8px;letter-spacing:2px;color:#8899aa">REPOS</span>'
+    +'<button class="metro-ctrl-btn" id="mc-ru">▲</button>'
+    +'<span style="font-family:Cinzel,serif;font-size:18px;font-weight:700;color:#f0f4f8" id="mc-rv">20s</span>'
+    +'<button class="metro-ctrl-btn" id="mc-rd">▼</button>'
+    +'</div>'
+    // RESP/MIN
+    +'<div style="display:flex;flex-direction:column;align-items:center;gap:4px">'
+    +'<span style="font-size:8px;letter-spacing:2px;color:#8899aa">RESP/MIN</span>'
+    +'<button class="metro-ctrl-btn" id="mc-bu">▲</button>'
+    +'<span style="font-family:Cinzel,serif;font-size:18px;font-weight:700;color:#f0f4f8" id="mc-bv">10</span>'
+    +'<button class="metro-ctrl-btn" id="mc-bd">▼</button>'
+    +'</div>'
+    +'</div>'
+
+    // Info + dots
+    +'<p id="metro-info" style="font-size:9px;letter-spacing:1px;color:#8899aa;text-align:center;margin-bottom:6px"></p>'
+    +'<div id="metro-dots" style="display:flex;gap:5px;justify-content:center;margin-bottom:8px;flex-wrap:wrap"></div>'
+
+    // Boutons action
+    +'<div style="display:flex;gap:8px;margin-bottom:8px">'
+    +'<button class="bp" id="metro-start" style="flex:1;padding:11px;font-size:18px">▶</button>'
+    +'<button class="bs" id="metro-reset" style="padding:11px 16px;font-size:14px">↺</button>'
+    +'<button class="bs" id="metro-save" style="padding:11px 16px;font-size:14px">💾</button>'
+    +'</div>'
+
+    // Séances sauvegardées (compact)
+    +'<div style="max-height:80px;overflow-y:auto" id="metro-saved-list"></div>'
     +'</div>';
 
   rebuildDots(); updInfo(); renderSaved();
@@ -1214,25 +1226,18 @@ function buildMetro(w, ex) {
 
   document.getElementById('metro-start').addEventListener('click',function(){
     getACtx();
-    if(!running){
-      running=true;curSerie=0;elapsed=0;updStartBtn();startSerie();
-    } else {
-      running=false;clearInterval(mainIv);
-      updStatus('EN PAUSE','');updStartBtn();
-    }
+    if(!running){running=true;curSerie=0;updStartBtn();startSerie();}
+    else{running=false;clearInterval(mainIv);updStatus('EN PAUSE','');updStartBtn();}
   });
   document.getElementById('metro-reset').addEventListener('click',function(){
-    running=false;clearInterval(mainIv);
-    curSerie=0;elapsed=0;inRest=false;
-    updLungs(0,null);updStatus('PRÊT','—');updDots();updStartBtn();
+    running=false;clearInterval(mainIv);curSerie=0;inRest=false;
+    updTriangle(0,false);updStatus('PRÊT','');updDots();updStartBtn();
   });
   document.getElementById('metro-save').addEventListener('click',function(){
-    var name=prompt('Nom de la séance :'); if(!name) return;
+    var name=prompt('Nom:'); if(!name) return;
     savedList.push({name:name,bpm:bpm,dur:seriesDur,rest:restDur,num:numSeries});
     if(savedList.length>10) savedList.shift();
-    save('fw-metro-saved',savedList);
-    notif('Séance "'+name+'" sauvegardée !');
-    renderSaved();
+    save('fw-metro-saved',savedList); notif('Sauvegardé: '+name); renderSaved();
   });
 }
 
