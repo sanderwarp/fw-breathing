@@ -161,6 +161,26 @@ body{font-family:'Raleway',Georgia,serif;background:#0d1117;color:#f0f4f8;min-he
 .login-btn{width:100%;padding:14px;background:#4fc3f7;border:none;color:#080c10;font-family:Cinzel,serif;font-size:12px;letter-spacing:4px;cursor:pointer;border-radius:4px;transition:all .2s;text-transform:uppercase}
 .login-btn:hover{background:#81d4fa}
 
+/* METRONOME */
+.metro-wrap{display:flex;flex-direction:column;align-items:center;width:100%;padding:16px 0}
+.metro-controls{display:flex;gap:32px;justify-content:center;align-items:flex-start;margin-bottom:20px}
+.metro-ctrl{display:flex;flex-direction:column;align-items:center;gap:8px}
+.metro-ctrl-lbl{font-size:10px;letter-spacing:3px;color:#8899aa;text-transform:uppercase}
+.metro-ctrl-val{font-family:Cinzel,serif;font-size:32px;font-weight:700;color:#f0f4f8;min-width:80px;text-align:center}
+.metro-ctrl-btn{background:transparent;border:1px solid rgba(79,195,247,.3);color:#4fc3f7;width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:20px;line-height:1;transition:all .2s}
+.metro-ctrl-btn:hover{background:rgba(79,195,247,.15)}
+.metro-series-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;margin-bottom:16px}
+.metro-series-lbl{font-size:9px;letter-spacing:2px;color:#8899aa;text-transform:uppercase;margin-bottom:8px;text-align:center;grid-column:1/-1}
+.metro-dot{padding:8px 4px;background:rgba(79,195,247,.05);border:1px solid rgba(79,195,247,.1);border-radius:4px;text-align:center;font-size:10px;color:#8899aa;transition:all .3s}
+.metro-dot.active{border-color:#4fc3f7;background:rgba(79,195,247,.15);color:#4fc3f7}
+.metro-dot.rest{border-color:#ffd54f;background:rgba(255,213,79,.08);color:#ffd54f}
+.metro-dot.done{border-color:#66bb6a;background:rgba(102,187,106,.08);color:#66bb6a;opacity:.5}
+.metro-saved-list{display:flex;flex-direction:column;gap:6px;width:100%;margin-top:12px}
+.metro-saved-row{display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(79,195,247,.05);border:1px solid rgba(79,195,247,.1);border-radius:4px}
+.metro-saved-name{flex:1;font-family:Cinzel,serif;font-size:13px;color:#f0f4f8}
+.metro-saved-info{font-size:10px;color:#8899aa}
+.metro-svg-wrap{position:relative;display:flex;justify-content:center;align-items:center;margin-bottom:16px}
+
 /* NOTIF */
 .notif{position:fixed;top:16px;right:16px;padding:12px 18px;background:#1a2332;border-left:3px solid #66bb6a;color:#f0f4f8;font-size:12px;z-index:9999;opacity:0;transform:translateX(16px);transition:all .3s;max-width:260px;pointer-events:none}
 .notif.show{opacity:1;transform:translateX(0)}
@@ -205,6 +225,13 @@ body{font-family:'Raleway',Georgia,serif;background:#0d1117;color:#f0f4f8;min-he
     <div class="card" data-ex="4"><img class="card-img" src="images/04-box-breathing.png" alt="Box Breathing"><div class="card-overlay"></div><span class="card-n">04</span><p class="card-cat">Système nerveux</p><h3 class="card-ttl">Box Breathing</h3></div>
     <div class="card" data-ex="5"><img class="card-img" src="images/05-table-co2.png" alt="Table CO₂"><div class="card-overlay"></div><span class="card-n">05</span><p class="card-cat">Tolérance CO₂</p><h3 class="card-ttl">Table CO₂</h3></div>
     <div class="card" data-ex="6"><img class="card-img" src="images/06-table-o2.png" alt="Table O₂"><div class="card-overlay"></div><span class="card-n">06</span><p class="card-cat">Tolérance O₂</p><h3 class="card-ttl">Table O₂</h3></div>
+  </div>
+  <!-- Bouton Métronome -->
+  <div style="display:flex;justify-content:center;padding:16px 0 20px">
+    <button id="btn-metro" style="display:flex;align-items:center;gap:10px;padding:12px 28px;background:transparent;border:1px solid rgba(79,195,247,.3);color:#4fc3f7;font-family:Cinzel,serif;font-size:11px;letter-spacing:3px;cursor:pointer;border-radius:4px;transition:all .3s;text-transform:uppercase">
+      <svg width="16" height="20" viewBox="0 0 16 20" fill="none"><polygon points="8,1 15,19 1,19" stroke="#4fc3f7" stroke-width="1.2" fill="none"/><line x1="8" y1="1" x2="8" y2="19" stroke="#4fc3f7" stroke-width="0.8" opacity=".6"/></svg>
+      Métronome
+    </button>
   </div>
 </div>
 
@@ -348,6 +375,9 @@ function initNav() {
     });
     document.getElementById('btn-back-home').addEventListener('click', function() { showPage('p-home'); });
     document.getElementById('btn-back-dash').addEventListener('click', function() { showPage('p-dash'); });
+  document.getElementById('btn-metro').addEventListener('click', function() {
+    openEx(7);
+  });
   document.getElementById('tbl-btn-back').addEventListener('click', function() {
     if (window._tblInterval) clearInterval(window._tblInterval);
     window._tblRunning = false;
@@ -395,7 +425,8 @@ var EX = {
   5: { cat:'Tolérance CO₂ · Poumons pleins', title:'Table CO₂', type:'co2', key:'fw-co2',
     instr:'<strong>Principe :</strong> 8 apnées de durée fixe (50% de ton max), récupération <em>décroissante</em> par paliers de 10s à chaque série. Toujours réalisé <strong>poumons pleins</strong> — inspire normalement avant chaque apnée.<br><br><strong>Pourquoi poumons pleins ?</strong> La réserve en O₂ est maintenue, ce qui permet au CO₂ de monter progressivement sans composante hypoxique agressive. Tu entraînes le seuil de tolérance central au CO₂ — le point où ton cerveau déclenche l\'envie de respirer — sans risque hypoxique.<br><br><strong>Adaptations :</strong> Tolérance au CO₂, réduction de l\'hyperventilation réflexe à l\'effort, meilleure régulation ventilatoire.' },
   6: { cat:'Tolérance O₂ · Volume pulmonaire', title:'Table O₂', type:'o2', key:'fw-o2',
-    instr:'<strong>Principe :</strong> 8 apnées <em>croissantes</em> (50% → 80% de ton max), récupération fixe 2 min. Toujours réalisé <strong>poumons pleins</strong> — inspire à fond avant chaque apnée.<br><br><strong>Pourquoi poumons pleins ?</strong> Les poumons gonflés étirent la cage thoracique de l\'intérieur — adaptation structurelle qui augmente réellement le volume pulmonaire.<br><br><strong>Adaptations :</strong> Tolérance hypoxie, efficience O₂, étirement structurel des poumons.' }
+    instr:'<strong>Principe :</strong> 8 apnées <em>croissantes</em> (50% → 80% de ton max), récupération fixe 2 min. Toujours réalisé <strong>poumons pleins</strong> — inspire à fond avant chaque apnée.<br><br><strong>Pourquoi poumons pleins ?</strong> Les poumons gonflés étirent la cage thoracique de l\'intérieur — adaptation structurelle qui augmente réellement le volume pulmonaire.<br><br><strong>Adaptations :</strong> Tolérance hypoxie, efficience O₂, étirement structurel des poumons.' },
+  7: { cat:'Cadence · Métronome', title:'Métronome Respiratoire', type:'metro', key:'fw-metro', instr:'' }
 };
 
 function openEx(id) {
@@ -406,8 +437,8 @@ function openEx(id) {
   var body = document.getElementById('ex-body');
   var imgMap = {1:'01-breath-of-fire.png',2:'02-sandbag.png',3:'03-balloon.png',4:'04-box-breathing.png',5:'05-table-co2.png',6:'06-table-o2.png'};
   var imgSrc = imgMap[id] ? 'images/' + imgMap[id] : '';
-  var showInstr = (ex.type !== 'co2' && ex.type !== 'o2');
-  var showImg = (ex.type !== 'co2' && ex.type !== 'o2');
+  var showInstr = (ex.type !== 'co2' && ex.type !== 'o2' && ex.type !== 'metro');
+  var showImg = (ex.type !== 'co2' && ex.type !== 'o2' && ex.type !== 'metro');
   body.innerHTML = (showImg ? '<img src="' + imgSrc + '" alt="' + ex.title + '" style="width:100%;height:140px;object-fit:cover;border-radius:4px;">' : '')
     + (showInstr ? '<div class="instr">' + ex.instr + '</div>' : '')
     + '<div class="widget" id="w-main"></div>';
@@ -415,7 +446,9 @@ function openEx(id) {
   if (ex.type === 'counter') buildCounter(w, ex);
   else if (ex.type === 'series') buildSeries(w, ex);
   else if (ex.type === 'balloon') buildBalloon(w, ex);
+  else if (ex.type === 'metro') buildMetro(w, ex);
   else if (ex.type === 'balloon') buildBalloon(w, ex);
+  else if (ex.type === 'metro') buildMetro(w, ex);
   else if (ex.type === 'box') buildBox(w, ex);
   else if (ex.type === 'co2') buildApnea(w, ex, 'co2');
   else if (ex.type === 'o2') buildApnea(w, ex, 'o2');
@@ -1040,6 +1073,268 @@ function buildBalloon(w, ex) {
   }
   render();
 }
-</script>
-</body>
-</html>
+
+// ============ MÉTRONOME RESPIRATOIRE ============
+function buildMetro(w, ex) {
+  var bpm = 10, seriesDur = 40, restDur = 20, numSeries = 4;
+  var running = false, inRest = false, curSerie = 0;
+  var mainIv = null, bipIv = null, elapsed = 0;
+  var savedList = load('fw-metro-saved') || [];
+  var audioCtxM = null;
+
+  function getACtx() {
+    if (!audioCtxM) { try { audioCtxM = new (window.AudioContext||window.webkitAudioContext)(); } catch(e){} }
+    if (audioCtxM && audioCtxM.state === 'suspended') audioCtxM.resume();
+    return audioCtxM;
+  }
+
+  function playBip() {
+    var ctx = getACtx(); if (!ctx) return;
+    try {
+      var o = ctx.createOscillator(), g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.type = 'sine'; o.frequency.value = 880;
+      g.gain.setValueAtTime(0.35, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.1);
+      o.start(); o.stop(ctx.currentTime+0.1);
+    } catch(e){}
+  }
+
+  function startBip() {
+    stopBip(); playBip();
+    var ms = Math.round(60000/bpm);
+    bipIv = setInterval(playBip, ms);
+  }
+  function stopBip() { if (bipIv) { clearInterval(bipIv); bipIv = null; } }
+
+  function secToStr(s) { var m=Math.floor(s/60),sec=s%60; return m>0?m+'m'+(sec>0?sec+'s':''):s+'s'; }
+  function fmtVal(s) { var m=Math.floor(s/60),sec=s%60; return m>0?m+':'+(sec<10?'0':'')+sec:s+'s'; }
+  function totalDur() { return numSeries*seriesDur+(numSeries-1)*restDur; }
+
+  function updateTriangle(pct, isRest) {
+    var fill = document.getElementById('mt-fill');
+    if (!fill) return;
+    // pct 0=vide(pointe) 1=plein(base large)
+    // Triangle: sommet (140,10), base (15,325) (265,325)
+    var p = Math.max(0, Math.min(1, pct));
+    var topY = 10 + 315*(1-p);
+    var halfW = 125*p + 1;
+    var topX = 140;
+    fill.setAttribute('points', topX+','+topY+' '+(topX+halfW)+',325 '+(topX-halfW)+',325');
+    fill.setAttribute('fill', isRest ? 'rgba(255,213,79,0.4)' : 'rgba(79,195,247,0.45)');
+  }
+
+  function updateStatus(label, timeStr) {
+    var pl = document.getElementById('metro-phase-lbl');
+    var tl = document.getElementById('metro-time-lbl');
+    if (pl) pl.textContent = label;
+    if (tl) tl.textContent = timeStr;
+  }
+
+  function updateDots() {
+    for (var i=0; i<numSeries; i++) {
+      var dot = document.getElementById('mdot-'+i);
+      if (!dot) continue;
+      if (i < curSerie) { dot.className='metro-dot done'; dot.innerHTML=(i+1)+'<br><span style="font-size:8px">✓</span>'; }
+      else if (i === curSerie && running) {
+        dot.className='metro-dot '+(inRest?'rest':'active');
+        dot.innerHTML=(i+1)+'<br><span style="font-size:8px">'+(inRest?'repos':'go')+'</span>';
+      } else {
+        dot.className='metro-dot'; dot.innerHTML=(i+1)+'<br><span style="font-size:8px">—</span>';
+      }
+    }
+  }
+
+  function updateStartBtn() {
+    var b = document.getElementById('metro-start');
+    if (b) { b.textContent = running ? '⏸ PAUSE' : '▶ START'; b.style.background = running ? '#ef5350' : '#4fc3f7'; }
+  }
+
+  function startSerie() {
+    inRest = false; elapsed = 0;
+    updateStatus('SÉRIE '+(curSerie+1)+' / '+numSeries, fmtVal(seriesDur));
+    updateTriangle(0, false);
+    updateDots();
+    startBip();
+    mainIv = setInterval(function() {
+      elapsed++;
+      var rem = seriesDur - elapsed;
+      updateTriangle(elapsed/seriesDur, false);
+      updateStatus('SÉRIE '+(curSerie+1)+' / '+numSeries, fmtVal(Math.max(0,rem)));
+      if (rem === 3) parler('Trois.', 0);
+      if (rem === 2) parler('Deux.', 0);
+      if (rem === 1) parler('Un.', 0);
+      if (elapsed >= seriesDur) {
+        clearInterval(mainIv); stopBip(); curSerie++;
+        if (curSerie >= numSeries) {
+          running = false;
+          updateTriangle(0, false);
+          updateStatus('TERMINÉ !', '✓');
+          updateDots(); updateStartBtn();
+          parler('Séance terminée. Excellent.', 0);
+          notif('Métronome terminé ! 💪');
+        } else { startRest(); }
+      }
+    }, 1000);
+  }
+
+  function startRest() {
+    inRest = true; elapsed = 0;
+    updateStatus('REPOS', fmtVal(restDur));
+    updateTriangle(1, true);
+    updateDots();
+    parler('Repos.', 0);
+    mainIv = setInterval(function() {
+      elapsed++;
+      var rem = restDur - elapsed;
+      updateTriangle(1-(elapsed/restDur), true);
+      updateStatus('REPOS', fmtVal(Math.max(0,rem)));
+      if (rem === 3) parler('Trois.', 0);
+      if (rem === 2) parler('Deux.', 0);
+      if (rem === 1) parler('Un.', 0);
+      if (elapsed >= restDur) {
+        clearInterval(mainIv); inRest = false;
+        parler('Respirez.', 0);
+        setTimeout(startSerie, 300);
+      }
+    }, 1000);
+  }
+
+  function renderSaved() {
+    var el = document.getElementById('metro-saved-list');
+    if (!el) return;
+    if (!savedList.length) { el.innerHTML='<p style="font-size:11px;color:#8899aa;text-align:center;padding:8px">Aucune séance sauvegardée</p>'; return; }
+    el.innerHTML = savedList.map(function(s,i) {
+      return '<div class="metro-saved-row">'
+        +'<span class="metro-saved-name">'+s.name+'</span>'
+        +'<span class="metro-saved-info">'+s.bpm+' bpm · '+s.num+'×'+s.dur+'s / '+s.rest+'s</span>'
+        +'<button class="bs" id="mload-'+i+'" style="font-size:9px;padding:4px 8px">↩</button>'
+        +'<button class="bs" id="mdel-'+i+'" style="font-size:9px;padding:4px 8px;color:#ef5350;border-color:rgba(239,83,80,.3)">✕</button>'
+        +'</div>';
+    }).join('');
+    savedList.forEach(function(s,i) {
+      var lb = document.getElementById('mload-'+i);
+      var db = document.getElementById('mdel-'+i);
+      if (lb) lb.addEventListener('click', function(){ bpm=s.bpm;seriesDur=s.dur;restDur=s.rest;numSeries=s.num; running=false;clearInterval(mainIv);stopBip();curSerie=0; renderControls(); renderSaved(); notif('Séance "'+s.name+'" chargée'); });
+      if (db) db.addEventListener('click', function(){ savedList.splice(i,1); save('fw-metro-saved',savedList); renderSaved(); });
+    });
+  }
+
+  function renderControls() {
+    var vals = { 'mc-timer-val': fmtVal(seriesDur), 'mc-ser-val': numSeries, 'mc-rest-val': fmtVal(restDur), 'mc-bpm-val': bpm };
+    Object.keys(vals).forEach(function(id){ var el=document.getElementById(id); if(el) el.textContent=vals[id]; });
+    var info = document.getElementById('metro-info');
+    if (info) info.textContent = numSeries+' séries de '+secToStr(seriesDur)+' / repos '+secToStr(restDur)+' — total '+secToStr(totalDur());
+    updateDots();
+    updateStartBtn();
+  }
+
+  function secToStr(s) { var m=Math.floor(s/60),sec=s%60; return m>0?m+'m'+(sec>0?sec+'s':''):s+'s'; }
+
+  // ---- BUILD DOM (une seule fois) ----
+  var dotsHTML = '';
+  for (var i=0; i<20; i++) dotsHTML += '<div class="metro-dot" id="mdot-'+i+'" style="display:none">-</div>';
+
+  w.innerHTML = '<div class="metro-wrap">'
+    // SVG Triangle
+    + '<div class="metro-svg-wrap">'
+    + '<svg class="metro-svg" viewBox="0 0 280 340" xmlns="http://www.w3.org/2000/svg">'
+    + '<polygon points="140,10 265,325 15,325" fill="none" stroke="rgba(79,195,247,0.15)" stroke-width="1.5"/>'
+    + '<polygon id="mt-fill" points="140,325 141,325 139,325" fill="rgba(79,195,247,0.45)"/>'
+    + '<line x1="140" y1="10" x2="140" y2="325" stroke="rgba(79,195,247,0.2)" stroke-width="1"/>'
+    + '<line x1="72" y1="114" x2="208" y2="114" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/><text x="215" y="118" fill="rgba(255,255,255,0.25)" font-size="11" font-family="Arial">25</text>'
+    + '<line x1="47" y1="218" x2="233" y2="218" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/><text x="240" y="222" fill="rgba(255,255,255,0.25)" font-size="11" font-family="Arial">50</text>'
+    + '<line x1="22" y1="285" x2="258" y2="285" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/><text x="265" y="289" fill="rgba(255,255,255,0.25)" font-size="11" font-family="Arial">75</text>'
+    + '</svg>'
+    + '<div style="position:absolute;bottom:60px;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none">'
+    + '<div style="font-family:Cinzel,serif;font-size:13px;letter-spacing:2px;color:#4fc3f7" id="metro-phase-lbl">PRÊT</div>'
+    + '<div style="font-family:Cinzel,serif;font-size:28px;font-weight:700;color:#fff;margin-top:4px" id="metro-time-lbl">—</div>'
+    + '</div>'
+    + '</div>'
+    // Contrôles
+    + '<div class="metro-controls">'
+    + '<div class="metro-ctrl"><span class="metro-ctrl-lbl">TIMER</span><button class="metro-ctrl-btn" id="mc-timer-up">▲</button><span class="metro-ctrl-val" id="mc-timer-val">40s</span><button class="metro-ctrl-btn" id="mc-timer-dn">▼</button></div>'
+    + '<div class="metro-ctrl"><span class="metro-ctrl-lbl">SÉRIES</span><button class="metro-ctrl-btn" id="mc-ser-up">▲</button><span class="metro-ctrl-val" id="mc-ser-val">4</span><button class="metro-ctrl-btn" id="mc-ser-dn">▼</button></div>'
+    + '<div class="metro-ctrl"><span class="metro-ctrl-lbl">REPOS</span><button class="metro-ctrl-btn" id="mc-rest-up">▲</button><span class="metro-ctrl-val" id="mc-rest-val">20s</span><button class="metro-ctrl-btn" id="mc-rest-dn">▼</button></div>'
+    + '<div class="metro-ctrl"><span class="metro-ctrl-lbl">RATE</span><button class="metro-ctrl-btn" id="mc-bpm-up">▲</button><span class="metro-ctrl-val" id="mc-bpm-val">10</span><button class="metro-ctrl-btn" id="mc-bpm-dn">▼</button></div>'
+    + '</div>'
+    // Info + dots
+    + '<p id="metro-info" style="font-size:10px;letter-spacing:2px;color:#8899aa;text-align:center;margin-bottom:12px">4 séries de 40s / repos 20s — total 3m40s</p>'
+    + '<div class="metro-series-wrap" id="metro-dots"></div>'
+    // Boutons
+    + '<div class="brow" style="width:100%;margin-bottom:16px">'
+    + '<button class="bp" id="metro-start" style="flex:1;padding:14px;font-size:13px">▶ START</button>'
+    + '<button class="bs" id="metro-reset">↺</button>'
+    + '<button class="bs" id="metro-save">💾</button>'
+    + '</div>'
+    // Sauvegardées
+    + '<div style="width:100%"><p class="w-title" style="margin-bottom:8px">Séances sauvegardées</p>'
+    + '<div id="metro-saved-list"></div></div>'
+    + '</div>';
+
+  // Initialiser les dots
+  var dotsContainer = document.getElementById('metro-dots');
+  for (var di=0; di<numSeries; di++) {
+    var d = document.createElement('div');
+    d.className = 'metro-dot'; d.id = 'mdot-'+di;
+    d.innerHTML = (di+1)+'<br><span style="font-size:8px">—</span>';
+    dotsContainer.appendChild(d);
+  }
+
+  renderSaved();
+
+  // Events contrôles
+  var ctrlMap = [
+    ['mc-timer-up', function(){seriesDur=Math.min(600,seriesDur+5);renderControls();}],
+    ['mc-timer-dn', function(){seriesDur=Math.max(5,seriesDur-5);renderControls();}],
+    ['mc-ser-up', function(){
+      numSeries=Math.min(20,numSeries+1);
+      var dc=document.getElementById('metro-dots');
+      if(dc){var d=document.createElement('div');d.className='metro-dot';d.id='mdot-'+(numSeries-1);d.innerHTML=numSeries+'<br><span style="font-size:8px">—</span>';dc.appendChild(d);}
+      renderControls();
+    }],
+    ['mc-ser-dn', function(){
+      if(numSeries<=1)return;
+      var old=document.getElementById('mdot-'+(numSeries-1));
+      if(old)old.remove();
+      numSeries=Math.max(1,numSeries-1);renderControls();
+    }],
+    ['mc-rest-up', function(){restDur=Math.min(300,restDur+5);renderControls();}],
+    ['mc-rest-dn', function(){restDur=Math.max(0,restDur-5);renderControls();}],
+    ['mc-bpm-up', function(){bpm=Math.min(60,bpm+1);renderControls();}],
+    ['mc-bpm-dn', function(){bpm=Math.max(1,bpm-1);renderControls();}],
+  ];
+  ctrlMap.forEach(function(p){ var el=document.getElementById(p[0]); if(el) el.addEventListener('click',p[1]); });
+
+  document.getElementById('metro-start').addEventListener('click', function() {
+    getACtx(); // unlock audio
+    if (!running) {
+      running=true; curSerie=0; elapsed=0;
+      updateStartBtn();
+      startSerie();
+    } else {
+      running=false; clearInterval(mainIv); stopBip();
+      updateStatus('EN PAUSE','—');
+      updateStartBtn();
+    }
+  });
+
+  document.getElementById('metro-reset').addEventListener('click', function() {
+    running=false; clearInterval(mainIv); stopBip();
+    curSerie=0; elapsed=0; inRest=false;
+    updateTriangle(0,false);
+    updateStatus('PRÊT','—');
+    updateDots(); updateStartBtn();
+  });
+
+  document.getElementById('metro-save').addEventListener('click', function() {
+    var name = prompt('Nom de la séance :');
+    if (!name) return;
+    savedList.push({name:name,bpm:bpm,dur:seriesDur,rest:restDur,num:numSeries});
+    if (savedList.length>10) savedList.shift();
+    save('fw-metro-saved',savedList);
+    notif('Séance "'+name+'" sauvegardée !');
+    renderSaved();
+  });
+}
+>
