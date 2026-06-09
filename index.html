@@ -2,6 +2,17 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<script>
+// Force reload si nouvelle version
+var APP_VERSION = "2.9";
+var stored = localStorage.getItem("fw-app-version");
+if (stored && stored !== APP_VERSION) {
+  localStorage.setItem("fw-app-version", APP_VERSION);
+  window.location.reload(true);
+} else {
+  localStorage.setItem("fw-app-version", APP_VERSION);
+}
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Frozen Warriors — Breathing App</title>
 <link rel="apple-touch-icon" href="images/hero.png">
