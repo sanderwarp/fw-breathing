@@ -150,12 +150,12 @@ body{font-family:'Raleway',Georgia,serif;background:#0d1117;color:#f0f4f8;min-he
 .tbl-big-num{font-family:Cinzel,serif;font-size:clamp(48px,12vw,72px);font-weight:900;color:#fff;line-height:1}
 
 /* METRONOME */
-.metro-wrap{display:flex;flex-direction:column;align-items:center;width:100%;padding:16px 0}
-.metro-controls{display:flex;gap:20px;justify-content:center;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap}
+.metro-wrap{display:flex;flex-direction:column;align-items:center;width:100%;padding:4px 0}
+.metro-controls{display:flex;gap:14px;justify-content:center;align-items:flex-start;margin-bottom:10px;flex-wrap:wrap}
 .metro-ctrl{display:flex;flex-direction:column;align-items:center;gap:6px}
 .metro-ctrl-lbl{font-size:9px;letter-spacing:3px;color:#8899aa;text-transform:uppercase}
-.metro-ctrl-val{font-family:Cinzel,serif;font-size:28px;font-weight:700;color:#f0f4f8;min-width:64px;text-align:center}
-.metro-ctrl-btn{background:transparent;border:1px solid rgba(79,195,247,.3);color:#4fc3f7;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px;line-height:1;transition:all .2s}
+.metro-ctrl-val{font-family:Cinzel,serif;font-size:22px;font-weight:700;color:#f0f4f8;min-width:52px;text-align:center}
+.metro-ctrl-btn{background:transparent;border:1px solid rgba(79,195,247,.3);color:#4fc3f7;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:15px;line-height:1;transition:all .2s}
 .metro-ctrl-btn:hover{background:rgba(79,195,247,.15)}
 .metro-dot{padding:8px 4px;background:rgba(79,195,247,.05);border:1px solid rgba(79,195,247,.1);border-radius:4px;text-align:center;font-size:11px;color:#8899aa;transition:all .3s;font-family:Cinzel,serif}
 .metro-dot.active{border-color:#4fc3f7;background:rgba(79,195,247,.15);color:#4fc3f7}
@@ -1042,19 +1042,11 @@ function buildMetro(w, ex) {
   // Met à jour le remplissage des poumons via clipRect
   // pct 0=vide, 1=plein
   function updLungs(pct, color) {
-    var overlay = document.getElementById('lung-overlay');
-    var fillImg = document.getElementById('lung-img-fill');
-    if (!overlay) return;
+    var fill = document.getElementById('mt-fill'); if(!fill) return;
     var p = Math.max(0, Math.min(1, pct));
-    overlay.style.height = (p * 100) + '%';
-    // Couleur de teinte via filter
-    if (color && color.indexOf('213,79') > -1) {
-      // repos = doré
-      if (fillImg) fillImg.style.filter = 'sepia(1) saturate(3) hue-rotate(5deg) brightness(1.2)';
-    } else {
-      // inspire/expire = bleu glacé normal
-      if (fillImg) fillImg.style.filter = 'brightness(1.3) saturate(1.2)';
-    }
+    var topY = 10 + 315*(1-p), hw = 125*p + 1;
+    fill.setAttribute('points', '140,'+topY+' '+(140+hw)+',325 '+(140-hw)+',325');
+    fill.setAttribute('fill', color || 'rgba(79,195,247,0.45)');
   }
 
   function updStatus(lbl, t) {
@@ -1174,19 +1166,19 @@ function buildMetro(w, ex) {
     }
   }
 
-  var lungSVG = '<div style="position:relative;width:min(75vw,260px);height:min(75vw,260px);margin:0 auto 8px">'
-    // Image poumon CO2
-    + '<img src="images/05-table-co2.png" style="width:100%;height:100%;object-fit:contain;display:block;opacity:0.4" />'
-    // Overlay de remplissage - monte de bas en haut
-    + '<div id="lung-overlay" style="position:absolute;bottom:0;left:0;width:100%;height:0%;overflow:hidden;transition:height 0.1s linear">'
-    + '<img src="images/05-table-co2.png" id="lung-img-fill" style="position:absolute;bottom:0;left:0;width:100%;height:min(75vw,260px);object-fit:contain;object-position:bottom" />'
-    + '</div>'
-    // Label au centre
-    + '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none">'
-    + '<div style="font-family:Cinzel,serif;font-size:14px;letter-spacing:3px;color:#fff;text-shadow:0 0 10px rgba(0,0,0,0.8)" id="metro-plbl">PRÊT</div>'
-    + '<div style="font-family:Cinzel,serif;font-size:22px;font-weight:700;color:#fff;margin-top:4px;text-shadow:0 0 10px rgba(0,0,0,0.8)" id="metro-tlbl">—</div>'
-    + '</div>'
-    + '</div>';
+  var lungSVG = '<div style="position:relative;display:flex;justify-content:center;margin-bottom:8px">'
+    +'<svg style="width:min(92vw,360px);height:min(110vw,420px)" viewBox="0 0 280 340">'
+    +'<polygon points="140,10 265,325 15,325" fill="none" stroke="rgba(79,195,247,0.15)" stroke-width="1.5"/>'
+    +'<polygon id="mt-fill" points="140,325 141,325 139,325" fill="rgba(79,195,247,0.45)"/>'
+    +'<line x1="140" y1="10" x2="140" y2="325" stroke="rgba(79,195,247,0.2)" stroke-width="1"/>'
+    +'<line x1="72" y1="114" x2="208" y2="114" stroke="rgba(255,255,255,0.07)" stroke-width="0.8"/><text x="215" y="118" fill="rgba(255,255,255,0.2)" font-size="11" font-family="Arial">25</text>'
+    +'<line x1="47" y1="218" x2="233" y2="218" stroke="rgba(255,255,255,0.07)" stroke-width="0.8"/><text x="240" y="222" fill="rgba(255,255,255,0.2)" font-size="11" font-family="Arial">50</text>'
+    +'<line x1="22" y1="285" x2="258" y2="285" stroke="rgba(255,255,255,0.07)" stroke-width="0.8"/><text x="265" y="289" fill="rgba(255,255,255,0.2)" font-size="11" font-family="Arial">75</text>'
+    +'</svg>'
+    +'<div style="position:absolute;bottom:50px;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none">'
+    +'<div style="font-family:Cinzel,serif;font-size:13px;letter-spacing:2px;color:#4fc3f7" id="metro-plbl">PRÊT</div>'
+    +'<div style="font-family:Cinzel,serif;font-size:26px;font-weight:700;color:#fff;margin-top:4px" id="metro-tlbl">—</div>'
+    +'</div></div>';
 
   w.innerHTML='<div class="metro-wrap">'
     + lungSVG
@@ -1200,9 +1192,9 @@ function buildMetro(w, ex) {
     +'<p id="metro-info" style="font-size:10px;letter-spacing:1px;color:#8899aa;text-align:center;margin-bottom:12px"></p>'
     +'<div class="metro-series-wrap" id="metro-dots"></div>'
     +'<div class="brow" style="width:100%;margin-bottom:14px">'
-    +'<button class="bp" id="metro-start" style="flex:1;padding:14px;font-size:13px">▶ START</button>'
-    +'<button class="bs" id="metro-reset" style="padding:14px 18px">↺</button>'
-    +'<button class="bs" id="metro-save" style="padding:14px 18px">💾</button>'
+    +'<button class="bp" id="metro-start" style="flex:1;padding:10px;font-size:11px;letter-spacing:2px">▶ START</button>'
+    +'<button class="bs" id="metro-reset" style="padding:10px 14px;font-size:13px">↺</button>'
+    +'<button class="bs" id="metro-save" style="padding:10px 14px;font-size:13px">💾</button>'
     +'</div>'
     +'<div style="width:100%"><p class="w-title" style="margin-bottom:8px">Séances sauvegardées</p>'
     +'<div id="metro-saved"></div></div>'
