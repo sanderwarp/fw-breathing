@@ -2,9 +2,6 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Frozen Warriors — Breathing App</title>
 <link rel="apple-touch-icon" href="images/hero.png">
@@ -154,23 +151,20 @@ body{font-family:'Raleway',Georgia,serif;background:#0d1117;color:#f0f4f8;min-he
 
 /* METRONOME */
 .metro-wrap{display:flex;flex-direction:column;align-items:center;width:100%;padding:16px 0}
-.metro-controls{display:flex;gap:32px;justify-content:center;align-items:flex-start;margin-bottom:20px}
-.metro-ctrl{display:flex;flex-direction:column;align-items:center;gap:8px}
-.metro-ctrl-lbl{font-size:10px;letter-spacing:3px;color:#8899aa;text-transform:uppercase}
-.metro-ctrl-val{font-family:Cinzel,serif;font-size:32px;font-weight:700;color:#f0f4f8;min-width:80px;text-align:center}
-.metro-ctrl-btn{background:transparent;border:1px solid rgba(79,195,247,.3);color:#4fc3f7;width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:20px;line-height:1;transition:all .2s}
+.metro-controls{display:flex;gap:20px;justify-content:center;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap}
+.metro-ctrl{display:flex;flex-direction:column;align-items:center;gap:6px}
+.metro-ctrl-lbl{font-size:9px;letter-spacing:3px;color:#8899aa;text-transform:uppercase}
+.metro-ctrl-val{font-family:Cinzel,serif;font-size:28px;font-weight:700;color:#f0f4f8;min-width:64px;text-align:center}
+.metro-ctrl-btn{background:transparent;border:1px solid rgba(79,195,247,.3);color:#4fc3f7;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px;line-height:1;transition:all .2s}
 .metro-ctrl-btn:hover{background:rgba(79,195,247,.15)}
-.metro-series-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;margin-bottom:16px}
-.metro-series-lbl{font-size:9px;letter-spacing:2px;color:#8899aa;text-transform:uppercase;margin-bottom:8px;text-align:center;grid-column:1/-1}
-.metro-dot{padding:8px 4px;background:rgba(79,195,247,.05);border:1px solid rgba(79,195,247,.1);border-radius:4px;text-align:center;font-size:10px;color:#8899aa;transition:all .3s}
+.metro-dot{padding:8px 4px;background:rgba(79,195,247,.05);border:1px solid rgba(79,195,247,.1);border-radius:4px;text-align:center;font-size:11px;color:#8899aa;transition:all .3s;font-family:Cinzel,serif}
 .metro-dot.active{border-color:#4fc3f7;background:rgba(79,195,247,.15);color:#4fc3f7}
 .metro-dot.rest{border-color:#ffd54f;background:rgba(255,213,79,.08);color:#ffd54f}
 .metro-dot.done{border-color:#66bb6a;background:rgba(102,187,106,.08);color:#66bb6a;opacity:.5}
-.metro-saved-list{display:flex;flex-direction:column;gap:6px;width:100%;margin-top:12px}
-.metro-saved-row{display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(79,195,247,.05);border:1px solid rgba(79,195,247,.1);border-radius:4px}
-.metro-saved-name{flex:1;font-family:Cinzel,serif;font-size:13px;color:#f0f4f8}
+.metro-series-wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;width:100%;margin-bottom:14px}
+.metro-saved-row{display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(79,195,247,.05);border:1px solid rgba(79,195,247,.1);border-radius:4px;margin-bottom:6px}
+.metro-saved-name{flex:1;font-family:Cinzel,serif;font-size:12px;color:#f0f4f8}
 .metro-saved-info{font-size:10px;color:#8899aa}
-.metro-svg-wrap{position:relative;display:flex;justify-content:center;align-items:center;margin-bottom:16px}
 
 /* NOTIF */
 .notif{position:fixed;top:16px;right:16px;padding:12px 18px;background:#1a2332;border-left:3px solid #66bb6a;color:#f0f4f8;font-size:12px;z-index:9999;opacity:0;transform:translateX(16px);transition:all .3s;max-width:260px;pointer-events:none}
@@ -204,13 +198,9 @@ body{font-family:'Raleway',Georgia,serif;background:#0d1117;color:#f0f4f8;min-he
     <div class="card" data-ex="4"><img class="card-img" src="images/04-box-breathing.png" alt="Box Breathing"><div class="card-overlay"></div><span class="card-n">04</span><p class="card-cat">Système nerveux</p><h3 class="card-ttl">Box Breathing</h3></div>
     <div class="card" data-ex="5"><img class="card-img" src="images/05-table-co2.png" alt="Table CO₂"><div class="card-overlay"></div><span class="card-n">05</span><p class="card-cat">Tolérance CO₂</p><h3 class="card-ttl">Table CO₂</h3></div>
     <div class="card" data-ex="6"><img class="card-img" src="images/06-table-o2.png" alt="Table O₂"><div class="card-overlay"></div><span class="card-n">06</span><p class="card-cat">Tolérance O₂</p><h3 class="card-ttl">Table O₂</h3></div>
+  <div style="display:flex;justify-content:center;padding:14px 0 18px">
+    <button id="btn-metro" style="display:flex;align-items:center;gap:10px;padding:12px 28px;background:transparent;border:1px solid rgba(79,195,247,.3);color:#4fc3f7;font-family:Cinzel,serif;font-size:11px;letter-spacing:3px;cursor:pointer;border-radius:4px;transition:all .3s;text-transform:uppercase"><svg width="16" height="20" viewBox="0 0 16 20" fill="none"><polygon points="8,1 15,19 1,19" stroke="#4fc3f7" stroke-width="1.2" fill="none"/><line x1="8" y1="1" x2="8" y2="19" stroke="#4fc3f7" stroke-width="0.8" opacity=".6"/></svg>Métronome</button>
   </div>
-  <!-- Bouton Métronome -->
-  <div style="display:flex;justify-content:center;padding:16px 0 20px">
-    <button id="btn-metro" style="display:flex;align-items:center;gap:10px;padding:12px 28px;background:transparent;border:1px solid rgba(79,195,247,.3);color:#4fc3f7;font-family:Cinzel,serif;font-size:11px;letter-spacing:3px;cursor:pointer;border-radius:4px;transition:all .3s;text-transform:uppercase">
-      <svg width="16" height="20" viewBox="0 0 16 20" fill="none"><polygon points="8,1 15,19 1,19" stroke="#4fc3f7" stroke-width="1.2" fill="none"/><line x1="8" y1="1" x2="8" y2="19" stroke="#4fc3f7" stroke-width="0.8" opacity=".6"/></svg>
-      Métronome
-    </button>
   </div>
 </div>
 
@@ -306,6 +296,7 @@ function showPage(id) {
   window.scrollTo(0, 0);
 }
 
+
 function initNav() {
   try {
     document.getElementById('btn-commencer').addEventListener('click', function() {
@@ -319,9 +310,7 @@ function initNav() {
     });
     document.getElementById('btn-back-home').addEventListener('click', function() { showPage('p-home'); });
     document.getElementById('btn-back-dash').addEventListener('click', function() { showPage('p-dash'); });
-  document.getElementById('btn-metro').addEventListener('click', function() {
-    openEx(7);
-  });
+  var bm = document.getElementById('btn-metro'); if(bm) bm.addEventListener('click', function() { openEx(7); });
   document.getElementById('tbl-btn-back').addEventListener('click', function() {
     if (window._tblInterval) clearInterval(window._tblInterval);
     window._tblRunning = false;
@@ -1022,263 +1011,239 @@ function buildBalloon(w, ex) {
 function buildMetro(w, ex) {
   var bpm = 10, seriesDur = 40, restDur = 20, numSeries = 4;
   var running = false, inRest = false, curSerie = 0;
-  var mainIv = null, bipIv = null, elapsed = 0;
+  var mainIv = null, elapsed = 0;
   var savedList = load('fw-metro-saved') || [];
-  var audioCtxM = null;
+  var actx = null;
 
   function getACtx() {
-    if (!audioCtxM) { try { audioCtxM = new (window.AudioContext||window.webkitAudioContext)(); } catch(e){} }
-    if (audioCtxM && audioCtxM.state === 'suspended') audioCtxM.resume();
-    return audioCtxM;
+    if (!actx) { try { actx = new (window.AudioContext||window.webkitAudioContext)(); } catch(e){} }
+    if (actx && actx.state === 'suspended') actx.resume();
+    return actx;
   }
 
-  function playBip() {
+  function playBip(isExpire) {
     var ctx = getACtx(); if (!ctx) return;
     try {
-      var o = ctx.createOscillator(), g = ctx.createGain();
+      var o=ctx.createOscillator(), g=ctx.createGain();
       o.connect(g); g.connect(ctx.destination);
-      o.type = 'sine'; o.frequency.value = 880;
-      g.gain.setValueAtTime(0.35, ctx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.1);
-      o.start(); o.stop(ctx.currentTime+0.1);
+      o.type='sine';
+      o.frequency.value = isExpire ? 440 : 660;
+      g.gain.setValueAtTime(0.4, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.12);
+      o.start(); o.stop(ctx.currentTime+0.12);
     } catch(e){}
   }
 
-  function startBip() {
-    stopBip(); playBip();
-    var ms = Math.round(60000/bpm);
-    bipIv = setInterval(playBip, ms);
-  }
-  function stopBip() { if (bipIv) { clearInterval(bipIv); bipIv = null; } }
-
-  function secToStr(s) { var m=Math.floor(s/60),sec=s%60; return m>0?m+'m'+(sec>0?sec+'s':''):s+'s'; }
-  function fmtVal(s) { var m=Math.floor(s/60),sec=s%60; return m>0?m+':'+(sec<10?'0':'')+sec:s+'s'; }
+  function bipSec() { return 30 / bpm; }
+  function fmtV(s) { var m=Math.floor(s/60),sec=s%60; return m>0?m+":"+(sec<10?"0":"")+sec:s+"s"; }
+  function secStr(s) { var m=Math.floor(s/60),sec=s%60; return m>0?m+"m"+(sec>0?sec+"s":""):s+"s"; }
   function totalDur() { return numSeries*seriesDur+(numSeries-1)*restDur; }
 
-  function updateTriangle(pct, isRest) {
-    var fill = document.getElementById('mt-fill');
-    if (!fill) return;
-    // pct 0=vide(pointe) 1=plein(base large)
-    // Triangle: sommet (140,10), base (15,325) (265,325)
+  // Met à jour le remplissage des poumons via clipRect
+  // pct 0=vide, 1=plein
+  function updLungs(pct, color) {
+    var overlay = document.getElementById('lung-overlay');
+    var fillImg = document.getElementById('lung-img-fill');
+    if (!overlay) return;
     var p = Math.max(0, Math.min(1, pct));
-    var topY = 10 + 315*(1-p);
-    var halfW = 125*p + 1;
-    var topX = 140;
-    fill.setAttribute('points', topX+','+topY+' '+(topX+halfW)+',325 '+(topX-halfW)+',325');
-    fill.setAttribute('fill', isRest ? 'rgba(255,213,79,0.4)' : 'rgba(79,195,247,0.45)');
-  }
-
-  function updateStatus(label, timeStr) {
-    var pl = document.getElementById('metro-phase-lbl');
-    var tl = document.getElementById('metro-time-lbl');
-    if (pl) pl.textContent = label;
-    if (tl) tl.textContent = timeStr;
-  }
-
-  function updateDots() {
-    for (var i=0; i<numSeries; i++) {
-      var dot = document.getElementById('mdot-'+i);
-      if (!dot) continue;
-      if (i < curSerie) { dot.className='metro-dot done'; dot.innerHTML=(i+1)+'<br><span style="font-size:8px">✓</span>'; }
-      else if (i === curSerie && running) {
-        dot.className='metro-dot '+(inRest?'rest':'active');
-        dot.innerHTML=(i+1)+'<br><span style="font-size:8px">'+(inRest?'repos':'go')+'</span>';
-      } else {
-        dot.className='metro-dot'; dot.innerHTML=(i+1)+'<br><span style="font-size:8px">—</span>';
-      }
+    overlay.style.height = (p * 100) + '%';
+    // Couleur de teinte via filter
+    if (color && color.indexOf('213,79') > -1) {
+      // repos = doré
+      if (fillImg) fillImg.style.filter = 'sepia(1) saturate(3) hue-rotate(5deg) brightness(1.2)';
+    } else {
+      // inspire/expire = bleu glacé normal
+      if (fillImg) fillImg.style.filter = 'brightness(1.3) saturate(1.2)';
     }
   }
 
-  function updateStartBtn() {
-    var b = document.getElementById('metro-start');
-    if (b) { b.textContent = running ? '⏸ PAUSE' : '▶ START'; b.style.background = running ? '#ef5350' : '#4fc3f7'; }
+  function updStatus(lbl, t) {
+    var pl=document.getElementById('metro-plbl'), tl=document.getElementById('metro-tlbl');
+    if(pl) pl.textContent=lbl;
+    if(tl) tl.textContent=t||'';
+  }
+
+  function updDots() {
+    for(var i=0;i<numSeries;i++){
+      var d=document.getElementById('mdot-'+i); if(!d) continue;
+      if(i<curSerie){d.className='metro-dot done';d.innerHTML=(i+1)+'<br><small>✓</small>';}
+      else if(i===curSerie&&running){d.className='metro-dot '+(inRest?'rest':'active');d.innerHTML=(i+1)+'<br><small>'+(inRest?'repos':'go')+'</small>';}
+      else{d.className='metro-dot';d.innerHTML=(i+1)+'<br><small>—</small>';}
+    }
+  }
+  function updStartBtn() {
+    var b=document.getElementById('metro-start');
+    if(b){b.textContent=running?'⏸ PAUSE':'▶ START';b.style.background=running?'#ef5350':'#4fc3f7';}
+  }
+  function updInfo() {
+    var el=document.getElementById('metro-info');
+    if(el) el.textContent=numSeries+' × '+secStr(seriesDur)+' / repos '+secStr(restDur)+' — total '+secStr(totalDur())+' · '+secStr(Math.round(60/bpm*10)/10)+'/resp';
+  }
+  function updCtrls() {
+    var map={'mc-tv':fmtV(seriesDur),'mc-sv':numSeries,'mc-rv':fmtV(restDur),'mc-bv':bpm};
+    Object.keys(map).forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=map[id];});
+    updInfo(); updDots();
   }
 
   function startSerie() {
-    inRest = false; elapsed = 0;
-    updateStatus('SÉRIE '+(curSerie+1)+' / '+numSeries, fmtVal(seriesDur));
-    updateTriangle(0, false);
-    updateDots();
-    startBip();
-    mainIv = setInterval(function() {
-      elapsed++;
-      var rem = seriesDur - elapsed;
-      updateTriangle(elapsed/seriesDur, false);
-      updateStatus('SÉRIE '+(curSerie+1)+' / '+numSeries, fmtVal(Math.max(0,rem)));
-      if (rem === 3) parler('Trois.', 0);
-      if (rem === 2) parler('Deux.', 0);
-      if (rem === 1) parler('Un.', 0);
-      if (elapsed >= seriesDur) {
-        clearInterval(mainIv); stopBip(); curSerie++;
-        if (curSerie >= numSeries) {
-          running = false;
-          updateTriangle(0, false);
-          updateStatus('TERMINÉ !', '✓');
-          updateDots(); updateStartBtn();
-          parler('Séance terminée. Excellent.', 0);
-          notif('Métronome terminé ! 💪');
+    inRest=false; elapsed=0; updDots();
+    updStatus('INSPIRE','');
+    playBip(false);
+    var bsInSub = Math.round(bipSec()*10);
+    var subElapsed=0, subTotal=seriesDur*10;
+    var phaseEl=0, isInspire=true;
+
+    mainIv=setInterval(function(){
+      subElapsed++; phaseEl++;
+      var pct = phaseEl/bsInSub;
+      var col = 'rgba(79,195,247,0.55)';
+      if(isInspire) {
+        updLungs(pct, col);
+        updStatus('INSPIRE','');
+      } else {
+        updLungs(1-pct, col);
+        updStatus('EXPIRE','');
+      }
+      if(phaseEl>=bsInSub){
+        phaseEl=0; isInspire=!isInspire;
+        if(subElapsed<subTotal) playBip(!isInspire);
+      }
+      if(subElapsed>=subTotal){
+        clearInterval(mainIv); curSerie++;
+        if(curSerie>=numSeries){
+          running=false; updLungs(0,null); updStatus('TERMINÉ !','✓');
+          updDots(); updStartBtn();
+          parler('Séance terminée. Excellent.',0); notif('Métronome terminé ! 💪');
         } else { startRest(); }
       }
-    }, 1000);
+    },100);
   }
 
   function startRest() {
-    inRest = true; elapsed = 0;
-    updateStatus('REPOS', fmtVal(restDur));
-    updateTriangle(1, true);
-    updateDots();
-    parler('Repos.', 0);
-    mainIv = setInterval(function() {
-      elapsed++;
-      var rem = restDur - elapsed;
-      updateTriangle(1-(elapsed/restDur), true);
-      updateStatus('REPOS', fmtVal(Math.max(0,rem)));
-      if (rem === 3) parler('Trois.', 0);
-      if (rem === 2) parler('Deux.', 0);
-      if (rem === 1) parler('Un.', 0);
-      if (elapsed >= restDur) {
-        clearInterval(mainIv); inRest = false;
-        parler('Respirez.', 0);
-        setTimeout(startSerie, 300);
+    inRest=true; elapsed=0; updDots();
+    updStatus('REPOS',''); updLungs(0,'rgba(255,213,79,0.4)');
+    parler('Repos.',0);
+    var subElapsed=0, subTotal=restDur*10;
+    mainIv=setInterval(function(){
+      subElapsed++;
+      var pct=subElapsed/subTotal;
+      updLungs(pct,'rgba(255,213,79,0.4)');
+      var remSec=restDur-Math.floor(subElapsed/10);
+      updStatus('REPOS', fmtV(Math.max(0,remSec)));
+      if(remSec===3&&subElapsed%10===0) parler('Trois.',0);
+      if(remSec===2&&subElapsed%10===0) parler('Deux.',0);
+      if(remSec===1&&subElapsed%10===0) parler('Un.',0);
+      if(subElapsed>=subTotal){
+        clearInterval(mainIv); inRest=false;
+        parler('Respirez.',0); setTimeout(startSerie,200);
       }
-    }, 1000);
+    },100);
   }
 
   function renderSaved() {
-    var el = document.getElementById('metro-saved-list');
-    if (!el) return;
-    if (!savedList.length) { el.innerHTML='<p style="font-size:11px;color:#8899aa;text-align:center;padding:8px">Aucune séance sauvegardée</p>'; return; }
-    el.innerHTML = savedList.map(function(s,i) {
+    var el=document.getElementById('metro-saved'); if(!el) return;
+    if(!savedList.length){el.innerHTML='<p style="font-size:11px;color:#8899aa;text-align:center;padding:8px">Aucune séance sauvegardée</p>';return;}
+    el.innerHTML=savedList.map(function(s,i){
       return '<div class="metro-saved-row">'
         +'<span class="metro-saved-name">'+s.name+'</span>'
-        +'<span class="metro-saved-info">'+s.bpm+' bpm · '+s.num+'×'+s.dur+'s / '+s.rest+'s</span>'
-        +'<button class="bs" id="mload-'+i+'" style="font-size:9px;padding:4px 8px">↩</button>'
-        +'<button class="bs" id="mdel-'+i+'" style="font-size:9px;padding:4px 8px;color:#ef5350;border-color:rgba(239,83,80,.3)">✕</button>'
+        +'<span class="metro-saved-info">'+s.bpm+' resp/min · '+s.num+'x'+s.dur+'s/'+s.rest+'s</span>'
+        +'<button class="bs" id="mld-'+i+'" style="font-size:9px;padding:4px 8px">↩</button>'
+        +'<button class="bs" id="mdl-'+i+'" style="font-size:9px;padding:4px 8px;color:#ef5350;border-color:rgba(239,83,80,.3)">✕</button>'
         +'</div>';
     }).join('');
-    savedList.forEach(function(s,i) {
-      var lb = document.getElementById('mload-'+i);
-      var db = document.getElementById('mdel-'+i);
-      if (lb) lb.addEventListener('click', function(){ bpm=s.bpm;seriesDur=s.dur;restDur=s.rest;numSeries=s.num; running=false;clearInterval(mainIv);stopBip();curSerie=0; renderControls(); renderSaved(); notif('Séance "'+s.name+'" chargée'); });
-      if (db) db.addEventListener('click', function(){ savedList.splice(i,1); save('fw-metro-saved',savedList); renderSaved(); });
+    savedList.forEach(function(s,i){
+      var lb=document.getElementById('mld-'+i), db=document.getElementById('mdl-'+i);
+      if(lb) lb.addEventListener('click',function(){
+        bpm=s.bpm;seriesDur=s.dur;restDur=s.rest;numSeries=s.num;
+        running=false;clearInterval(mainIv);curSerie=0;
+        updCtrls();rebuildDots();renderSaved();notif('Séance "'+s.name+'" chargée');
+      });
+      if(db) db.addEventListener('click',function(){
+        savedList.splice(i,1);save('fw-metro-saved',savedList);renderSaved();
+      });
     });
   }
 
-  function renderControls() {
-    var vals = { 'mc-timer-val': fmtVal(seriesDur), 'mc-ser-val': numSeries, 'mc-rest-val': fmtVal(restDur), 'mc-bpm-val': bpm };
-    Object.keys(vals).forEach(function(id){ var el=document.getElementById(id); if(el) el.textContent=vals[id]; });
-    var info = document.getElementById('metro-info');
-    if (info) info.textContent = numSeries+' séries de '+secToStr(seriesDur)+' / repos '+secToStr(restDur)+' — total '+secToStr(totalDur());
-    updateDots();
-    updateStartBtn();
+  function rebuildDots() {
+    var dc=document.getElementById('metro-dots'); if(!dc) return; dc.innerHTML='';
+    for(var i=0;i<numSeries;i++){
+      var d=document.createElement('div');
+      d.className='metro-dot';d.id='mdot-'+i;
+      d.innerHTML=(i+1)+'<br><small>—</small>';
+      dc.appendChild(d);
+    }
   }
 
-  function secToStr(s) { var m=Math.floor(s/60),sec=s%60; return m>0?m+'m'+(sec>0?sec+'s':''):s+'s'; }
-
-  // ---- BUILD DOM (une seule fois) ----
-  var dotsHTML = '';
-  for (var i=0; i<20; i++) dotsHTML += '<div class="metro-dot" id="mdot-'+i+'" style="display:none">-</div>';
-
-  w.innerHTML = '<div class="metro-wrap">'
-    // SVG Triangle
-    + '<div class="metro-svg-wrap">'
-    + '<svg class="metro-svg" viewBox="0 0 280 340" xmlns="http://www.w3.org/2000/svg">'
-    + '<polygon points="140,10 265,325 15,325" fill="none" stroke="rgba(79,195,247,0.15)" stroke-width="1.5"/>'
-    + '<polygon id="mt-fill" points="140,325 141,325 139,325" fill="rgba(79,195,247,0.45)"/>'
-    + '<line x1="140" y1="10" x2="140" y2="325" stroke="rgba(79,195,247,0.2)" stroke-width="1"/>'
-    + '<line x1="72" y1="114" x2="208" y2="114" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/><text x="215" y="118" fill="rgba(255,255,255,0.25)" font-size="11" font-family="Arial">25</text>'
-    + '<line x1="47" y1="218" x2="233" y2="218" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/><text x="240" y="222" fill="rgba(255,255,255,0.25)" font-size="11" font-family="Arial">50</text>'
-    + '<line x1="22" y1="285" x2="258" y2="285" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/><text x="265" y="289" fill="rgba(255,255,255,0.25)" font-size="11" font-family="Arial">75</text>'
-    + '</svg>'
-    + '<div style="position:absolute;bottom:60px;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none">'
-    + '<div style="font-family:Cinzel,serif;font-size:13px;letter-spacing:2px;color:#4fc3f7" id="metro-phase-lbl">PRÊT</div>'
-    + '<div style="font-family:Cinzel,serif;font-size:28px;font-weight:700;color:#fff;margin-top:4px" id="metro-time-lbl">—</div>'
+  var lungSVG = '<div style="position:relative;width:min(75vw,260px);height:min(75vw,260px);margin:0 auto 8px">'
+    // Image poumon CO2
+    + '<img src="images/05-table-co2.png" style="width:100%;height:100%;object-fit:contain;display:block;opacity:0.4" />'
+    // Overlay de remplissage - monte de bas en haut
+    + '<div id="lung-overlay" style="position:absolute;bottom:0;left:0;width:100%;height:0%;overflow:hidden;transition:height 0.1s linear">'
+    + '<img src="images/05-table-co2.png" id="lung-img-fill" style="position:absolute;bottom:0;left:0;width:100%;height:min(75vw,260px);object-fit:contain;object-position:bottom" />'
     + '</div>'
+    // Label au centre
+    + '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none">'
+    + '<div style="font-family:Cinzel,serif;font-size:14px;letter-spacing:3px;color:#fff;text-shadow:0 0 10px rgba(0,0,0,0.8)" id="metro-plbl">PRÊT</div>'
+    + '<div style="font-family:Cinzel,serif;font-size:22px;font-weight:700;color:#fff;margin-top:4px;text-shadow:0 0 10px rgba(0,0,0,0.8)" id="metro-tlbl">—</div>'
     + '</div>'
-    // Contrôles
-    + '<div class="metro-controls">'
-    + '<div class="metro-ctrl"><span class="metro-ctrl-lbl">TIMER</span><button class="metro-ctrl-btn" id="mc-timer-up">▲</button><span class="metro-ctrl-val" id="mc-timer-val">40s</span><button class="metro-ctrl-btn" id="mc-timer-dn">▼</button></div>'
-    + '<div class="metro-ctrl"><span class="metro-ctrl-lbl">SÉRIES</span><button class="metro-ctrl-btn" id="mc-ser-up">▲</button><span class="metro-ctrl-val" id="mc-ser-val">4</span><button class="metro-ctrl-btn" id="mc-ser-dn">▼</button></div>'
-    + '<div class="metro-ctrl"><span class="metro-ctrl-lbl">REPOS</span><button class="metro-ctrl-btn" id="mc-rest-up">▲</button><span class="metro-ctrl-val" id="mc-rest-val">20s</span><button class="metro-ctrl-btn" id="mc-rest-dn">▼</button></div>'
-    + '<div class="metro-ctrl"><span class="metro-ctrl-lbl">RATE</span><button class="metro-ctrl-btn" id="mc-bpm-up">▲</button><span class="metro-ctrl-val" id="mc-bpm-val">10</span><button class="metro-ctrl-btn" id="mc-bpm-dn">▼</button></div>'
-    + '</div>'
-    // Info + dots
-    + '<p id="metro-info" style="font-size:10px;letter-spacing:2px;color:#8899aa;text-align:center;margin-bottom:12px">4 séries de 40s / repos 20s — total 3m40s</p>'
-    + '<div class="metro-series-wrap" id="metro-dots"></div>'
-    // Boutons
-    + '<div class="brow" style="width:100%;margin-bottom:16px">'
-    + '<button class="bp" id="metro-start" style="flex:1;padding:14px;font-size:13px">▶ START</button>'
-    + '<button class="bs" id="metro-reset">↺</button>'
-    + '<button class="bs" id="metro-save">💾</button>'
-    + '</div>'
-    // Sauvegardées
-    + '<div style="width:100%"><p class="w-title" style="margin-bottom:8px">Séances sauvegardées</p>'
-    + '<div id="metro-saved-list"></div></div>'
     + '</div>';
 
-  // Initialiser les dots
-  var dotsContainer = document.getElementById('metro-dots');
-  for (var di=0; di<numSeries; di++) {
-    var d = document.createElement('div');
-    d.className = 'metro-dot'; d.id = 'mdot-'+di;
-    d.innerHTML = (di+1)+'<br><span style="font-size:8px">—</span>';
-    dotsContainer.appendChild(d);
-  }
+  w.innerHTML='<div class="metro-wrap">'
+    + lungSVG
 
-  renderSaved();
+    +'<div class="metro-controls">'
+    +'<div class="metro-ctrl"><span class="metro-ctrl-lbl">TIMER</span><button class="metro-ctrl-btn" id="mc-tu">▲</button><span class="metro-ctrl-val" id="mc-tv">40s</span><button class="metro-ctrl-btn" id="mc-td">▼</button></div>'
+    +'<div class="metro-ctrl"><span class="metro-ctrl-lbl">SÉRIES</span><button class="metro-ctrl-btn" id="mc-su">▲</button><span class="metro-ctrl-val" id="mc-sv">4</span><button class="metro-ctrl-btn" id="mc-sd">▼</button></div>'
+    +'<div class="metro-ctrl"><span class="metro-ctrl-lbl">REPOS</span><button class="metro-ctrl-btn" id="mc-ru">▲</button><span class="metro-ctrl-val" id="mc-rv">20s</span><button class="metro-ctrl-btn" id="mc-rd">▼</button></div>'
+    +'<div class="metro-ctrl"><span class="metro-ctrl-lbl">RESP/MIN</span><button class="metro-ctrl-btn" id="mc-bu">▲</button><span class="metro-ctrl-val" id="mc-bv">10</span><button class="metro-ctrl-btn" id="mc-bd">▼</button></div>'
+    +'</div>'
+    +'<p id="metro-info" style="font-size:10px;letter-spacing:1px;color:#8899aa;text-align:center;margin-bottom:12px"></p>'
+    +'<div class="metro-series-wrap" id="metro-dots"></div>'
+    +'<div class="brow" style="width:100%;margin-bottom:14px">'
+    +'<button class="bp" id="metro-start" style="flex:1;padding:14px;font-size:13px">▶ START</button>'
+    +'<button class="bs" id="metro-reset" style="padding:14px 18px">↺</button>'
+    +'<button class="bs" id="metro-save" style="padding:14px 18px">💾</button>'
+    +'</div>'
+    +'<div style="width:100%"><p class="w-title" style="margin-bottom:8px">Séances sauvegardées</p>'
+    +'<div id="metro-saved"></div></div>'
+    +'</div>';
 
-  // Events contrôles
-  var ctrlMap = [
-    ['mc-timer-up', function(){seriesDur=Math.min(600,seriesDur+5);renderControls();}],
-    ['mc-timer-dn', function(){seriesDur=Math.max(5,seriesDur-5);renderControls();}],
-    ['mc-ser-up', function(){
-      numSeries=Math.min(20,numSeries+1);
-      var dc=document.getElementById('metro-dots');
-      if(dc){var d=document.createElement('div');d.className='metro-dot';d.id='mdot-'+(numSeries-1);d.innerHTML=numSeries+'<br><span style="font-size:8px">—</span>';dc.appendChild(d);}
-      renderControls();
-    }],
-    ['mc-ser-dn', function(){
-      if(numSeries<=1)return;
-      var old=document.getElementById('mdot-'+(numSeries-1));
-      if(old)old.remove();
-      numSeries=Math.max(1,numSeries-1);renderControls();
-    }],
-    ['mc-rest-up', function(){restDur=Math.min(300,restDur+5);renderControls();}],
-    ['mc-rest-dn', function(){restDur=Math.max(0,restDur-5);renderControls();}],
-    ['mc-bpm-up', function(){bpm=Math.min(60,bpm+1);renderControls();}],
-    ['mc-bpm-dn', function(){bpm=Math.max(1,bpm-1);renderControls();}],
-  ];
-  ctrlMap.forEach(function(p){ var el=document.getElementById(p[0]); if(el) el.addEventListener('click',p[1]); });
+  rebuildDots(); updInfo(); renderSaved();
 
-  document.getElementById('metro-start').addEventListener('click', function() {
-    getACtx(); // unlock audio
-    if (!running) {
-      running=true; curSerie=0; elapsed=0;
-      updateStartBtn();
-      startSerie();
+  [['mc-tu',function(){seriesDur=Math.min(600,seriesDur+5);updCtrls();}],
+   ['mc-td',function(){seriesDur=Math.max(5,seriesDur-5);updCtrls();}],
+   ['mc-su',function(){numSeries=Math.min(20,numSeries+1);rebuildDots();updCtrls();}],
+   ['mc-sd',function(){if(numSeries<=1)return;numSeries--;rebuildDots();updCtrls();}],
+   ['mc-ru',function(){restDur=Math.min(300,restDur+5);updCtrls();}],
+   ['mc-rd',function(){restDur=Math.max(0,restDur-5);updCtrls();}],
+   ['mc-bu',function(){bpm=Math.min(60,bpm+1);updCtrls();}],
+   ['mc-bd',function(){bpm=Math.max(1,bpm-1);updCtrls();}],
+  ].forEach(function(p){var el=document.getElementById(p[0]);if(el)el.addEventListener('click',p[1]);});
+
+  document.getElementById('metro-start').addEventListener('click',function(){
+    getACtx();
+    if(!running){
+      running=true;curSerie=0;elapsed=0;updStartBtn();startSerie();
     } else {
-      running=false; clearInterval(mainIv); stopBip();
-      updateStatus('EN PAUSE','—');
-      updateStartBtn();
+      running=false;clearInterval(mainIv);
+      updStatus('EN PAUSE','');updStartBtn();
     }
   });
-
-  document.getElementById('metro-reset').addEventListener('click', function() {
-    running=false; clearInterval(mainIv); stopBip();
-    curSerie=0; elapsed=0; inRest=false;
-    updateTriangle(0,false);
-    updateStatus('PRÊT','—');
-    updateDots(); updateStartBtn();
+  document.getElementById('metro-reset').addEventListener('click',function(){
+    running=false;clearInterval(mainIv);
+    curSerie=0;elapsed=0;inRest=false;
+    updLungs(0,null);updStatus('PRÊT','—');updDots();updStartBtn();
   });
-
-  document.getElementById('metro-save').addEventListener('click', function() {
-    var name = prompt('Nom de la séance :');
-    if (!name) return;
+  document.getElementById('metro-save').addEventListener('click',function(){
+    var name=prompt('Nom de la séance :'); if(!name) return;
     savedList.push({name:name,bpm:bpm,dur:seriesDur,rest:restDur,num:numSeries});
-    if (savedList.length>10) savedList.shift();
+    if(savedList.length>10) savedList.shift();
     save('fw-metro-saved',savedList);
     notif('Séance "'+name+'" sauvegardée !');
     renderSaved();
   });
 }
->
+
+</script>
+</body>
+</html>
